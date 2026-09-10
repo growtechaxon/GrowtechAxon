@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GrowtechAxon | Admin Dashboard</title>
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="sidebar-brand">
+                <div class="brand-logo">GX</div>
+
+                <div>
+                    <h2>Growtech<span>Axon</span></h2>
+                    <small>ADMIN PANEL</small>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a href="#" class="nav-item active">
+                    <span>▣</span>
+                    Dashboard
+                </a>
+
+                <a href="#leads" class="nav-item">
+                    <span>👥</span>
+                    Customer Leads
+                </a>
+
+            </nav>
+
+            <button id="logoutBtn" class="logout-btn">
+                <span>↪</span>
+                Logout
+            </button>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP BAR -->
+            <header class="topbar">
+
+                <div>
+                    <h1>Dashboard</h1>
+                    <p>Welcome back, Admin 👋</p>
+                </div>
+
+                <div class="admin-badge">
+                    <span class="status-dot"></span>
+                    Admin
+                </div>
+
+            </header>
+
+
+            <!-- STATS -->
+            <section class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+
+                    <div>
+                        <p>Total Leads</p>
+                        <h2 id="totalLeads">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon">🆕</div>
+
+                    <div>
+                        <p>New Leads</p>
+                        <h2 id="newLeads">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+
+                    <div>
+                        <p>Today's Leads</p>
+                        <h2 id="todayLeads">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon">💼</div>
+
+                    <div>
+                        <p>Projects</p>
+                        <h2 id="projectLeads">0</h2>
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- LEADS -->
+            <section class="leads-section" id="leads">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Customer Leads</h2>
+                        <p>Website se received customer enquiries</p>
+                    </div>
+
+                    <button id="refreshBtn" class="refresh-btn">
+                        ↻ Refresh
+                    </button>
+
+                </div>
+
+
+                <!-- SEARCH -->
+                <div class="filters">
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search customer, email, phone..."
+                    >
+
+                    <select id="statusFilter">
+
+                        <option value="all">
+                            All Status
+                        </option>
+
+                        <option value="New">
+                            New
+                        </option>
+
+                        <option value="Contacted">
+                            Contacted
+                        </option>
+
+                        <option value="Converted">
+                            Converted
+                        </option>
+
+                        <option value="Closed">
+                            Closed
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- TABLE -->
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+
+                                <th>Customer</th>
+
+                                <th>Business</th>
+
+                                <th>Email</th>
+
+                                <th>Phone</th>
+
+                                <th>Service</th>
+
+                                <th>Budget</th>
+
+                                <th>Status</th>
+
+                                <th>Date</th>
+
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="leadsTable">
+
+                            <tr>
+
+                                <td colspan="10" class="loading">
+                                    Loading leads...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="admin.js"></script>
+
+</body>
+
+</html>

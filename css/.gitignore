@@ -1,0 +1,8 @@
+node_modules/
+.env
+*.log
+
+Backend/node_modules/
+Backend/.env
+
+Backend/data/leads.json
