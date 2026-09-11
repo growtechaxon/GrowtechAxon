@@ -427,7 +427,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
 
             const response = await fetch(
-                "https://growtechaxon-backend.onrender.com"
+                "https://growtechaxon-backend.onrender.com",
                 {
                     method: "POST",
 
