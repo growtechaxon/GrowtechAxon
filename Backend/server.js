@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
-const Lead = require("./models/Lead");
+const Lead = require("./MODELS/Lead");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
