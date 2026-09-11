@@ -427,17 +427,15 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
 
             const response = await fetch(
-                "https://growtechaxon-backend.onrender.com",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify(formData)
-                }
-            );
+    "https://growtechaxon-backend.onrender.com/api/leads",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+    }
+);
 
 
             const result = await response.json();
