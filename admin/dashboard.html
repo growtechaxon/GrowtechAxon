@@ -14,158 +14,351 @@
 
     <div class="dashboard">
 
-        <!-- SIDEBAR -->
+        <!-- =====================================================
+             SIDEBAR
+        ====================================================== -->
+
         <aside class="sidebar">
 
             <div class="sidebar-brand">
-                <div class="brand-logo">GX</div>
 
-                <div>
+                <div class="brand-logo">
+                    GX
+                </div>
+
+                <div class="brand-text">
                     <h2>Growtech<span>Axon</span></h2>
                     <small>ADMIN PANEL</small>
                 </div>
+
             </div>
+
 
             <nav class="sidebar-nav">
 
                 <a href="#" class="nav-item active">
-                    <span>▣</span>
-                    Dashboard
+                    <span class="nav-icon">▣</span>
+                    <span class="nav-text">Dashboard</span>
                 </a>
 
                 <a href="#leads" class="nav-item">
-                    <span>👥</span>
-                    Customer Leads
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Customer Leads</span>
+                </a>
+
+                <a href="#teamManagement" class="nav-item">
+                    <span class="nav-icon">✦</span>
+                    <span class="nav-text">Our Team</span>
                 </a>
 
             </nav>
 
-            <button id="logoutBtn" class="logout-btn">
-                <span>↪</span>
-                Logout
-            </button>
+
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-status">
+                    <span class="status-dot"></span>
+
+                    <div>
+                        <strong>System Online</strong>
+                        <small>All services active</small>
+                    </div>
+                </div>
+
+
+                <button id="logoutBtn" class="logout-btn">
+                    <span>↪</span>
+                    <span>Logout</span>
+                </button>
+
+            </div>
 
         </aside>
 
 
-        <!-- MAIN CONTENT -->
+
+        <!-- =====================================================
+             MAIN CONTENT
+        ====================================================== -->
+
         <main class="main-content">
 
-            <!-- TOP BAR -->
+
+            <!-- =================================================
+                 TOPBAR
+            ================================================== -->
+
             <header class="topbar">
 
-                <div>
+                <div class="page-heading">
+
+                    <div class="eyebrow">
+                        GROWTECHAXON • ADMIN
+                    </div>
+
                     <h1>Dashboard</h1>
-                    <p>Welcome back, Admin 👋</p>
+
+                    <p>
+                        Manage your customer enquiries and team from one place.
+                    </p>
+
                 </div>
 
-                <div class="admin-badge">
-                    <span class="status-dot"></span>
-                    Admin
+
+                <div class="topbar-right">
+
+                    <div class="admin-badge">
+
+                        <span class="status-dot"></span>
+
+                        <div>
+                            <strong>Admin</strong>
+                            <small>Online</small>
+                        </div>
+
+                    </div>
+
                 </div>
 
             </header>
 
 
-            <!-- STATS -->
+
+            <!-- =================================================
+                 STATS
+            ================================================== -->
+
             <section class="stats-grid">
 
-                <div class="stat-card">
-                    <div class="stat-icon">👥</div>
 
-                    <div>
+                <!-- TOTAL LEADS -->
+
+                <div class="stat-card">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-icon">
+                            👥
+                        </div>
+
+                        <span class="stat-label">
+                            LEADS
+                        </span>
+
+                    </div>
+
+                    <div class="stat-info">
+
                         <p>Total Leads</p>
-                        <h2 id="totalLeads">0</h2>
+
+                        <h2 id="totalLeads">
+                            0
+                        </h2>
+
+                        <span class="stat-description">
+                            All customer enquiries
+                        </span>
+
                     </div>
+
                 </div>
 
 
-                <div class="stat-card">
-                    <div class="stat-icon">🆕</div>
 
-                    <div>
+                <!-- NEW LEADS -->
+
+                <div class="stat-card stat-green">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-icon">
+                            ✦
+                        </div>
+
+                        <span class="stat-label">
+                            NEW
+                        </span>
+
+                    </div>
+
+                    <div class="stat-info">
+
                         <p>New Leads</p>
-                        <h2 id="newLeads">0</h2>
+
+                        <h2 id="newLeads">
+                            0
+                        </h2>
+
+                        <span class="stat-description">
+                            Awaiting response
+                        </span>
+
                     </div>
+
                 </div>
 
 
-                <div class="stat-card">
-                    <div class="stat-icon">📅</div>
 
-                    <div>
+                <!-- TODAY -->
+
+                <div class="stat-card stat-gold">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-icon">
+                            ◷
+                        </div>
+
+                        <span class="stat-label">
+                            TODAY
+                        </span>
+
+                    </div>
+
+                    <div class="stat-info">
+
                         <p>Today's Leads</p>
-                        <h2 id="todayLeads">0</h2>
+
+                        <h2 id="todayLeads">
+                            0
+                        </h2>
+
+                        <span class="stat-description">
+                            Received today
+                        </span>
+
                     </div>
+
                 </div>
 
 
-                <div class="stat-card">
-                    <div class="stat-icon">💼</div>
 
-                    <div>
-                        <p>Projects</p>
-                        <h2 id="projectLeads">0</h2>
+                <!-- PROJECTS -->
+
+                <div class="stat-card stat-purple">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-icon">
+                            ◆
+                        </div>
+
+                        <span class="stat-label">
+                            PROJECTS
+                        </span>
+
                     </div>
+
+                    <div class="stat-info">
+
+                        <p>Projects</p>
+
+                        <h2 id="projectLeads">
+                            0
+                        </h2>
+
+                        <span class="stat-description">
+                            Converted enquiries
+                        </span>
+
+                    </div>
+
                 </div>
 
             </section>
 
 
-            <!-- LEADS -->
-            <section class="leads-section" id="leads">
+
+            <!-- =================================================
+                 CUSTOMER LEADS
+            ================================================== -->
+
+            <section class="content-section leads-section" id="leads">
+
+
+                <!-- SECTION HEADER -->
 
                 <div class="section-header">
 
-                    <div>
-                        <h2>Customer Leads</h2>
-                        <p>Website se received customer enquiries</p>
+                    <div class="section-title">
+
+                        <span class="section-kicker">
+                            CUSTOMER MANAGEMENT
+                        </span>
+
+                        <h2>
+                            Customer Leads
+                        </h2>
+
+                        <p>
+                            Website se received customer enquiries
+                        </p>
+
                     </div>
 
+
                     <button id="refreshBtn" class="refresh-btn">
-                        ↻ Refresh
+                        <span>↻</span>
+                        Refresh
                     </button>
 
                 </div>
 
 
-                <!-- SEARCH -->
-                <div class="filters">
 
-                    <input
-                        type="text"
-                        id="searchInput"
-                        placeholder="Search customer, email, phone..."
-                    >
+                <!-- FILTER BAR -->
 
-                    <select id="statusFilter">
+                <div class="filter-bar">
 
-                        <option value="all">
-                            All Status
-                        </option>
+                    <div class="search-box">
 
-                        <option value="New">
-                            New
-                        </option>
+                        <span class="search-icon">
+                            ⌕
+                        </span>
 
-                        <option value="Contacted">
-                            Contacted
-                        </option>
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search customer, email, phone..."
+                        >
 
-                        <option value="Converted">
-                            Converted
-                        </option>
+                    </div>
 
-                        <option value="Closed">
-                            Closed
-                        </option>
 
-                    </select>
+                    <div class="filter-select">
+
+                        <select id="statusFilter">
+
+                            <option value="all">
+                                All Status
+                            </option>
+
+                            <option value="New">
+                                New
+                            </option>
+
+                            <option value="Contacted">
+                                Contacted
+                            </option>
+
+                            <option value="Converted">
+                                Converted
+                            </option>
+
+                            <option value="Closed">
+                                Closed
+                            </option>
+
+                        </select>
+
+                    </div>
 
                 </div>
 
 
+
                 <!-- TABLE -->
+
                 <div class="table-wrapper">
 
                     <table>
@@ -198,12 +391,113 @@
 
                         </thead>
 
+
                         <tbody id="leadsTable">
 
                             <tr>
 
                                 <td colspan="10" class="loading">
-                                    Loading leads...
+
+                                    <div class="loading-spinner"></div>
+
+                                    <span>
+                                        Loading leads...
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 OUR TEAM MANAGEMENT
+            ================================================== -->
+
+            <section
+                class="content-section team-admin-section"
+                id="teamManagement"
+            >
+
+
+                <div class="section-header">
+
+                    <div class="section-title">
+
+                        <span class="section-kicker">
+                            COMPANY MANAGEMENT
+                        </span>
+
+                        <h2>
+                            Our Team
+                        </h2>
+
+                        <p>
+                            Manage GrowtechAxon team members
+                        </p>
+
+                    </div>
+
+
+                    <button id="addTeamBtn" class="refresh-btn add-team-btn">
+
+                        <span>+</span>
+
+                        Add Team Member
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- TEAM TABLE -->
+
+                <div class="table-wrapper">
+
+                    <table class="team-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Photo</th>
+
+                                <th>Name</th>
+
+                                <th>Designation</th>
+
+                                <th>Order</th>
+
+                                <th>Status</th>
+
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="teamTable">
+
+                            <tr>
+
+                                <td colspan="6" class="loading">
+
+                                    <div class="loading-spinner"></div>
+
+                                    <span>
+                                        Loading team members...
+                                    </span>
+
                                 </td>
 
                             </tr>
@@ -219,6 +513,279 @@
         </main>
 
     </div>
+
+
+
+    <!-- =========================================================
+         ADD / EDIT TEAM MEMBER MODAL
+    ========================================================== -->
+
+    <div id="teamModal" class="team-modal">
+
+        <div class="team-modal-content">
+
+
+            <!-- MODAL HEADER -->
+
+            <div class="team-modal-header">
+
+                <div>
+
+                    <span class="team-modal-tag">
+                        GROWTECHAXON
+                    </span>
+
+                    <h2 id="teamModalTitle">
+                        Add Team Member
+                    </h2>
+
+                    <p>
+                        Add or update your team member details.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="closeTeamModal"
+                    class="team-close-btn"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+
+            <!-- TEAM FORM -->
+
+            <form id="teamForm">
+
+                <input
+                    type="hidden"
+                    id="teamId"
+                >
+
+
+
+                <!-- NAME + DESIGNATION -->
+
+                <div class="team-form-grid">
+
+                    <div class="team-input-group">
+
+                        <label for="teamName">
+                            Full Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="teamName"
+                            placeholder="Enter full name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="team-input-group">
+
+                        <label for="teamDesignation">
+                            Designation *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="teamDesignation"
+                            placeholder="e.g. Founder & CEO"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PHOTO -->
+
+                <div class="team-input-group">
+
+                    <label for="teamPhoto">
+                        Profile Photo URL
+                    </label>
+
+                    <input
+                        type="url"
+                        id="teamPhoto"
+                        placeholder="https://example.com/photo.jpg"
+                    >
+
+                    <small>
+                        Abhi image URL use kar sakte hain.
+                        Direct image upload system next step me add karenge.
+                    </small>
+
+                </div>
+
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="team-input-group">
+
+                    <label for="teamDescription">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="teamDescription"
+                        rows="4"
+                        placeholder="Write a short professional description..."
+                    ></textarea>
+
+                </div>
+
+
+
+                <!-- SOCIAL LINKS -->
+
+                <div class="team-form-grid">
+
+                    <div class="team-input-group">
+
+                        <label for="teamLinkedin">
+                            LinkedIn
+                        </label>
+
+                        <input
+                            type="url"
+                            id="teamLinkedin"
+                            placeholder="https://linkedin.com/in/..."
+                        >
+
+                    </div>
+
+
+                    <div class="team-input-group">
+
+                        <label for="teamInstagram">
+                            Instagram
+                        </label>
+
+                        <input
+                            type="url"
+                            id="teamInstagram"
+                            placeholder="https://instagram.com/..."
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- GITHUB + ORDER -->
+
+                <div class="team-form-grid">
+
+                    <div class="team-input-group">
+
+                        <label for="teamGithub">
+                            GitHub
+                        </label>
+
+                        <input
+                            type="url"
+                            id="teamGithub"
+                            placeholder="https://github.com/..."
+                        >
+
+                    </div>
+
+
+                    <div class="team-input-group">
+
+                        <label for="teamOrder">
+                            Display Order
+                        </label>
+
+                        <input
+                            type="number"
+                            id="teamOrder"
+                            value="0"
+                            min="0"
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ACTIVE STATUS -->
+
+                <div class="team-status-row">
+
+                    <label class="team-toggle">
+
+                        <input
+                            type="checkbox"
+                            id="teamActive"
+                            checked
+                        >
+
+                        <span class="team-toggle-slider"></span>
+
+                        <span>
+                            Active Member
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+
+                <!-- MESSAGE -->
+
+                <div id="teamMessage"></div>
+
+
+
+                <!-- ACTIONS -->
+
+                <div class="team-form-actions">
+
+                    <button
+                        type="button"
+                        id="cancelTeamBtn"
+                        class="team-cancel-btn"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="team-save-btn"
+                    >
+
+                        <span id="teamSaveText">
+                            Save Team Member
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
 
 
     <script src="admin.js"></script>
