@@ -91,6 +91,53 @@ function getPhoneNumber(phone) {
 
 
 /* =========================================================
+   TEAM PHOTO URL FIX
+   Converts old localhost URLs to Render backend URL
+========================================================= */
+
+function getTeamPhotoUrl(photo) {
+
+    if (!photo) {
+        return "";
+    }
+
+    const photoString =
+        String(photo).trim();
+
+
+    /* Old localhost URL */
+    if (
+        photoString.startsWith(
+            "http://localhost:5000"
+        )
+    ) {
+
+        return photoString.replace(
+            "http://localhost:5000",
+            API_URL
+        );
+    }
+
+
+    /* Old 127.0.0.1 URL */
+    if (
+        photoString.startsWith(
+            "http://127.0.0.1:5000"
+        )
+    ) {
+
+        return photoString.replace(
+            "http://127.0.0.1:5000",
+            API_URL
+        );
+    }
+
+
+    return photoString;
+}
+
+
+/* =========================================================
    ADMIN LOGIN
 ========================================================= */
 
@@ -1633,7 +1680,7 @@ function showExistingTeamPhoto(
 
 
     showTeamPhotoPreview(
-        photo
+        getTeamPhotoUrl(photo)
     );
 }
 
@@ -1793,7 +1840,9 @@ function displayTeamMembers(
 
 
                 const photo =
-                    member.photo || "";
+                    getTeamPhotoUrl(
+                        member.photo
+                    );
 
 
                 const photoHTML =
@@ -1815,8 +1864,23 @@ function displayTeamMembers(
                                 "
                                 onerror="
                                     this.style.display='none';
+                                    this.nextElementSibling.style.display='flex';
                                 "
                             >
+
+                            <div
+                                class="team-no-photo"
+                                style="
+                                    width:60px;
+                                    height:60px;
+                                    display:none;
+                                    align-items:center;
+                                    justify-content:center;
+                                    border-radius:50%;
+                                "
+                            >
+                                GX
+                            </div>
                         `
 
                         : `
@@ -2579,8 +2643,6 @@ window.editTeamMember =
 
         /* -------------------------------------------------
            FILE INPUT CANNOT BE PREFILLED
-
-           Instead, show existing image.
         ------------------------------------------------- */
 
         const photoInput =
@@ -2731,8 +2793,10 @@ window.toggleTeamMember =
                                     "",
 
                                 photo:
-                                    member.photo ||
-                                    "",
+                                    getTeamPhotoUrl(
+                                        member.photo ||
+                                        ""
+                                    ),
 
                                 linkedin:
                                     member.linkedin ||
