@@ -1,7 +1,9 @@
 /* =========================================================
    GROWTECH AXON - ADMIN PANEL
    Leads + Team Management
+   Image Upload + Preview
 ========================================================= */
+
 
 /* =========================================================
    API CONFIG
@@ -34,8 +36,13 @@ async function getJSON(response) {
     const text = await response.text();
 
     try {
-        return text ? JSON.parse(text) : {};
+
+        return text
+            ? JSON.parse(text)
+            : {};
+
     } catch {
+
         return {
             success: false,
             message: text || "Invalid server response."
@@ -59,7 +66,8 @@ function formatLeadDate(lead) {
 
     if (lead?.createdAt) {
 
-        const date = new Date(lead.createdAt);
+        const date =
+            new Date(lead.createdAt);
 
         if (!isNaN(date.getTime())) {
 
@@ -72,7 +80,9 @@ function formatLeadDate(lead) {
         }
     }
 
-    return escapeHTML(lead?.date || "-");
+    return escapeHTML(
+        lead?.date || "-"
+    );
 }
 
 
@@ -87,106 +97,152 @@ function getPhoneNumber(phone) {
    ADMIN LOGIN
 ========================================================= */
 
-const loginForm = document.getElementById("loginForm");
-const loginMessage = document.getElementById("loginMessage");
+const loginForm =
+    document.getElementById("loginForm");
+
+const loginMessage =
+    document.getElementById("loginMessage");
 
 
 if (loginForm) {
 
-    loginForm.addEventListener("submit", async (e) => {
+    loginForm.addEventListener(
+        "submit",
+        async (e) => {
 
-        e.preventDefault();
+            e.preventDefault();
 
-        const username =
-            document.getElementById("username")?.value.trim();
+            const username =
+                document
+                    .getElementById("username")
+                    ?.value
+                    .trim();
 
-        const password =
-            document.getElementById("password")?.value || "";
+            const password =
+                document
+                    .getElementById("password")
+                    ?.value || "";
 
-        const button =
-            loginForm.querySelector("button");
+            const button =
+                loginForm.querySelector("button");
 
-        if (!username || !password) {
 
-            if (loginMessage) {
-                loginMessage.textContent =
-                    "Please enter username and password.";
-            }
+            if (!username || !password) {
 
-            return;
-        }
+                if (loginMessage) {
 
-        if (button) {
-            button.disabled = true;
-        }
-
-        if (loginMessage) {
-            loginMessage.textContent = "Signing in...";
-        }
-
-        try {
-
-            const response = await fetch(
-                `${API_URL}/api/admin/login`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        username,
-                        password
-                    })
+                    loginMessage.textContent =
+                        "Please enter username and password.";
                 }
-            );
 
-            const data = await getJSON(response);
-
-            if (!response.ok || !data.success) {
-
-                throw new Error(
-                    data.message || "Login failed."
-                );
+                return;
             }
 
-            if (!data.token) {
-
-                throw new Error(
-                    "Login successful but token was not received."
-                );
-            }
-
-            localStorage.setItem(
-                "growtechAdminToken",
-                data.token
-            );
-
-            if (loginMessage) {
-                loginMessage.textContent =
-                    "Login successful!";
-            }
-
-            setTimeout(() => {
-                window.location.href = "dashboard.html";
-            }, 500);
-
-        } catch (error) {
-
-            console.error("Admin login error:", error);
-
-            if (loginMessage) {
-                loginMessage.textContent =
-                    error.message || "Unable to login.";
-            }
-
-        } finally {
 
             if (button) {
-                button.disabled = false;
+                button.disabled = true;
             }
-        }
 
-    });
+
+            if (loginMessage) {
+
+                loginMessage.textContent =
+                    "Signing in...";
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/admin/login`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    username,
+                                    password
+                                })
+                        }
+                    );
+
+
+                const data =
+                    await getJSON(response);
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Login failed."
+                    );
+                }
+
+
+                if (!data.token) {
+
+                    throw new Error(
+                        "Login successful but token was not received."
+                    );
+                }
+
+
+                localStorage.setItem(
+                    "growtechAdminToken",
+                    data.token
+                );
+
+
+                if (loginMessage) {
+
+                    loginMessage.textContent =
+                        "Login successful!";
+                }
+
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        "dashboard.html";
+
+                }, 500);
+
+
+            } catch (error) {
+
+                console.error(
+                    "Admin login error:",
+                    error
+                );
+
+
+                if (loginMessage) {
+
+                    loginMessage.textContent =
+                        error.message ||
+                        "Unable to login.";
+                }
+
+
+            } finally {
+
+                if (button) {
+                    button.disabled = false;
+                }
+            }
+
+        }
+    );
 }
 
 
@@ -200,7 +256,9 @@ const leadsTable =
 
 if (leadsTable) {
 
-    const token = getAdminToken();
+    const token =
+        getAdminToken();
+
 
     if (!token) {
 
@@ -220,8 +278,11 @@ if (leadsTable) {
 function initializeDashboard() {
 
     loadLeads();
+
     initializeLeadFilters();
+
     initializeRefresh();
+
     initializeLogout();
 }
 
@@ -237,12 +298,17 @@ async function loadLeads() {
 
     if (!table) return;
 
-    const token = getAdminToken();
+
+    const token =
+        getAdminToken();
+
 
     if (!token) {
+
         redirectToLogin();
         return;
     }
+
 
     table.innerHTML = `
         <tr>
@@ -252,17 +318,22 @@ async function loadLeads() {
         </tr>
     `;
 
+
     try {
 
-        const response = await fetch(
-            `${API_URL}/api/leads`,
-            {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${token}`
+        const response =
+            await fetch(
+                `${API_URL}/api/leads`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        "Authorization":
+                            `Bearer ${token}`
+                    }
                 }
-            }
-        );
+            );
+
 
         if (response.status === 401) {
 
@@ -270,33 +341,55 @@ async function loadLeads() {
             return;
         }
 
-        const data = await getJSON(response);
 
-        if (!response.ok || !data.success) {
+        const data =
+            await getJSON(response);
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
 
             throw new Error(
-                data.message || "Unable to load leads."
+                data.message ||
+                "Unable to load leads."
             );
         }
+
 
         window.allLeads =
             Array.isArray(data.leads)
                 ? data.leads
                 : [];
 
-        displayLeads(window.allLeads);
-        updateStats(window.allLeads);
+
+        displayLeads(
+            window.allLeads
+        );
+
+
+        updateStats(
+            window.allLeads
+        );
+
 
     } catch (error) {
 
-        console.error("Load leads error:", error);
+        console.error(
+            "Load leads error:",
+            error
+        );
+
 
         table.innerHTML = `
             <tr>
                 <td colspan="10" class="loading">
                     ❌ Unable to load customer leads.
                     <br>
-                    <small>${escapeHTML(error.message)}</small>
+                    <small>
+                        ${escapeHTML(error.message)}
+                    </small>
                 </td>
             </tr>
         `;
@@ -313,9 +406,14 @@ function displayLeads(leads) {
     const table =
         document.getElementById("leadsTable");
 
+
     if (!table) return;
 
-    if (!Array.isArray(leads) || leads.length === 0) {
+
+    if (
+        !Array.isArray(leads) ||
+        leads.length === 0
+    ) {
 
         table.innerHTML = `
             <tr>
@@ -328,138 +426,188 @@ function displayLeads(leads) {
         return;
     }
 
-    table.innerHTML = leads.map((lead, index) => {
 
-        const leadId =
-            String(lead._id || "");
+    table.innerHTML =
+        leads.map(
+            (lead, index) => {
 
-        const phone =
-            getPhoneNumber(lead.phone);
+                const leadId =
+                    String(
+                        lead._id || ""
+                    );
 
-        const status =
-            lead.status || "New";
 
-        return `
-            <tr>
+                const phone =
+                    getPhoneNumber(
+                        lead.phone
+                    );
 
-                <td>
-                    ${index + 1}
-                </td>
 
-                <td>
-                    <strong>
-                        ${escapeHTML(lead.name || "-")}
-                    </strong>
-                </td>
+                const status =
+                    lead.status || "New";
 
-                <td>
-                    ${escapeHTML(lead.business || "-")}
-                </td>
 
-                <td>
-                    ${escapeHTML(lead.email || "-")}
-                </td>
+                return `
+                    <tr>
 
-                <td>
-                    ${escapeHTML(lead.phone || "-")}
-                </td>
+                        <td>
+                            ${index + 1}
+                        </td>
 
-                <td>
-                    ${escapeHTML(lead.service || "-")}
-                </td>
+                        <td>
+                            <strong>
+                                ${escapeHTML(
+                                    lead.name || "-"
+                                )}
+                            </strong>
+                        </td>
 
-                <td>
-                    ${escapeHTML(lead.budget || "-")}
-                </td>
+                        <td>
+                            ${escapeHTML(
+                                lead.business || "-"
+                            )}
+                        </td>
 
-                <td>
+                        <td>
+                            ${escapeHTML(
+                                lead.email || "-"
+                            )}
+                        </td>
 
-                    <select
-                        class="lead-status"
-                        data-id="${escapeHTML(leadId)}"
-                        aria-label="Lead status"
-                    >
+                        <td>
+                            ${escapeHTML(
+                                lead.phone || "-"
+                            )}
+                        </td>
 
-                        <option value="New"
-                            ${status === "New" ? "selected" : ""}>
-                            New
-                        </option>
+                        <td>
+                            ${escapeHTML(
+                                lead.service || "-"
+                            )}
+                        </td>
 
-                        <option value="Contacted"
-                            ${status === "Contacted" ? "selected" : ""}>
-                            Contacted
-                        </option>
+                        <td>
+                            ${escapeHTML(
+                                lead.budget || "-"
+                            )}
+                        </td>
 
-                        <option value="Converted"
-                            ${status === "Converted" ? "selected" : ""}>
-                            Converted
-                        </option>
+                        <td>
 
-                        <option value="Closed"
-                            ${status === "Closed" ? "selected" : ""}>
-                            Closed
-                        </option>
+                            <select
+                                class="lead-status"
+                                data-id="${escapeHTML(leadId)}"
+                                aria-label="Lead status"
+                            >
 
-                    </select>
-
-                </td>
-
-                <td>
-                    ${formatLeadDate(lead)}
-                </td>
-
-                <td>
-
-                    <div class="lead-actions">
-
-                        <button
-                            type="button"
-                            class="action-btn action-view"
-                            data-action="view"
-                            data-id="${escapeHTML(leadId)}"
-                        >
-                            View
-                        </button>
-
-                        ${
-                            phone
-                            ? `
-                                <a
-                                    href="tel:${phone}"
-                                    class="action-btn action-call"
+                                <option
+                                    value="New"
+                                    ${
+                                        status === "New"
+                                            ? "selected"
+                                            : ""
+                                    }
                                 >
-                                    Call
-                                </a>
+                                    New
+                                </option>
 
-                                <a
-                                    href="https://wa.me/${phone}"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="action-btn action-whatsapp"
+                                <option
+                                    value="Contacted"
+                                    ${
+                                        status === "Contacted"
+                                            ? "selected"
+                                            : ""
+                                    }
                                 >
-                                    WA
-                                </a>
-                            `
-                            : ""
-                        }
+                                    Contacted
+                                </option>
 
-                        <button
-                            type="button"
-                            class="action-btn action-delete"
-                            data-action="delete"
-                            data-id="${escapeHTML(leadId)}"
-                        >
-                            Delete
-                        </button>
+                                <option
+                                    value="Converted"
+                                    ${
+                                        status === "Converted"
+                                            ? "selected"
+                                            : ""
+                                    }
+                                >
+                                    Converted
+                                </option>
 
-                    </div>
+                                <option
+                                    value="Closed"
+                                    ${
+                                        status === "Closed"
+                                            ? "selected"
+                                            : ""
+                                    }
+                                >
+                                    Closed
+                                </option>
 
-                </td>
+                            </select>
 
-            </tr>
-        `;
+                        </td>
 
-    }).join("");
+                        <td>
+                            ${formatLeadDate(lead)}
+                        </td>
+
+                        <td>
+
+                            <div class="lead-actions">
+
+                                <button
+                                    type="button"
+                                    class="action-btn action-view"
+                                    data-action="view"
+                                    data-id="${escapeHTML(leadId)}"
+                                >
+                                    View
+                                </button>
+
+
+                                ${
+                                    phone
+                                        ? `
+                                            <a
+                                                href="tel:${phone}"
+                                                class="action-btn action-call"
+                                            >
+                                                Call
+                                            </a>
+
+                                            <a
+                                                href="https://wa.me/${phone}"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="action-btn action-whatsapp"
+                                            >
+                                                WA
+                                            </a>
+                                        `
+                                        : ""
+                                }
+
+
+                                <button
+                                    type="button"
+                                    class="action-btn action-delete"
+                                    data-action="delete"
+                                    data-id="${escapeHTML(leadId)}"
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                `;
+            }
+        )
+        .join("");
+
 
     attachLeadActions();
 }
@@ -485,6 +633,7 @@ function attachLeadActions() {
                     const status =
                         select.value;
 
+
                     await updateStatus(
                         id,
                         status
@@ -495,7 +644,9 @@ function attachLeadActions() {
 
 
     document
-        .querySelectorAll("[data-action='view']")
+        .querySelectorAll(
+            "[data-action='view']"
+        )
         .forEach(button => {
 
             button.addEventListener(
@@ -511,7 +662,9 @@ function attachLeadActions() {
 
 
     document
-        .querySelectorAll("[data-action='delete']")
+        .querySelectorAll(
+            "[data-action='delete']"
+        )
         .forEach(button => {
 
             button.addEventListener(
@@ -531,32 +684,45 @@ function attachLeadActions() {
    UPDATE LEAD STATUS
 ========================================================= */
 
-async function updateStatus(id, status) {
+async function updateStatus(
+    id,
+    status
+) {
 
-    const token = getAdminToken();
+    const token =
+        getAdminToken();
+
 
     if (!token) {
+
         redirectToLogin();
         return;
     }
 
+
     try {
 
-        const response = await fetch(
-            `${API_URL}/api/leads/${id}/status`,
-            {
-                method: "PUT",
+        const response =
+            await fetch(
+                `${API_URL}/api/leads/${id}/status`,
+                {
+                    method: "PUT",
 
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
+                    headers: {
+                        "Content-Type":
+                            "application/json",
 
-                body: JSON.stringify({
-                    status
-                })
-            }
-        );
+                        "Authorization":
+                            `Bearer ${token}`
+                    },
+
+                    body:
+                        JSON.stringify({
+                            status
+                        })
+                }
+            );
+
 
         if (response.status === 401) {
 
@@ -564,10 +730,15 @@ async function updateStatus(id, status) {
             return;
         }
 
+
         const data =
             await getJSON(response);
 
-        if (!response.ok || !data.success) {
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
 
             throw new Error(
                 data.message ||
@@ -575,21 +746,28 @@ async function updateStatus(id, status) {
             );
         }
 
+
         const lead =
-            (window.allLeads || []).find(
-                item =>
-                    String(item._id) === String(id)
-            );
+            (window.allLeads || [])
+                .find(
+                    item =>
+                        String(item._id) ===
+                        String(id)
+                );
+
 
         if (lead) {
 
             lead.status =
-                data.lead?.status || status;
+                data.lead?.status ||
+                status;
         }
+
 
         updateStats(
             window.allLeads || []
         );
+
 
     } catch (error) {
 
@@ -598,10 +776,12 @@ async function updateStatus(id, status) {
             error
         );
 
+
         alert(
             error.message ||
             "Status update failed."
         );
+
 
         loadLeads();
     }
@@ -615,10 +795,13 @@ async function updateStatus(id, status) {
 async function deleteLead(id) {
 
     const lead =
-        (window.allLeads || []).find(
-            item =>
-                String(item._id) === String(id)
-        );
+        (window.allLeads || [])
+            .find(
+                item =>
+                    String(item._id) ===
+                    String(id)
+            );
+
 
     if (!lead) {
 
@@ -626,33 +809,45 @@ async function deleteLead(id) {
         return;
     }
 
+
     const confirmed =
         confirm(
-            `Delete lead of ${lead.name || "this customer"}?\n\nThis action cannot be undone.`
+            `Delete lead of ${
+                lead.name ||
+                "this customer"
+            }?\n\nThis action cannot be undone.`
         );
+
 
     if (!confirmed) return;
 
-    const token = getAdminToken();
+
+    const token =
+        getAdminToken();
+
 
     if (!token) {
+
         redirectToLogin();
         return;
     }
 
+
     try {
 
-        const response = await fetch(
-            `${API_URL}/api/leads/${id}`,
-            {
-                method: "DELETE",
+        const response =
+            await fetch(
+                `${API_URL}/api/leads/${id}`,
+                {
+                    method: "DELETE",
 
-                headers: {
-                    "Authorization":
-                        `Bearer ${token}`
+                    headers: {
+                        "Authorization":
+                            `Bearer ${token}`
+                    }
                 }
-            }
-        );
+            );
+
 
         if (response.status === 401) {
 
@@ -660,10 +855,15 @@ async function deleteLead(id) {
             return;
         }
 
+
         const data =
             await getJSON(response);
 
-        if (!response.ok || !data.success) {
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
 
             throw new Error(
                 data.message ||
@@ -671,7 +871,9 @@ async function deleteLead(id) {
             );
         }
 
+
         await loadLeads();
+
 
     } catch (error) {
 
@@ -679,6 +881,7 @@ async function deleteLead(id) {
             "Delete lead error:",
             error
         );
+
 
         alert(
             error.message ||
@@ -695,16 +898,20 @@ async function deleteLead(id) {
 function viewLead(id) {
 
     const lead =
-        (window.allLeads || []).find(
-            item =>
-                String(item._id) === String(id)
-        );
+        (window.allLeads || [])
+            .find(
+                item =>
+                    String(item._id) ===
+                    String(id)
+            );
+
 
     if (!lead) {
 
         alert("Lead not found.");
         return;
     }
+
 
     alert(
 `CUSTOMER DETAILS
@@ -745,18 +952,22 @@ function updateStats(leads) {
             ? leads
             : [];
 
+
     const total =
         safeLeads.length;
+
 
     const newLeads =
         safeLeads.filter(
             lead =>
-                (lead.status || "New") === "New"
+                (lead.status || "New") ===
+                "New"
         ).length;
 
 
     const todayStart =
         new Date();
+
 
     todayStart.setHours(
         0,
@@ -769,33 +980,40 @@ function updateStats(leads) {
     const tomorrowStart =
         new Date(todayStart);
 
+
     tomorrowStart.setDate(
         tomorrowStart.getDate() + 1
     );
 
 
     const todayLeads =
-        safeLeads.filter(lead => {
+        safeLeads.filter(
+            lead => {
 
-            if (!lead.createdAt) {
-                return false;
+                if (!lead.createdAt) {
+                    return false;
+                }
+
+
+                const created =
+                    new Date(
+                        lead.createdAt
+                    );
+
+
+                return (
+                    created >= todayStart &&
+                    created < tomorrowStart
+                );
             }
-
-            const created =
-                new Date(lead.createdAt);
-
-            return (
-                created >= todayStart &&
-                created < tomorrowStart
-            );
-
-        }).length;
+        ).length;
 
 
     const converted =
         safeLeads.filter(
             lead =>
-                lead.status === "Converted"
+                lead.status ===
+                "Converted"
         ).length;
 
 
@@ -804,15 +1022,18 @@ function updateStats(leads) {
         total
     );
 
+
     setText(
         "newLeads",
         newLeads
     );
 
+
     setText(
         "todayLeads",
         todayLeads
     );
+
 
     setText(
         "projectLeads",
@@ -821,10 +1042,14 @@ function updateStats(leads) {
 }
 
 
-function setText(id, value) {
+function setText(
+    id,
+    value
+) {
 
     const element =
         document.getElementById(id);
+
 
     if (element) {
         element.textContent = value;
@@ -839,10 +1064,15 @@ function setText(id, value) {
 function initializeLeadFilters() {
 
     const searchInput =
-        document.getElementById("searchInput");
+        document.getElementById(
+            "searchInput"
+        );
+
 
     const statusFilter =
-        document.getElementById("statusFilter");
+        document.getElementById(
+            "statusFilter"
+        );
 
 
     if (searchInput) {
@@ -867,10 +1097,15 @@ function initializeLeadFilters() {
 function applyFilters() {
 
     const searchInput =
-        document.getElementById("searchInput");
+        document.getElementById(
+            "searchInput"
+        );
+
 
     const statusFilter =
-        document.getElementById("statusFilter");
+        document.getElementById(
+            "statusFilter"
+        );
 
 
     const search =
@@ -880,41 +1115,50 @@ function applyFilters() {
 
 
     const selectedStatus =
-        statusFilter?.value || "all";
+        statusFilter?.value ||
+        "all";
 
 
     const filtered =
-        (window.allLeads || []).filter(lead => {
+        (window.allLeads || [])
+            .filter(
+                lead => {
 
-            const searchableText = `
-                ${lead.name || ""}
-                ${lead.business || ""}
-                ${lead.email || ""}
-                ${lead.phone || ""}
-                ${lead.city || ""}
-                ${lead.service || ""}
-                ${lead.budget || ""}
-            `.toLowerCase();
-
-
-            const matchesSearch =
-                !search ||
-                searchableText.includes(search);
+                    const searchableText = `
+                        ${lead.name || ""}
+                        ${lead.business || ""}
+                        ${lead.email || ""}
+                        ${lead.phone || ""}
+                        ${lead.city || ""}
+                        ${lead.service || ""}
+                        ${lead.budget || ""}
+                    `.toLowerCase();
 
 
-            const matchesStatus =
-                selectedStatus === "all" ||
-                (lead.status || "New") === selectedStatus;
+                    const matchesSearch =
+                        !search ||
+                        searchableText.includes(
+                            search
+                        );
 
 
-            return (
-                matchesSearch &&
-                matchesStatus
+                    const matchesStatus =
+                        selectedStatus === "all" ||
+                        (lead.status || "New") ===
+                            selectedStatus;
+
+
+                    return (
+                        matchesSearch &&
+                        matchesStatus
+                    );
+                }
             );
-        });
 
 
-    displayLeads(filtered);
+    displayLeads(
+        filtered
+    );
 }
 
 
@@ -925,7 +1169,10 @@ function applyFilters() {
 function initializeRefresh() {
 
     const refreshBtn =
-        document.getElementById("refreshBtn");
+        document.getElementById(
+            "refreshBtn"
+        );
+
 
     if (!refreshBtn) return;
 
@@ -937,10 +1184,13 @@ function initializeRefresh() {
             const originalText =
                 refreshBtn.textContent;
 
+
             refreshBtn.disabled = true;
+
 
             refreshBtn.textContent =
                 "↻ Loading...";
+
 
             try {
 
@@ -965,7 +1215,10 @@ function initializeRefresh() {
 function initializeLogout() {
 
     const logoutBtn =
-        document.getElementById("logoutBtn");
+        document.getElementById(
+            "logoutBtn"
+        );
+
 
     if (!logoutBtn) return;
 
@@ -979,11 +1232,14 @@ function initializeLogout() {
                     "Are you sure you want to logout?"
                 );
 
+
             if (!confirmed) return;
+
 
             localStorage.removeItem(
                 "growtechAdminToken"
             );
+
 
             window.location.href =
                 "login.html";
@@ -997,37 +1253,64 @@ function initializeLogout() {
 ========================================================= */
 
 const teamTable =
-    document.getElementById("teamTable");
+    document.getElementById(
+        "teamTable"
+    );
+
 
 const teamModal =
-    document.getElementById("teamModal");
+    document.getElementById(
+        "teamModal"
+    );
+
 
 const teamForm =
-    document.getElementById("teamForm");
+    document.getElementById(
+        "teamForm"
+    );
+
 
 const addTeamBtn =
-    document.getElementById("addTeamBtn");
+    document.getElementById(
+        "addTeamBtn"
+    );
+
 
 const closeTeamModal =
-    document.getElementById("closeTeamModal");
+    document.getElementById(
+        "closeTeamModal"
+    );
+
 
 const cancelTeamBtn =
-    document.getElementById("cancelTeamBtn");
+    document.getElementById(
+        "cancelTeamBtn"
+    );
+
 
 const teamModalTitle =
-    document.getElementById("teamModalTitle");
+    document.getElementById(
+        "teamModalTitle"
+    );
+
 
 const teamSaveText =
-    document.getElementById("teamSaveText");
+    document.getElementById(
+        "teamSaveText"
+    );
+
 
 const teamMessage =
-    document.getElementById("teamMessage");
+    document.getElementById(
+        "teamMessage"
+    );
 
 
 if (teamTable) {
 
     const teamToken =
         getAdminToken();
+
 
     if (!teamToken) {
 
@@ -1046,11 +1329,315 @@ if (teamTable) {
 
 function initializeTeamManagement() {
 
+    createTeamPhotoPreview();
+
+    initializeTeamPhotoInput();
+
     loadTeamMembers();
 
     initializeTeamModal();
 
     initializeTeamForm();
+}
+
+
+/* =========================================================
+   CREATE IMAGE PREVIEW
+========================================================= */
+
+function createTeamPhotoPreview() {
+
+    const photoInput =
+        document.getElementById(
+            "teamPhoto"
+        );
+
+
+    if (!photoInput) return;
+
+
+    if (
+        document.getElementById(
+            "teamPhotoPreview"
+        )
+    ) {
+        return;
+    }
+
+
+    const preview =
+        document.createElement(
+            "div"
+        );
+
+
+    preview.id =
+        "teamPhotoPreview";
+
+
+    preview.style.marginTop =
+        "12px";
+
+
+    preview.innerHTML = `
+        <div
+            style="
+                display:none;
+                position:relative;
+                width:120px;
+            "
+            id="teamPhotoPreviewBox"
+        >
+
+            <img
+                id="teamPhotoPreviewImage"
+                src=""
+                alt="Team photo preview"
+                style="
+                    width:120px;
+                    height:120px;
+                    object-fit:cover;
+                    border-radius:12px;
+                    border:1px solid #ddd;
+                    display:block;
+                "
+            >
+
+            <button
+                type="button"
+                id="removeTeamPhotoPreview"
+                style="
+                    margin-top:6px;
+                    cursor:pointer;
+                    padding:5px 10px;
+                    border:0;
+                    border-radius:6px;
+                "
+            >
+                Remove
+            </button>
+
+        </div>
+    `;
+
+
+    photoInput.parentNode.appendChild(
+        preview
+    );
+
+
+    const removeButton =
+        document.getElementById(
+            "removeTeamPhotoPreview"
+        );
+
+
+    if (removeButton) {
+
+        removeButton.addEventListener(
+            "click",
+            () => {
+
+                photoInput.value = "";
+
+                hideTeamPhotoPreview();
+            }
+        );
+    }
+}
+
+
+/* =========================================================
+   IMAGE INPUT
+========================================================= */
+
+function initializeTeamPhotoInput() {
+
+    const photoInput =
+        document.getElementById(
+            "teamPhoto"
+        );
+
+
+    if (!photoInput) return;
+
+
+    photoInput.addEventListener(
+        "change",
+        handleTeamPhotoChange
+    );
+}
+
+
+/* =========================================================
+   HANDLE IMAGE CHANGE
+========================================================= */
+
+function handleTeamPhotoChange(event) {
+
+    const input =
+        event.target;
+
+
+    const file =
+        input.files?.[0];
+
+
+    if (!file) {
+
+        hideTeamPhotoPreview();
+        return;
+    }
+
+
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/jpg"
+    ];
+
+
+    if (
+        !allowedTypes.includes(
+            file.type
+        )
+    ) {
+
+        alert(
+            "Only JPG, PNG and WEBP images are allowed."
+        );
+
+
+        input.value = "";
+
+        hideTeamPhotoPreview();
+
+        return;
+    }
+
+
+    const maxSize =
+        5 * 1024 * 1024;
+
+
+    if (file.size > maxSize) {
+
+        alert(
+            "Image size must be less than 5MB."
+        );
+
+
+        input.value = "";
+
+        hideTeamPhotoPreview();
+
+        return;
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function () {
+
+            showTeamPhotoPreview(
+                reader.result
+            );
+        };
+
+
+    reader.readAsDataURL(
+        file
+    );
+}
+
+
+/* =========================================================
+   SHOW PHOTO PREVIEW
+========================================================= */
+
+function showTeamPhotoPreview(
+    src
+) {
+
+    const box =
+        document.getElementById(
+            "teamPhotoPreviewBox"
+        );
+
+
+    const image =
+        document.getElementById(
+            "teamPhotoPreviewImage"
+        );
+
+
+    if (!box || !image) return;
+
+
+    image.src =
+        src;
+
+
+    box.style.display =
+        "block";
+}
+
+
+/* =========================================================
+   HIDE PHOTO PREVIEW
+========================================================= */
+
+function hideTeamPhotoPreview() {
+
+    const box =
+        document.getElementById(
+            "teamPhotoPreviewBox"
+        );
+
+
+    const image =
+        document.getElementById(
+            "teamPhotoPreviewImage"
+        );
+
+
+    if (box) {
+
+        box.style.display =
+            "none";
+    }
+
+
+    if (image) {
+
+        image.src =
+            "";
+    }
+}
+
+
+/* =========================================================
+   LOAD EXISTING PHOTO PREVIEW
+========================================================= */
+
+function showExistingTeamPhoto(
+    photo
+) {
+
+    if (!photo) {
+
+        hideTeamPhotoPreview();
+        return;
+    }
+
+
+    showTeamPhotoPreview(
+        photo
+    );
 }
 
 
@@ -1061,18 +1648,24 @@ function initializeTeamManagement() {
 async function loadTeamMembers() {
 
     const table =
-        document.getElementById("teamTable");
+        document.getElementById(
+            "teamTable"
+        );
+
 
     if (!table) return;
 
+
     const token =
         getAdminToken();
+
 
     if (!token) {
 
         redirectToLogin();
         return;
     }
+
 
     table.innerHTML = `
         <tr>
@@ -1146,7 +1739,11 @@ async function loadTeamMembers() {
                 <td colspan="6" class="loading">
                     ❌ Unable to load team members.
                     <br>
-                    <small>${escapeHTML(error.message)}</small>
+                    <small>
+                        ${escapeHTML(
+                            error.message
+                        )}
+                    </small>
                 </td>
             </tr>
         `;
@@ -1158,10 +1755,15 @@ async function loadTeamMembers() {
    DISPLAY TEAM
 ========================================================= */
 
-function displayTeamMembers(team) {
+function displayTeamMembers(
+    team
+) {
 
     const table =
-        document.getElementById("teamTable");
+        document.getElementById(
+            "teamTable"
+        );
+
 
     if (!table) return;
 
@@ -1184,118 +1786,165 @@ function displayTeamMembers(team) {
 
 
     table.innerHTML =
-        team.map((member, index) => {
+        team.map(
+            (member) => {
 
-            const memberId =
-                String(member._id || "");
-
-
-            const photo =
-                member.photo || "";
-
-
-            const photoHTML =
-                photo
-                    ? `
-                        <img
-                            src="${escapeHTML(photo)}"
-                            class="team-avatar"
-                            alt="${escapeHTML(member.name || "Team Member")}"
-                            onerror="this.style.display='none';"
-                        >
-                    `
-                    : `
-                        <div class="team-no-photo">
-                            GX
-                        </div>
-                    `;
+                const memberId =
+                    String(
+                        member._id || ""
+                    );
 
 
-            return `
-                <tr>
+                const photo =
+                    member.photo || "";
 
-                    <td>
-                        ${photoHTML}
-                    </td>
 
-                    <td>
-                        <strong>
-                            ${escapeHTML(member.name || "-")}
-                        </strong>
-                    </td>
+                const photoHTML =
+                    photo
 
-                    <td>
-                        ${escapeHTML(
-                            member.designation || "-"
-                        )}
-                    </td>
-
-                    <td>
-                        ${Number(
-                            member.displayOrder || 0
-                        )}
-                    </td>
-
-                    <td>
-
-                        ${
-                            member.active !== false
-
-                            ? `
-                                <span class="team-status-active">
-                                    Active
-                                </span>
-                            `
-
-                            : `
-                                <span class="team-status-inactive">
-                                    Inactive
-                                </span>
-                            `
-                        }
-
-                    </td>
-
-                    <td>
-
-                        <div class="team-actions">
-
-                            <button
-                                type="button"
-                                class="team-action-edit"
-                                onclick="editTeamMember('${memberId}')"
+                        ? `
+                            <img
+                                src="${escapeHTML(photo)}"
+                                class="team-avatar"
+                                alt="${escapeHTML(
+                                    member.name ||
+                                    "Team Member"
+                                )}"
+                                style="
+                                    width:60px;
+                                    height:60px;
+                                    object-fit:cover;
+                                    border-radius:50%;
+                                "
+                                onerror="
+                                    this.style.display='none';
+                                "
                             >
-                                Edit
-                            </button>
+                        `
 
-                            <button
-                                type="button"
-                                class="team-action-toggle"
-                                onclick="toggleTeamMember('${memberId}')"
+                        : `
+                            <div
+                                class="team-no-photo"
+                                style="
+                                    width:60px;
+                                    height:60px;
+                                    display:flex;
+                                    align-items:center;
+                                    justify-content:center;
+                                    border-radius:50%;
+                                "
                             >
-                                ${
-                                    member.active !== false
-                                        ? "Disable"
-                                        : "Activate"
-                                }
-                            </button>
+                                GX
+                            </div>
+                        `;
 
-                            <button
-                                type="button"
-                                class="team-action-delete"
-                                onclick="deleteTeamMember('${memberId}')"
+
+                return `
+                    <tr>
+
+                        <td>
+                            ${photoHTML}
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                ${escapeHTML(
+                                    member.name ||
+                                    "-"
+                                )}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+                            ${escapeHTML(
+                                member.designation ||
+                                "-"
+                            )}
+                        </td>
+
+
+                        <td>
+                            ${Number(
+                                member.displayOrder ||
+                                0
+                            )}
+                        </td>
+
+
+                        <td>
+
+                            ${
+                                member.active !== false
+
+                                    ? `
+                                        <span
+                                            class="team-status-active"
+                                        >
+                                            Active
+                                        </span>
+                                    `
+
+                                    : `
+                                        <span
+                                            class="team-status-inactive"
+                                        >
+                                            Inactive
+                                        </span>
+                                    `
+                            }
+
+                        </td>
+
+
+                        <td>
+
+                            <div
+                                class="team-actions"
                             >
-                                Delete
-                            </button>
 
-                        </div>
+                                <button
+                                    type="button"
+                                    class="team-action-edit"
+                                    onclick="editTeamMember('${memberId}')"
+                                >
+                                    Edit
+                                </button>
 
-                    </td>
 
-                </tr>
-            `;
+                                <button
+                                    type="button"
+                                    class="team-action-toggle"
+                                    onclick="toggleTeamMember('${memberId}')"
+                                >
+                                    ${
+                                        member.active !== false
+                                            ? "Disable"
+                                            : "Activate"
+                                    }
+                                </button>
 
-        }).join("");
+
+                                <button
+                                    type="button"
+                                    class="team-action-delete"
+                                    onclick="deleteTeamMember('${memberId}')"
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                `;
+            }
+        )
+        .join("");
 }
 
 
@@ -1339,7 +1988,8 @@ function initializeTeamModal() {
             (e) => {
 
                 if (
-                    e.target === teamModal
+                    e.target ===
+                    teamModal
                 ) {
 
                     closeTeamForm();
@@ -1358,6 +2008,7 @@ function openAddTeamModal() {
 
     resetTeamForm();
 
+
     if (teamModalTitle) {
 
         teamModalTitle.textContent =
@@ -1374,7 +2025,9 @@ function openAddTeamModal() {
 
     if (teamModal) {
 
-        teamModal.classList.add("active");
+        teamModal.classList.add(
+            "active"
+        );
     }
 }
 
@@ -1391,6 +2044,7 @@ function closeTeamForm() {
             "active"
         );
     }
+
 
     resetTeamForm();
 }
@@ -1409,34 +2063,54 @@ function resetTeamForm() {
 
 
     const teamId =
-        document.getElementById("teamId");
+        document.getElementById(
+            "teamId"
+        );
+
 
     const teamActive =
-        document.getElementById("teamActive");
+        document.getElementById(
+            "teamActive"
+        );
+
 
     const teamOrder =
-        document.getElementById("teamOrder");
+        document.getElementById(
+            "teamOrder"
+        );
 
 
     if (teamId) {
-        teamId.value = "";
+
+        teamId.value =
+            "";
     }
 
 
     if (teamActive) {
-        teamActive.checked = true;
+
+        teamActive.checked =
+            true;
     }
 
 
     if (teamOrder) {
-        teamOrder.value = 0;
+
+        teamOrder.value =
+            0;
     }
+
+
+    hideTeamPhotoPreview();
 
 
     if (teamMessage) {
 
-        teamMessage.textContent = "";
-        teamMessage.className = "";
+        teamMessage.textContent =
+            "";
+
+        teamMessage.className =
+            "";
     }
 }
 
@@ -1459,6 +2133,7 @@ function initializeTeamForm() {
 
 /* =========================================================
    SAVE / UPDATE TEAM
+   WITH FILE UPLOAD
 ========================================================= */
 
 async function saveTeamMember(e) {
@@ -1478,73 +2153,104 @@ async function saveTeamMember(e) {
 
 
     const id =
-        document.getElementById(
-            "teamId"
-        )?.value.trim();
+        document
+            .getElementById(
+                "teamId"
+            )
+            ?.value
+            .trim();
 
 
-    const memberData = {
-
-        name:
-            document.getElementById(
+    const name =
+        document
+            .getElementById(
                 "teamName"
-            )?.value.trim() || "",
+            )
+            ?.value
+            .trim() || "";
 
 
-        designation:
-            document.getElementById(
+    const designation =
+        document
+            .getElementById(
                 "teamDesignation"
-            )?.value.trim() || "",
+            )
+            ?.value
+            .trim() || "";
 
 
-        description:
-            document.getElementById(
+    const description =
+        document
+            .getElementById(
                 "teamDescription"
-            )?.value.trim() || "",
+            )
+            ?.value
+            .trim() || "";
 
 
-        photo:
-            document.getElementById(
-                "teamPhoto"
-            )?.value.trim() || "",
-
-
-        linkedin:
-            document.getElementById(
+    const linkedin =
+        document
+            .getElementById(
                 "teamLinkedin"
-            )?.value.trim() || "",
+            )
+            ?.value
+            .trim() || "";
 
 
-        instagram:
-            document.getElementById(
+    const instagram =
+        document
+            .getElementById(
                 "teamInstagram"
-            )?.value.trim() || "",
+            )
+            ?.value
+            .trim() || "";
 
 
-        github:
-            document.getElementById(
+    const github =
+        document
+            .getElementById(
                 "teamGithub"
-            )?.value.trim() || "",
+            )
+            ?.value
+            .trim() || "";
 
 
-        displayOrder:
-            Number(
-                document.getElementById(
+    const displayOrder =
+        Number(
+            document
+                .getElementById(
                     "teamOrder"
-                )?.value
-            ) || 0,
+                )
+                ?.value
+        ) || 0;
 
 
-        active:
-            document.getElementById(
+    const active =
+        document
+            .getElementById(
                 "teamActive"
-            )?.checked ?? true
-    };
+            )
+            ?.checked ?? true;
 
+
+    const photoInput =
+        document.getElementById(
+            "teamPhoto"
+        );
+
+
+    const photoFile =
+        photoInput?.files?.[0] ||
+        null;
+
+
+    /* -----------------------------------------------------
+       VALIDATION
+    ----------------------------------------------------- */
 
     if (
-        !memberData.name ||
-        !memberData.designation
+        !name ||
+        !designation
     ) {
 
         showTeamMessage(
@@ -1556,13 +2262,59 @@ async function saveTeamMember(e) {
     }
 
 
+    /* -----------------------------------------------------
+       FILE VALIDATION
+    ----------------------------------------------------- */
+
+    if (photoFile) {
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "image/jpg"
+        ];
+
+
+        if (
+            !allowedTypes.includes(
+                photoFile.type
+            )
+        ) {
+
+            showTeamMessage(
+                "Only JPG, PNG and WEBP images are allowed.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (
+            photoFile.size >
+            5 * 1024 * 1024
+        ) {
+
+            showTeamMessage(
+                "Image must be smaller than 5MB.",
+                "error"
+            );
+
+            return;
+        }
+    }
+
+
     const isEdit =
         Boolean(id);
 
 
     const url =
         isEdit
+
             ? `${API_URL}/api/admin/team/${id}`
+
             : `${API_URL}/api/admin/team`;
 
 
@@ -1579,16 +2331,87 @@ async function saveTeamMember(e) {
 
 
     if (saveButton) {
-        saveButton.disabled = true;
+
+        saveButton.disabled =
+            true;
     }
 
 
     showTeamMessage(
         isEdit
             ? "Updating team member..."
-            : "Saving team member...",
+            : "Uploading and saving team member...",
         "loading"
     );
+
+
+    /* -----------------------------------------------------
+       FORM DATA
+    ----------------------------------------------------- */
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "name",
+        name
+    );
+
+
+    formData.append(
+        "designation",
+        designation
+    );
+
+
+    formData.append(
+        "description",
+        description
+    );
+
+
+    formData.append(
+        "linkedin",
+        linkedin
+    );
+
+
+    formData.append(
+        "instagram",
+        instagram
+    );
+
+
+    formData.append(
+        "github",
+        github
+    );
+
+
+    formData.append(
+        "displayOrder",
+        String(displayOrder)
+    );
+
+
+    formData.append(
+        "active",
+        String(active)
+    );
+
+
+    /* -----------------------------------------------------
+       ADD PHOTO ONLY IF SELECTED
+    ----------------------------------------------------- */
+
+    if (photoFile) {
+
+        formData.append(
+            "photo",
+            photoFile
+        );
+    }
 
 
     try {
@@ -1600,22 +2423,20 @@ async function saveTeamMember(e) {
                     method,
 
                     headers: {
-                        "Content-Type":
-                            "application/json",
-
                         "Authorization":
                             `Bearer ${token}`
                     },
 
                     body:
-                        JSON.stringify(
-                            memberData
-                        )
+                        formData
                 }
             );
 
 
-        if (response.status === 401) {
+        if (
+            response.status ===
+            401
+        ) {
 
             redirectToLogin();
             return;
@@ -1623,7 +2444,9 @@ async function saveTeamMember(e) {
 
 
         const data =
-            await getJSON(response);
+            await getJSON(
+                response
+            );
 
 
         if (
@@ -1640,7 +2463,7 @@ async function saveTeamMember(e) {
 
         showTeamMessage(
             data.message ||
-                "Team member saved successfully.",
+            "Team member saved successfully.",
             "success"
         );
 
@@ -1664,7 +2487,7 @@ async function saveTeamMember(e) {
 
         showTeamMessage(
             error.message ||
-                "Unable to save team member.",
+            "Unable to save team member.",
             "error"
         );
 
@@ -1672,7 +2495,9 @@ async function saveTeamMember(e) {
     } finally {
 
         if (saveButton) {
-            saveButton.disabled = false;
+
+            saveButton.disabled =
+                false;
         }
     }
 }
@@ -1686,11 +2511,14 @@ window.editTeamMember =
     function(id) {
 
         const member =
-            (window.allTeamMembers || []).find(
-                item =>
-                    String(item._id) ===
-                    String(id)
-            );
+            (window.allTeamMembers || [])
+                .find(
+                    item =>
+                        String(
+                            item._id
+                        ) ===
+                        String(id)
+                );
 
 
         if (!member) {
@@ -1708,44 +2536,71 @@ window.editTeamMember =
             member._id
         );
 
+
         setValue(
             "teamName",
             member.name
         );
+
 
         setValue(
             "teamDesignation",
             member.designation
         );
 
+
         setValue(
             "teamDescription",
             member.description
         );
 
-        setValue(
-            "teamPhoto",
-            member.photo
-        );
 
         setValue(
             "teamLinkedin",
             member.linkedin
         );
 
+
         setValue(
             "teamInstagram",
             member.instagram
         );
+
 
         setValue(
             "teamGithub",
             member.github
         );
 
+
         setValue(
             "teamOrder",
-            member.displayOrder || 0
+            member.displayOrder ||
+            0
+        );
+
+
+        /* -------------------------------------------------
+           FILE INPUT CANNOT BE PREFILLED
+
+           Instead, show existing image.
+        ------------------------------------------------- */
+
+        const photoInput =
+            document.getElementById(
+                "teamPhoto"
+            );
+
+
+        if (photoInput) {
+
+            photoInput.value =
+                "";
+        }
+
+
+        showExistingTeamPhoto(
+            member.photo
         );
 
 
@@ -1778,8 +2633,11 @@ window.editTeamMember =
 
         if (teamMessage) {
 
-            teamMessage.textContent = "";
-            teamMessage.className = "";
+            teamMessage.textContent =
+                "";
+
+            teamMessage.className =
+                "";
         }
 
 
@@ -1792,10 +2650,18 @@ window.editTeamMember =
     };
 
 
-function setValue(id, value) {
+/* =========================================================
+   SET VALUE
+========================================================= */
+
+function setValue(
+    id,
+    value
+) {
 
     const element =
         document.getElementById(id);
+
 
     if (element) {
 
@@ -1813,11 +2679,14 @@ window.toggleTeamMember =
     async function(id) {
 
         const member =
-            (window.allTeamMembers || []).find(
-                item =>
-                    String(item._id) ===
-                    String(id)
-            );
+            (window.allTeamMembers || [])
+                .find(
+                    item =>
+                        String(
+                            item._id
+                        ) ===
+                        String(id)
+                );
 
 
         if (!member) return;
@@ -1843,6 +2712,7 @@ window.toggleTeamMember =
                         method: "PUT",
 
                         headers: {
+
                             "Content-Type":
                                 "application/json",
 
@@ -1860,33 +2730,43 @@ window.toggleTeamMember =
                                     member.designation,
 
                                 description:
-                                    member.description || "",
+                                    member.description ||
+                                    "",
 
                                 photo:
-                                    member.photo || "",
+                                    member.photo ||
+                                    "",
 
                                 linkedin:
-                                    member.linkedin || "",
+                                    member.linkedin ||
+                                    "",
 
                                 instagram:
-                                    member.instagram || "",
+                                    member.instagram ||
+                                    "",
 
                                 github:
-                                    member.github || "",
+                                    member.github ||
+                                    "",
 
                                 displayOrder:
-                                    member.displayOrder || 0,
+                                    member.displayOrder ||
+                                    0,
 
                                 active:
                                     member.active === false
                                         ? true
                                         : false
+
                             })
                     }
                 );
 
 
-            if (response.status === 401) {
+            if (
+                response.status ===
+                401
+            ) {
 
                 redirectToLogin();
                 return;
@@ -1894,7 +2774,9 @@ window.toggleTeamMember =
 
 
             const data =
-                await getJSON(response);
+                await getJSON(
+                    response
+                );
 
 
             if (
@@ -1936,19 +2818,32 @@ window.deleteTeamMember =
     async function(id) {
 
         const member =
-            (window.allTeamMembers || []).find(
-                item =>
-                    String(item._id) ===
-                    String(id)
+            (window.allTeamMembers || [])
+                .find(
+                    item =>
+                        String(
+                            item._id
+                        ) ===
+                        String(id)
+                );
+
+
+        if (!member) {
+
+            alert(
+                "Team member not found."
             );
 
-
-        if (!member) return;
+            return;
+        }
 
 
         const confirmed =
             confirm(
-                `Delete ${member.name || "this team member"}?\n\nThis action cannot be undone.`
+                `Delete ${
+                    member.name ||
+                    "this team member"
+                }?\n\nThis action cannot be undone.`
             );
 
 
@@ -1982,7 +2877,10 @@ window.deleteTeamMember =
                 );
 
 
-            if (response.status === 401) {
+            if (
+                response.status ===
+                401
+            ) {
 
                 redirectToLogin();
                 return;
@@ -1990,7 +2888,9 @@ window.deleteTeamMember =
 
 
             const data =
-                await getJSON(response);
+                await getJSON(
+                    response
+                );
 
 
             if (
@@ -2037,7 +2937,7 @@ function showTeamMessage(
 
 
     teamMessage.textContent =
-        message;ś
+        message;
 
 
     teamMessage.className =

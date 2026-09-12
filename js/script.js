@@ -250,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ================= SCROLL REVEAL ================= */
 
     const revealElements = document.querySelectorAll(
-        ".service-card, .project-card, .feature, .stat-card, .process-step, .testimonial-card, .pricing-card"
+        ".service-card, .project-card, .feature, .stat-card, .process-step, .testimonial-card, .pricing-card,.team-card"
     );
 
     revealElements.forEach(element => {
@@ -370,7 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             return;
         }
-
+  
 
         /* ================= FORM DATA ================= */
 
@@ -525,6 +525,144 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     });
+    /* ================= TEAM MEMBERS ================= */
+
+const teamGrid = document.getElementById("teamGrid");
+
+async function loadTeamMembers() {
+
+    if (!teamGrid) return;
+
+    try {
+
+        const response = await fetch(
+    "https://growtechaxon-backend.onrender.com/api/team"
+);
+        if (!response.ok) {
+            throw new Error("Failed to load team members");
+        }
+
+        const result = await response.json();
+
+        const members = Array.isArray(result)
+            ? result
+            : result.team || result.data || [];
+
+        const activeMembers = members
+            .filter(member => member.active !== false)
+            .sort(
+                (a, b) =>
+                    (a.displayOrder || 0) -
+                    (b.displayOrder || 0)
+            );
+
+        if (!activeMembers.length) {
+
+            teamGrid.innerHTML = `
+                <div class="team-empty">
+                    Our team members will appear here soon.
+                </div>
+            `;
+
+            return;
+        }
+
+        teamGrid.innerHTML = activeMembers.map(member => `
+
+            <article class="team-card">
+
+                <div class="team-photo">
+
+                    <img
+                        src="${member.photo || "images/default-team.jpg"}"
+                        alt="${member.name || "Team Member"}"
+                        loading="lazy"
+                    >
+
+                </div>
+
+                <div class="team-info">
+
+                    <h3>
+                        ${member.name || ""}
+                    </h3>
+
+                    <span class="team-designation">
+                        ${member.designation || ""}
+                    </span>
+
+                    <p>
+                        ${member.description || ""}
+                    </p>
+
+                    <div class="team-socials">
+
+                        ${
+                            member.linkedin
+                                ? `
+                            <a
+                                href="${member.linkedin}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="LinkedIn">
+                                <i class="fa-brands fa-linkedin-in"></i>
+                            </a>
+                            `
+                                : ""
+                        }
+
+                        ${
+                            member.instagram
+                                ? `
+                            <a
+                                href="${member.instagram}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Instagram">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                            `
+                                : ""
+                        }
+
+                        ${
+                            member.github
+                                ? `
+                            <a
+                                href="${member.github}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="GitHub">
+                                <i class="fa-brands fa-github"></i>
+                            </a>
+                            `
+                                : ""
+                        }
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        `).join("");
+
+    } catch (error) {
+
+        console.error(
+            "Team loading error:",
+            error
+        );
+
+        teamGrid.innerHTML = `
+            <div class="team-empty">
+                Unable to load team members.
+            </div>
+        `;
+    }
+}
+
+loadTeamMembers();
 
 
     /* ================= SMOOTH ANCHOR LINKS ================= */

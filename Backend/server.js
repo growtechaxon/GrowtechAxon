@@ -4,6 +4,7 @@ const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
 const jwt = require("jsonwebtoken");
+const multer = require("multer");
 require("dotenv").config();
 
 const Lead = require("./MODELS/Lead");
@@ -14,7 +15,6 @@ const Team = require("./MODELS/Team");
 // =====================================================
 
 const app = express();
-
 const PORT = process.env.PORT || 5000;
 
 // =====================================================
@@ -25,18 +25,160 @@ app.use(cors());
 app.use(express.json());
 
 // =====================================================
+// TEAM IMAGE UPLOAD SETUP
+// =====================================================
+
+const teamUploadFolder = path.join(
+    __dirname,
+    "uploads",
+    "team"
+);
+
+// Create uploads/team folder automatically
+if (!fs.existsSync(teamUploadFolder)) {
+    fs.mkdirSync(teamUploadFolder, {
+        recursive: true
+    });
+}
+
+// -----------------------------------------------------
+// MULTER STORAGE
+// -----------------------------------------------------
+
+const teamStorage = multer.diskStorage({
+
+    destination: (req, file, cb) => {
+
+        cb(
+            null,
+            teamUploadFolder
+        );
+
+    },
+
+    filename: (req, file, cb) => {
+
+        const extension =
+            path.extname(
+                file.originalname
+            ).toLowerCase();
+
+        const uniqueName =
+            `team-${Date.now()}-${Math.round(
+                Math.random() * 1e9
+            )}${extension}`;
+
+        cb(
+            null,
+            uniqueName
+        );
+
+    }
+
+});
+
+// -----------------------------------------------------
+// MULTER CONFIGURATION
+// -----------------------------------------------------
+
+const uploadTeamPhoto = multer({
+
+    storage: teamStorage,
+
+    limits: {
+        fileSize: 5 * 1024 * 1024
+    },
+
+    fileFilter: (req, file, cb) => {
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/webp"
+        ];
+
+        if (
+            allowedTypes.includes(
+                file.mimetype
+            )
+        ) {
+
+            cb(
+                null,
+                true
+            );
+
+        } else {
+
+            cb(
+                new Error(
+                    "Only JPG, PNG and WEBP images are allowed."
+                )
+            );
+
+        }
+
+    }
+
+});
+
+// =====================================================
+// SERVE UPLOADED TEAM IMAGES
+// =====================================================
+
+app.use(
+    "/uploads",
+    express.static(
+        path.join(
+            __dirname,
+            "uploads"
+        )
+    )
+);
+
+// =====================================================
 // OLD DATA FILE
 // =====================================================
 
-const dataFolder = path.join(__dirname, "data");
-const leadsFile = path.join(dataFolder, "leads.json");
+const dataFolder =
+    path.join(
+        __dirname,
+        "data"
+    );
 
-if (!fs.existsSync(dataFolder)) {
-    fs.mkdirSync(dataFolder);
+const leadsFile =
+    path.join(
+        dataFolder,
+        "leads.json"
+    );
+
+if (
+    !fs.existsSync(
+        dataFolder
+    )
+) {
+
+    fs.mkdirSync(
+        dataFolder,
+        {
+            recursive: true
+        }
+    );
+
 }
 
-if (!fs.existsSync(leadsFile)) {
-    fs.writeFileSync(leadsFile, "[]");
+if (
+    !fs.existsSync(
+        leadsFile
+    )
+) {
+
+    fs.writeFileSync(
+        leadsFile,
+        "[]"
+    );
+
 }
 
 // =====================================================
@@ -44,105 +186,154 @@ if (!fs.existsSync(leadsFile)) {
 // =====================================================
 
 mongoose
-    .connect(process.env.MONGODB_URI)
+    .connect(
+        process.env.MONGODB_URI
+    )
     .then(() => {
-        console.log("MongoDB connected successfully!");
+
+        console.log(
+            "MongoDB connected successfully!"
+        );
+
     })
     .catch((error) => {
+
         console.error(
             "MongoDB connection failed:",
             error.message
         );
+
     });
 
 // =====================================================
 // ADMIN LOGIN
 // =====================================================
 
-app.post("/api/admin/login", async (req, res) => {
+app.post(
+    "/api/admin/login",
+    async (req, res) => {
 
-    try {
+        try {
 
-        const {
-            username,
-            password
-        } = req.body;
+            const {
+                username,
+                password
+            } = req.body;
 
-        if (!username || !password) {
+            if (
+                !username ||
+                !password
+            ) {
 
-            return res.status(400).json({
-                success: false,
-                message:
-                    "Username and password are required."
-            });
+                return res.status(400).json({
 
-        }
+                    success: false,
 
-        if (
-            username !== process.env.ADMIN_USERNAME ||
-            password !== process.env.ADMIN_PASSWORD
-        ) {
+                    message:
+                        "Username and password are required."
 
-            return res.status(401).json({
-                success: false,
-                message:
-                    "Invalid username or password."
-            });
+                });
 
-        }
-
-        const token = jwt.sign(
-            {
-                username: username,
-                role: "admin"
-            },
-            process.env.JWT_SECRET,
-            {
-                expiresIn: "8h"
             }
-        );
 
-        res.json({
-            success: true,
-            message: "Login successful!",
-            token
-        });
+            if (
+                username !==
+                    process.env.ADMIN_USERNAME ||
+                password !==
+                    process.env.ADMIN_PASSWORD
+            ) {
 
-    } catch (error) {
+                return res.status(401).json({
 
-        console.error(
-            "Admin login error:",
-            error
-        );
+                    success: false,
 
-        res.status(500).json({
-            success: false,
-            message:
-                "Login server error."
-        });
+                    message:
+                        "Invalid username or password."
+
+                });
+
+            }
+
+            const token =
+                jwt.sign(
+
+                    {
+                        username:
+                            username,
+
+                        role:
+                            "admin"
+                    },
+
+                    process.env.JWT_SECRET,
+
+                    {
+                        expiresIn:
+                            "8h"
+                    }
+
+                );
+
+            res.json({
+
+                success: true,
+
+                message:
+                    "Login successful!",
+
+                token:
+                    token
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Admin login error:",
+                error
+            );
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Login server error."
+
+            });
+
+        }
 
     }
-
-});
+);
 
 // =====================================================
 // ADMIN AUTH MIDDLEWARE
 // =====================================================
 
-function verifyAdmin(req, res, next) {
+function verifyAdmin(
+    req,
+    res,
+    next
+) {
 
     const authHeader =
         req.headers.authorization;
 
     if (
         !authHeader ||
-        !authHeader.startsWith("Bearer ")
+        !authHeader.startsWith(
+            "Bearer "
+        )
     ) {
 
         return res.status(401).json({
+
             success: false,
+
             message:
                 "Unauthorized access."
+
         });
 
     }
@@ -158,26 +349,36 @@ function verifyAdmin(req, res, next) {
                 process.env.JWT_SECRET
             );
 
-        if (decoded.role !== "admin") {
+        if (
+            decoded.role !==
+            "admin"
+        ) {
 
             return res.status(403).json({
+
                 success: false,
+
                 message:
                     "Admin access required."
+
             });
 
         }
 
-        req.admin = decoded;
+        req.admin =
+            decoded;
 
         next();
 
     } catch (error) {
 
         return res.status(401).json({
+
             success: false,
+
             message:
                 "Invalid or expired token."
+
         });
 
     }
@@ -188,29 +389,41 @@ function verifyAdmin(req, res, next) {
 // BACKEND HOME
 // =====================================================
 
-app.get("/", (req, res) => {
+app.get(
+    "/",
+    (req, res) => {
 
-    res.json({
-        success: true,
-        message:
-            "GrowtechAxon Backend is running 🚀"
-    });
+        res.json({
 
-});
+            success: true,
+
+            message:
+                "GrowtechAxon Backend is running 🚀"
+
+        });
+
+    }
+);
 
 // =====================================================
 // TEST API
 // =====================================================
 
-app.get("/api/test", (req, res) => {
+app.get(
+    "/api/test",
+    (req, res) => {
 
-    res.json({
-        success: true,
-        message:
-            "API connection successful!"
-    });
+        res.json({
 
-});
+            success: true,
+
+            message:
+                "API connection successful!"
+
+        });
+
+    }
+);
 
 // =====================================================
 // LEADS
@@ -220,93 +433,105 @@ app.get("/api/test", (req, res) => {
 // SUBMIT LEAD — PUBLIC
 // -----------------------------------------------------
 
-app.post("/api/leads", async (req, res) => {
+app.post(
+    "/api/leads",
+    async (req, res) => {
 
-    try {
+        try {
 
-        const {
-            name,
-            business,
-            email,
-            phone,
-            city,
-            service,
-            budget,
-            message
-        } = req.body;
+            const {
+                name,
+                business,
+                email,
+                phone,
+                city,
+                service,
+                budget,
+                message
+            } = req.body;
 
-        if (
-            !name ||
-            !email ||
-            !phone ||
-            !message
-        ) {
+            if (
+                !name ||
+                !email ||
+                !phone ||
+                !message
+            ) {
 
-            return res.status(400).json({
-                success: false,
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Please fill all required fields."
+
+                });
+
+            }
+
+            const newLead =
+                await Lead.create({
+
+                    name:
+                        name,
+
+                    business:
+                        business || "",
+
+                    email:
+                        email,
+
+                    phone:
+                        phone,
+
+                    city:
+                        city || "",
+
+                    service:
+                        service || "",
+
+                    budget:
+                        budget || "",
+
+                    message:
+                        message,
+
+                    status:
+                        "New"
+
+                });
+
+            res.status(201).json({
+
+                success: true,
+
                 message:
-                    "Please fill all required fields."
+                    "Project request received successfully!",
+
+                lead:
+                    newLead
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Lead save error:",
+                error
+            );
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Server error."
+
             });
 
         }
 
-        const newLead =
-            await Lead.create({
-
-                name: name,
-
-                business:
-                    business || "",
-
-                email: email,
-
-                phone: phone,
-
-                city:
-                    city || "",
-
-                service:
-                    service || "",
-
-                budget:
-                    budget || "",
-
-                message: message,
-
-                status: "New"
-
-            });
-
-        res.status(201).json({
-
-            success: true,
-
-            message:
-                "Project request received successfully!",
-
-            lead: newLead
-
-        });
-
-    } catch (error) {
-
-        console.error(
-            "Lead save error:",
-            error
-        );
-
-        res.status(500).json({
-
-            success: false,
-
-            message:
-                "Server error."
-
-        });
-
     }
-
-});
+);
 
 // -----------------------------------------------------
 // GET LEADS — ADMIN ONLY
@@ -322,7 +547,8 @@ app.get(
             const leads =
                 await Lead.find()
                     .sort({
-                        createdAt: -1
+                        createdAt:
+                            -1
                     });
 
             res.json({
@@ -381,7 +607,9 @@ app.put(
             ];
 
             if (
-                !allowedStatuses.includes(status)
+                !allowedStatuses.includes(
+                    status
+                )
             ) {
 
                 return res.status(400).json({
@@ -406,7 +634,8 @@ app.put(
                     },
 
                     {
-                        new: true
+                        new:
+                            true
                     }
 
                 );
@@ -532,15 +761,24 @@ app.get(
 
             const team =
                 await Team.find({
-                    active: true
+
+                    active:
+                        true
+
                 }).sort({
-                    displayOrder: 1,
-                    createdAt: 1
+
+                    displayOrder:
+                        1,
+
+                    createdAt:
+                        1
+
                 });
 
             res.json({
 
-                success: true,
+                success:
+                    true,
 
                 count:
                     team.length,
@@ -559,7 +797,8 @@ app.get(
 
             res.status(500).json({
 
-                success: false,
+                success:
+                    false,
 
                 message:
                     "Unable to load team members."
@@ -585,13 +824,19 @@ app.get(
             const team =
                 await Team.find()
                     .sort({
-                        displayOrder: 1,
-                        createdAt: 1
+
+                        displayOrder:
+                            1,
+
+                        createdAt:
+                            1
+
                     });
 
             res.json({
 
-                success: true,
+                success:
+                    true,
 
                 count:
                     team.length,
@@ -610,7 +855,8 @@ app.get(
 
             res.status(500).json({
 
-                success: false,
+                success:
+                    false,
 
                 message:
                     "Unable to load team members."
@@ -629,6 +875,7 @@ app.get(
 app.post(
     "/api/admin/team",
     verifyAdmin,
+    uploadTeamPhoto.single("photo"),
     async (req, res) => {
 
         try {
@@ -637,7 +884,6 @@ app.post(
                 name,
                 designation,
                 description,
-                photo,
                 linkedin,
                 instagram,
                 github,
@@ -645,14 +891,38 @@ app.post(
                 active
             } = req.body;
 
+            // ---------------------------------------------
+            // VALIDATION
+            // ---------------------------------------------
+
             if (
                 !name ||
                 !designation
             ) {
 
+                if (req.file) {
+
+                    try {
+
+                        fs.unlinkSync(
+                            req.file.path
+                        );
+
+                    } catch (error) {
+
+                        console.error(
+                            "Image cleanup error:",
+                            error
+                        );
+
+                    }
+
+                }
+
                 return res.status(400).json({
 
-                    success: false,
+                    success:
+                        false,
 
                     message:
                         "Name and designation are required."
@@ -661,41 +931,78 @@ app.post(
 
             }
 
+            // ---------------------------------------------
+            // IMAGE URL
+            // ---------------------------------------------
+
+            let photo = "";
+
+            if (req.file) {
+
+                photo =
+                    `${req.protocol}://${req.get("host")}/uploads/team/${req.file.filename}`;
+
+            }
+
+            // ---------------------------------------------
+            // ACTIVE VALUE
+            // ---------------------------------------------
+
+            const activeValue =
+                active === undefined
+                    ? true
+                    : String(active) === "true";
+
+            // ---------------------------------------------
+            // CREATE MEMBER
+            // ---------------------------------------------
+
             const newMember =
                 await Team.create({
 
                     name:
-                        name,
+                        name.trim(),
 
                     designation:
-                        designation,
+                        designation.trim(),
 
                     description:
-                        description || "",
+                        description
+                            ? description.trim()
+                            : "",
 
                     photo:
-                        photo || "",
+                        photo,
 
                     linkedin:
-                        linkedin || "",
+                        linkedin
+                            ? linkedin.trim()
+                            : "",
 
                     instagram:
-                        instagram || "",
+                        instagram
+                            ? instagram.trim()
+                            : "",
 
                     github:
-                        github || "",
+                        github
+                            ? github.trim()
+                            : "",
 
                     displayOrder:
-                        Number(displayOrder) || 0,
+                        Number(
+                            displayOrder
+                        ) || 0,
 
                     active:
-                        active !== false
+                        activeValue
 
                 });
 
             res.status(201).json({
 
-                success: true,
+                success:
+                    true,
 
                 message:
                     "Team member added successfully.",
@@ -707,6 +1014,25 @@ app.post(
 
         } catch (error) {
 
+            if (req.file) {
+
+                try {
+
+                    fs.unlinkSync(
+                        req.file.path
+                    );
+
+                } catch (deleteError) {
+
+                    console.error(
+                        "Uploaded image cleanup error:",
+                        deleteError
+                    );
+
+                }
+
+            }
+
             console.error(
                 "Add team member error:",
                 error
@@ -714,7 +1040,8 @@ app.post(
 
             res.status(500).json({
 
-                success: false,
+                success:
+                    false,
 
                 message:
                     "Unable to add team member."
@@ -733,6 +1060,7 @@ app.post(
 app.put(
     "/api/admin/team/:id",
     verifyAdmin,
+    uploadTeamPhoto.single("photo"),
     async (req, res) => {
 
         try {
@@ -741,7 +1069,6 @@ app.put(
                 name,
                 designation,
                 description,
-                photo,
                 linkedin,
                 instagram,
                 github,
@@ -749,14 +1076,38 @@ app.put(
                 active
             } = req.body;
 
+            // ---------------------------------------------
+            // VALIDATION
+            // ---------------------------------------------
+
             if (
                 !name ||
                 !designation
             ) {
 
+                if (req.file) {
+
+                    try {
+
+                        fs.unlinkSync(
+                            req.file.path
+                        );
+
+                    } catch (error) {
+
+                        console.error(
+                            "Image cleanup error:",
+                            error
+                        );
+
+                    }
+
+                }
+
                 return res.status(400).json({
 
-                    success: false,
+                    success:
+                        false,
 
                     message:
                         "Name and designation are required."
@@ -765,57 +1116,40 @@ app.put(
 
             }
 
-            const updatedMember =
-                await Team.findByIdAndUpdate(
+            // ---------------------------------------------
+            // FIND EXISTING MEMBER
+            // ---------------------------------------------
 
-                    req.params.id,
+            const existingMember =
+                await Team.findById(
+                    req.params.id
+                );
 
-                    {
+            if (!existingMember) {
 
-                        name:
-                            name,
+                if (req.file) {
 
-                        designation:
-                            designation,
+                    try {
 
-                        description:
-                            description || "",
+                        fs.unlinkSync(
+                            req.file.path
+                        );
 
-                        photo:
-                            photo || "",
+                    } catch (error) {
 
-                        linkedin:
-                            linkedin || "",
-
-                        instagram:
-                            instagram || "",
-
-                        github:
-                            github || "",
-
-                        displayOrder:
-                            Number(displayOrder) || 0,
-
-                        active:
-                            active !== false
-
-                    },
-
-                    {
-
-                        new: true,
-
-                        runValidators: true
+                        console.error(
+                            "Image cleanup error:",
+                            error
+                        );
 
                     }
 
-                );
-
-            if (!updatedMember) {
+                }
 
                 return res.status(404).json({
 
-                    success: false,
+                    success:
+                        false,
 
                     message:
                         "Team member not found."
@@ -824,9 +1158,150 @@ app.put(
 
             }
 
+            // ---------------------------------------------
+            // UPDATE DATA
+            // ---------------------------------------------
+
+            const updateData = {
+
+                name:
+                    name.trim(),
+
+                designation:
+                    designation.trim(),
+
+                description:
+                    description
+                        ? description.trim()
+                        : "",
+
+                linkedin:
+                    linkedin
+                        ? linkedin.trim()
+                        : "",
+
+                instagram:
+                    instagram
+                        ? instagram.trim()
+                        : "",
+
+                github:
+                    github
+                        ? github.trim()
+                        : "",
+
+                displayOrder:
+                    Number(
+                        displayOrder
+                    ) || 0,
+
+                active:
+                    active === undefined
+                        ? true
+                        : String(active) === "true"
+
+            };
+
+            // ---------------------------------------------
+            // NEW IMAGE
+            // ---------------------------------------------
+
+            if (req.file) {
+
+                updateData.photo =
+                    `${req.protocol}://${req.get("host")}/uploads/team/${req.file.filename}`;
+
+            } else {
+
+                // No new image
+                // Keep old image
+
+                updateData.photo =
+                    existingMember.photo || "";
+
+            }
+
+            // ---------------------------------------------
+            // UPDATE DATABASE
+            // ---------------------------------------------
+
+            const updatedMember =
+                await Team.findByIdAndUpdate(
+
+                    req.params.id,
+
+                    updateData,
+
+                    {
+                        new:
+                            true,
+
+                        runValidators:
+                            true
+
+                    }
+
+                );
+
+            // ---------------------------------------------
+            // DELETE OLD IMAGE
+            // ---------------------------------------------
+
+            if (
+                req.file &&
+                existingMember.photo &&
+                existingMember.photo.includes(
+                    "/uploads/team/"
+                )
+            ) {
+
+                try {
+
+                    const oldImageName =
+                        path.basename(
+
+                            new URL(
+                                existingMember.photo
+                            ).pathname
+
+                        );
+
+                    const oldImagePath =
+                        path.join(
+
+                            teamUploadFolder,
+
+                            oldImageName
+
+                        );
+
+                    if (
+                        fs.existsSync(
+                            oldImagePath
+                        )
+                    ) {
+
+                        fs.unlinkSync(
+                            oldImagePath
+                        );
+
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "Old team image delete error:",
+                        error
+                    );
+
+                }
+
+            }
+
             res.json({
 
-                success: true,
+                success:
+                    true,
 
                 message:
                     "Team member updated successfully.",
@@ -838,6 +1313,28 @@ app.put(
 
         } catch (error) {
 
+            // Delete newly uploaded image
+            // if database update failed
+
+            if (req.file) {
+
+                try {
+
+                    fs.unlinkSync(
+                        req.file.path
+                    );
+
+                } catch (deleteError) {
+
+                    console.error(
+                        "New image cleanup error:",
+                        deleteError
+                    );
+
+                }
+
+            }
+
             console.error(
                 "Update team member error:",
                 error
@@ -845,7 +1342,8 @@ app.put(
 
             res.status(500).json({
 
-                success: false,
+                success:
+                    false,
 
                 message:
                     "Unable to update team member."
@@ -877,7 +1375,8 @@ app.delete(
 
                 return res.status(404).json({
 
-                    success: false,
+                    success:
+                        false,
 
                     message:
                         "Team member not found."
@@ -886,9 +1385,64 @@ app.delete(
 
             }
 
+            // ---------------------------------------------
+            // DELETE TEAM IMAGE
+            // ---------------------------------------------
+
+            if (
+                deletedMember.photo &&
+                deletedMember.photo.includes(
+                    "/uploads/team/"
+                )
+            ) {
+
+                try {
+
+                    const imageName =
+                        path.basename(
+
+                            new URL(
+                                deletedMember.photo
+                            ).pathname
+
+                        );
+
+                    const imagePath =
+                        path.join(
+
+                            teamUploadFolder,
+
+                            imageName
+
+                        );
+
+                    if (
+                        fs.existsSync(
+                            imagePath
+                        )
+                    ) {
+
+                        fs.unlinkSync(
+                            imagePath
+                        );
+
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "Delete team image error:",
+                        error
+                    );
+
+                }
+
+            }
+
             res.json({
 
-                success: true,
+                success:
+                    true,
 
                 message:
                     "Team member deleted successfully."
@@ -904,7 +1458,8 @@ app.delete(
 
             res.status(500).json({
 
-                success: false,
+                success:
+                    false,
 
                 message:
                     "Unable to delete team member."
@@ -917,18 +1472,78 @@ app.delete(
 );
 
 // =====================================================
+// MULTER / UPLOAD ERROR HANDLER
+// =====================================================
+
+app.use(
+    (error, req, res, next) => {
+
+        if (
+            error instanceof multer.MulterError
+        ) {
+
+            if (
+                error.code ===
+                "LIMIT_FILE_SIZE"
+            ) {
+
+                return res.status(400).json({
+
+                    success:
+                        false,
+
+                    message:
+                        "Image size must be less than 5MB."
+
+                });
+
+            }
+
+            return res.status(400).json({
+
+                success:
+                    false,
+
+                message:
+                    error.message
+
+            });
+
+        }
+
+        if (
+            error &&
+            error.message ===
+                "Only JPG, PNG and WEBP images are allowed."
+        ) {
+
+            return res.status(400).json({
+
+                success:
+                    false,
+
+                message:
+                    error.message
+
+            });
+
+        }
+
+        next(error);
+
+    }
+);
+
+// =====================================================
 // SERVE FRONTEND + ADMIN FILES
 // =====================================================
 
-// This makes these URLs work:
-//
-// http://localhost:5000/
-// http://localhost:5000/admin/login.html
-// http://localhost:5000/admin/dashboard.html
-
 app.use(
     express.static(
-        path.join(__dirname, "..")
+        path.join(
+            __dirname,
+            ".."
+        )
     )
 );
 
