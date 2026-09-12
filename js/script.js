@@ -1,15 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
-       GROWTECHAXON FRONTEND CONFIG
-    ========================================================= */
+       GROWTECHAXON API
+       ========================================================= */
 
     const API_URL = "https://growtechaxon-backend.onrender.com";
 
 
     /* =========================================================
        PRELOADER
-    ========================================================= */
+       ========================================================= */
 
     const preloader = document.getElementById("preloader");
 
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
        HEADER SCROLL
-    ========================================================= */
+       ========================================================= */
 
     const header = document.getElementById("header");
     const backToTop = document.getElementById("backToTop");
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
        MOBILE MENU
-    ========================================================= */
+       ========================================================= */
 
     const menuToggle = document.getElementById("menuToggle");
     const navMenu = document.getElementById("navMenu");
@@ -74,13 +74,12 @@ document.addEventListener("DOMContentLoaded", () => {
             icon?.classList.remove("fa-xmark");
             icon?.classList.add("fa-bars");
         }
-
     });
 
 
     /* =========================================================
        CLOSE MOBILE MENU
-    ========================================================= */
+       ========================================================= */
 
     document.querySelectorAll(".nav-link, .nav-cta").forEach(link => {
 
@@ -92,7 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             icon?.classList.remove("fa-xmark");
             icon?.classList.add("fa-bars");
-
         });
 
     });
@@ -100,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
        ACTIVE NAVIGATION
-    ========================================================= */
+       ========================================================= */
 
     const sections = document.querySelectorAll("section[id]");
     const navLinks = document.querySelectorAll(".nav-link");
@@ -120,7 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
             ) {
                 current = section.getAttribute("id");
             }
-
         });
 
         navLinks.forEach(link => {
@@ -130,9 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (link.getAttribute("href") === `#${current}`) {
                 link.classList.add("active");
             }
-
         });
-
     }
 
     window.addEventListener("scroll", updateActiveNav);
@@ -141,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
        BACK TO TOP
-    ========================================================= */
+       ========================================================= */
 
     backToTop?.addEventListener("click", () => {
 
@@ -155,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
        PROJECT FILTER
-    ========================================================= */
+       ========================================================= */
 
     const filterButtons = document.querySelectorAll(".filter-btn");
     const projectCards = document.querySelectorAll(".project-card");
@@ -193,7 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     setTimeout(() => {
                         card.style.display = "none";
                     }, 250);
-
                 }
 
             });
@@ -205,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
        COUNTER ANIMATION
-    ========================================================= */
+       ========================================================= */
 
     const counters = document.querySelectorAll(".counter");
 
@@ -247,13 +241,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         } else {
                             counter.textContent = target + "+";
                         }
-
                     }
 
                     requestAnimationFrame(updateCounter);
 
                     counterObserver.unobserve(counter);
-
                 });
 
             },
@@ -271,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
        SCROLL REVEAL
-    ========================================================= */
+       ========================================================= */
 
     const revealElements = document.querySelectorAll(
         ".service-card, .project-card, .feature, .stat-card, .process-step, .testimonial-card, .pricing-card, .team-card"
@@ -300,7 +292,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     entry.target.style.transform = "translateY(0)";
 
                     revealObserver.unobserve(entry.target);
-
                 });
 
             },
@@ -324,8 +315,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-       CONTACT / PROJECT FORM
-    ========================================================= */
+       CONTACT FORM
+       ========================================================= */
 
     const projectForm = document.getElementById("projectForm");
     const formMessage = document.getElementById("formMessage");
@@ -347,11 +338,12 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("message")?.value.trim();
 
 
-        /* REQUIRED FIELDS */
+        /* Required fields */
 
         if (!name || !email || !phone || !message) {
 
             if (formMessage) {
+
                 formMessage.textContent =
                     "Please fill all required fields.";
 
@@ -362,7 +354,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        /* EMAIL VALIDATION */
+        /* Email validation */
 
         const emailPattern =
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -370,6 +362,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!emailPattern.test(email)) {
 
             if (formMessage) {
+
                 formMessage.textContent =
                     "Please enter a valid email address.";
 
@@ -380,7 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        /* PHONE VALIDATION */
+        /* Phone validation */
 
         const phoneDigits =
             phone.replace(/\D/g, "");
@@ -388,6 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (phoneDigits.length < 10) {
 
             if (formMessage) {
+
                 formMessage.textContent =
                     "Please enter a valid phone number.";
 
@@ -398,38 +392,37 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        /* FORM DATA */
+        /* Form Data */
 
         const formData = {
 
             name:
-                document.getElementById("name")?.value.trim() || "",
+                document.getElementById("name")?.value || "",
 
             business:
-                document.getElementById("business")?.value.trim() || "",
+                document.getElementById("business")?.value || "",
 
             email:
-                document.getElementById("email")?.value.trim() || "",
+                document.getElementById("email")?.value || "",
 
             phone:
-                document.getElementById("phone")?.value.trim() || "",
+                document.getElementById("phone")?.value || "",
 
             city:
-                document.getElementById("city")?.value.trim() || "",
+                document.getElementById("city")?.value || "",
 
             service:
-                document.getElementById("service")?.value.trim() || "",
+                document.getElementById("service")?.value || "",
 
             budget:
-                document.getElementById("budget")?.value.trim() || "",
+                document.getElementById("budget")?.value || "",
 
             message:
-                document.getElementById("message")?.value.trim() || ""
-
+                document.getElementById("message")?.value || ""
         };
 
 
-        /* SUBMIT BUTTON */
+        /* Submit Button */
 
         const submitButton =
             projectForm.querySelector(".form-submit");
@@ -444,11 +437,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             submitButton.innerHTML =
                 'Sending... <i class="fa-solid fa-spinner fa-spin"></i>';
-
         }
 
 
-        /* SEND TO RENDER BACKEND */
+        /* =====================================================
+           SEND LEAD TO RENDER BACKEND
+           ===================================================== */
 
         try {
 
@@ -458,7 +452,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     method: "POST",
 
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
                     },
 
                     body: JSON.stringify(formData)
@@ -475,11 +470,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     result.message ||
                     "Unable to submit request."
                 );
-
             }
 
 
-            /* SUCCESS */
+            /* Success */
 
             if (formMessage) {
 
@@ -487,7 +481,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Thank you! Your project request has been received.";
 
                 formMessage.style.color = "#60a5fa";
-
             }
 
 
@@ -508,7 +501,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     submitButton.disabled = false;
 
                 }, 3000);
-
             }
 
 
@@ -517,12 +509,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 result
             );
 
-        }
-
-
-        /* ERROR */
-
-        catch (error) {
+        } catch (error) {
 
             console.error(
                 "Lead submission error:",
@@ -536,7 +523,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Unable to send request. Please try again.";
 
                 formMessage.style.color = "#f87171";
-
             }
 
 
@@ -547,9 +533,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 submitButton.innerHTML =
                     originalButtonText ||
                     "Send Project Request";
-
             }
-
         }
 
     });
@@ -557,112 +541,134 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
        TEAM MEMBERS
-    ========================================================= */
+       ========================================================= */
 
     const teamGrid = document.getElementById("teamGrid");
 
 
-    /* ---------------------------------------------------------
-       TEAM IMAGE URL FIX
-       Old localhost URLs automatically converted to Render URL
-    --------------------------------------------------------- */
+    /* =========================================================
+       TEAM IMAGE URL NORMALIZER
+       ========================================================= */
 
     function getTeamPhotoUrl(photo) {
 
-        if (!photo || typeof photo !== "string") {
-            return createDefaultTeamImage();
+        if (!photo) {
+            return "";
         }
 
-        photo = photo.trim();
+        let imageUrl = String(photo).trim();
 
         /* Old localhost URL */
+
         if (
-            photo.startsWith("http://localhost:5000")
+            imageUrl.startsWith("http://localhost:5000")
         ) {
-            return photo.replace(
-                "http://localhost:5000",
-                API_URL
-            );
+
+            imageUrl =
+                imageUrl.replace(
+                    "http://localhost:5000",
+                    API_URL
+                );
         }
+
 
         /* Old 127.0.0.1 URL */
+
         if (
-            photo.startsWith("http://127.0.0.1:5000")
+            imageUrl.startsWith("http://127.0.0.1:5000")
         ) {
-            return photo.replace(
-                "http://127.0.0.1:5000",
-                API_URL
-            );
+
+            imageUrl =
+                imageUrl.replace(
+                    "http://127.0.0.1:5000",
+                    API_URL
+                );
         }
 
-        /* Relative upload URL */
-        if (photo.startsWith("/uploads/")) {
-            return API_URL + photo;
-        }
 
-        /* Already full Render URL */
+        /* HTTP Render URL */
+
         if (
-            photo.startsWith("https://") ||
-            photo.startsWith("http://")
+            imageUrl.startsWith(
+                "http://growtechaxon-backend.onrender.com"
+            )
         ) {
-            return photo;
+
+            imageUrl =
+                imageUrl.replace(
+                    "http://growtechaxon-backend.onrender.com",
+                    API_URL
+                );
         }
 
-        /* Any other relative path */
-        if (!photo.startsWith("data:")) {
 
-            return API_URL + "/" + photo.replace(/^\/+/, "");
+        /* Relative /uploads URL */
 
+        if (imageUrl.startsWith("/uploads/")) {
+
+            imageUrl =
+                `${API_URL}${imageUrl}`;
         }
 
-        return photo;
+
+        /* Relative uploads/team URL */
+
+        if (imageUrl.startsWith("uploads/team/")) {
+
+            imageUrl =
+                `${API_URL}/${imageUrl}`;
+        }
+
+
+        return imageUrl;
     }
 
 
-    /* ---------------------------------------------------------
+    /* =========================================================
        DEFAULT TEAM IMAGE
-       No external image required, so 404 error nahi aayega.
-    --------------------------------------------------------- */
+       ========================================================= */
 
-    function createDefaultTeamImage() {
+    function getDefaultTeamImage() {
 
         const svg = `
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 width="600"
-                 height="600"
-                 viewBox="0 0 600 600">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="600"
+                height="600"
+                viewBox="0 0 600 600">
 
-                <rect width="600"
-                      height="600"
-                      fill="#08152b"/>
+                <rect
+                    width="600"
+                    height="600"
+                    fill="#08152b"/>
 
-                <circle cx="300"
-                        cy="225"
-                        r="105"
-                        fill="#2563eb"/>
+                <circle
+                    cx="300"
+                    cy="210"
+                    r="90"
+                    fill="#2563eb"/>
 
-                <circle cx="300"
-                        cy="210"
-                        r="55"
-                        fill="#ffffff"
-                        opacity="0.95"/>
+                <circle
+                    cx="300"
+                    cy="210"
+                    r="50"
+                    fill="#dbeafe"/>
 
                 <path
-                    d="M170 475
-                       C185 365 415 365 430 475
-                       Z"
-                    fill="#ffffff"
-                    opacity="0.95"/>
+                    d="M145 500
+                       C160 370 220 310 300 310
+                       C380 310 440 370 455 500Z"
+                    fill="#2563eb"/>
 
                 <text
                     x="300"
-                    y="550"
+                    y="555"
                     text-anchor="middle"
-                    fill="#38bdf8"
-                    font-size="30"
+                    fill="#ffffff"
                     font-family="Arial, sans-serif"
-                    font-weight="700">
-                    GROWTECHAXON
+                    font-size="24"
+                    font-weight="600">
+                    GrowtechAxon
                 </text>
 
             </svg>
@@ -673,73 +679,284 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* ---------------------------------------------------------
-       ESCAPE HTML
-       Protects team content before inserting into HTML.
-    --------------------------------------------------------- */
+    /* =========================================================
+       CREATE TEAM CARD
+       ========================================================= */
 
-    function escapeHTML(value) {
+    function createTeamCard(member) {
 
-        if (value === null || value === undefined) {
-            return "";
+        const article =
+            document.createElement("article");
+
+        article.className = "team-card";
+
+
+        /* Team photo */
+
+        const photoWrapper =
+            document.createElement("div");
+
+        photoWrapper.className = "team-photo";
+
+
+        const image =
+            document.createElement("img");
+
+        image.loading = "lazy";
+
+        image.alt =
+            member.name || "Team Member";
+
+
+        const imageUrl =
+            getTeamPhotoUrl(member.photo);
+
+
+        /*
+         * Agar image URL available hai to use load karo.
+         * Nahi to direct fallback image.
+         */
+
+        if (imageUrl) {
+
+            image.src = imageUrl;
+
+        } else {
+
+            image.src = getDefaultTeamImage();
         }
 
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+
+        /*
+         * Image load fail hone par safe fallback.
+         * Koi inline onerror HTML nahi.
+         */
+
+        image.addEventListener("error", () => {
+
+            if (image.dataset.fallbackApplied === "true") {
+                return;
+            }
+
+            image.dataset.fallbackApplied = "true";
+
+            image.src = getDefaultTeamImage();
+
+        });
+
+
+        photoWrapper.appendChild(image);
+
+
+        /* Team info */
+
+        const info =
+            document.createElement("div");
+
+        info.className = "team-info";
+
+
+        const name =
+            document.createElement("h3");
+
+        name.textContent =
+            member.name || "";
+
+
+        const designation =
+            document.createElement("span");
+
+        designation.className =
+            "team-designation";
+
+        designation.textContent =
+            member.designation || "";
+
+
+        const description =
+            document.createElement("p");
+
+        description.textContent =
+            member.description || "";
+
+
+        /* Social links */
+
+        const socials =
+            document.createElement("div");
+
+        socials.className =
+            "team-socials";
+
+
+        /* LinkedIn */
+
+        if (member.linkedin) {
+
+            const link =
+                document.createElement("a");
+
+            link.href =
+                member.linkedin;
+
+            link.target =
+                "_blank";
+
+            link.rel =
+                "noopener noreferrer";
+
+            link.setAttribute(
+                "aria-label",
+                "LinkedIn"
+            );
+
+            link.innerHTML =
+                '<i class="fa-brands fa-linkedin-in"></i>';
+
+            socials.appendChild(link);
+        }
+
+
+        /* Instagram */
+
+        if (member.instagram) {
+
+            const link =
+                document.createElement("a");
+
+            link.href =
+                member.instagram;
+
+            link.target =
+                "_blank";
+
+            link.rel =
+                "noopener noreferrer";
+
+            link.setAttribute(
+                "aria-label",
+                "Instagram"
+            );
+
+            link.innerHTML =
+                '<i class="fa-brands fa-instagram"></i>';
+
+            socials.appendChild(link);
+        }
+
+
+        /* GitHub */
+
+        if (member.github) {
+
+            const link =
+                document.createElement("a");
+
+            link.href =
+                member.github;
+
+            link.target =
+                "_blank";
+
+            link.rel =
+                "noopener noreferrer";
+
+            link.setAttribute(
+                "aria-label",
+                "GitHub"
+            );
+
+            link.innerHTML =
+                '<i class="fa-brands fa-github"></i>';
+
+            socials.appendChild(link);
+        }
+
+
+        /* Append info */
+
+        info.appendChild(name);
+        info.appendChild(designation);
+        info.appendChild(description);
+
+        if (socials.children.length > 0) {
+            info.appendChild(socials);
+        }
+
+
+        /* Complete card */
+
+        article.appendChild(photoWrapper);
+        article.appendChild(info);
+
+
+        return article;
     }
 
 
-    /* ---------------------------------------------------------
-       LOAD TEAM
-    --------------------------------------------------------- */
+    /* =========================================================
+       LOAD TEAM MEMBERS
+       ========================================================= */
 
     async function loadTeamMembers() {
 
-        if (!teamGrid) return;
+        if (!teamGrid) {
+            return;
+        }
+
 
         try {
 
-            const response = await fetch(
-                `${API_URL}/api/team`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Accept": "application/json"
-                    },
-                    cache: "no-cache"
-                }
-            );
+            const response =
+                await fetch(
+                    `${API_URL}/api/team`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Accept": "application/json"
+                        },
+
+                        cache: "no-cache"
+                    }
+                );
 
 
             if (!response.ok) {
+
                 throw new Error(
-                    `Team API returned ${response.status}`
+                    `Team API failed: ${response.status}`
                 );
             }
 
 
-            const result = await response.json();
+            const result =
+                await response.json();
 
 
-            const members = Array.isArray(result)
-                ? result
-                : result.team || result.data || [];
+            const members =
+                Array.isArray(result)
+                    ? result
+                    : result.team ||
+                      result.data ||
+                      [];
 
 
-            const activeMembers = members
-                .filter(member => member.active !== false)
-                .sort(
-                    (a, b) =>
-                        Number(a.displayOrder || 0) -
-                        Number(b.displayOrder || 0)
-                );
+            const activeMembers =
+                members
+                    .filter(
+                        member =>
+                            member &&
+                            member.active !== false
+                    )
+                    .sort(
+                        (a, b) =>
+                            (Number(a.displayOrder) || 0) -
+                            (Number(b.displayOrder) || 0)
+                    );
 
 
-            /* NO TEAM */
+            /* No team members */
 
             if (!activeMembers.length) {
 
@@ -753,133 +970,41 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            /* TEAM CARDS */
+            /* Clear old content */
 
-            teamGrid.innerHTML = activeMembers.map(member => {
-
-                const photoURL =
-                    getTeamPhotoUrl(member.photo);
-
-                const name =
-                    escapeHTML(member.name || "Team Member");
-
-                const designation =
-                    escapeHTML(member.designation || "");
-
-                const description =
-                    escapeHTML(member.description || "");
+            teamGrid.innerHTML = "";
 
 
-                const linkedin =
-                    member.linkedin
-                        ? escapeHTML(member.linkedin)
-                        : "";
+            /* Add team cards */
 
-                const instagram =
-                    member.instagram
-                        ? escapeHTML(member.instagram)
-                        : "";
+            activeMembers.forEach(member => {
 
-                const github =
-                    member.github
-                        ? escapeHTML(member.github)
-                        : "";
+                const card =
+                    createTeamCard(member);
+
+                teamGrid.appendChild(card);
+
+            });
 
 
-                return `
+            /*
+             * Scroll reveal ke liye newly created
+             * team cards ko visible rakho.
+             */
 
-                    <article class="team-card">
+            teamGrid
+                .querySelectorAll(".team-card")
+                .forEach(card => {
 
-                        <div class="team-photo">
-
-                            <img
-                                src="${photoURL}"
-                                alt="${name}"
-                                loading="lazy"
-                                onerror="this.onerror=null;this.src='${createDefaultTeamImage()}';"
-                            >
-
-                        </div>
-
-
-                        <div class="team-info">
-
-                            <h3>
-                                ${name}
-                            </h3>
+                    card.style.opacity = "1";
+                    card.style.transform =
+                        "translateY(0)";
+                });
 
 
-                            <span class="team-designation">
-                                ${designation}
-                            </span>
-
-
-                            <p>
-                                ${description}
-                            </p>
-
-
-                            <div class="team-socials">
-
-                                ${
-                                    linkedin
-                                        ? `
-                                    <a
-                                        href="${linkedin}"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        aria-label="LinkedIn">
-
-                                        <i class="fa-brands fa-linkedin-in"></i>
-
-                                    </a>
-                                    `
-                                        : ""
-                                }
-
-
-                                ${
-                                    instagram
-                                        ? `
-                                    <a
-                                        href="${instagram}"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        aria-label="Instagram">
-
-                                        <i class="fa-brands fa-instagram"></i>
-
-                                    </a>
-                                    `
-                                        : ""
-                                }
-
-
-                                ${
-                                    github
-                                        ? `
-                                    <a
-                                        href="${github}"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        aria-label="GitHub">
-
-                                        <i class="fa-brands fa-github"></i>
-
-                                    </a>
-                                    `
-                                        : ""
-                                }
-
-                            </div>
-
-                        </div>
-
-                    </article>
-
-                `;
-
-            }).join("");
+            console.log(
+                `Team members loaded: ${activeMembers.length}`
+            );
 
 
         } catch (error) {
@@ -895,9 +1020,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     Unable to load team members.
                 </div>
             `;
-
         }
-
     }
 
 
@@ -906,49 +1029,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
        SMOOTH ANCHOR LINKS
-    ========================================================= */
+       ========================================================= */
 
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
+    document
+        .querySelectorAll('a[href^="#"]')
+        .forEach(link => {
 
-        link.addEventListener("click", event => {
+            link.addEventListener("click", event => {
 
-            const targetId =
-                link.getAttribute("href");
-
-
-            if (!targetId || targetId === "#") {
-                return;
-            }
+                const targetId =
+                    link.getAttribute("href");
 
 
-            const target =
-                document.querySelector(targetId);
+                if (
+                    !targetId ||
+                    targetId === "#"
+                ) {
+                    return;
+                }
 
 
-            if (!target) {
-                return;
-            }
+                const target =
+                    document.querySelector(targetId);
 
 
-            event.preventDefault();
+                if (!target) {
+                    return;
+                }
 
 
-            target.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
+                event.preventDefault();
+
+
+                target.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
             });
 
         });
 
-    });
-
 
     /* =========================================================
        CURSOR GLOW
-    ========================================================= */
+       ========================================================= */
 
     const cursorGlow =
         document.createElement("div");
+
 
     cursorGlow.style.position = "fixed";
     cursorGlow.style.width = "180px";
@@ -965,6 +1094,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     cursorGlow.style.display = "none";
 
+
     document.body.appendChild(cursorGlow);
 
 
@@ -973,53 +1103,64 @@ document.addEventListener("DOMContentLoaded", () => {
         cursorGlow.style.display = "block";
 
 
-        document.addEventListener("mousemove", event => {
+        document.addEventListener(
+            "mousemove",
+            event => {
 
-            cursorGlow.style.left =
-                event.clientX + "px";
+                cursorGlow.style.left =
+                    event.clientX + "px";
 
-            cursorGlow.style.top =
-                event.clientY + "px";
+                cursorGlow.style.top =
+                    event.clientY + "px";
 
-        });
+            }
+        );
 
     }
 
 
     /* =========================================================
        ESCAPE KEY
-    ========================================================= */
+       ========================================================= */
 
-    document.addEventListener("keydown", event => {
+    document.addEventListener(
+        "keydown",
+        event => {
 
-        if (event.key === "Escape") {
+            if (event.key === "Escape") {
 
-            navMenu?.classList.remove("open");
-
-
-            const icon =
-                menuToggle?.querySelector("i");
+                navMenu?.classList.remove("open");
 
 
-            icon?.classList.remove("fa-xmark");
+                const icon =
+                    menuToggle?.querySelector("i");
 
-            icon?.classList.add("fa-bars");
+
+                icon?.classList.remove(
+                    "fa-xmark"
+                );
+
+
+                icon?.classList.add(
+                    "fa-bars"
+                );
+
+            }
 
         }
-
-    });
+    );
 
 
     /* =========================================================
        WEBSITE READY
-    ========================================================= */
+       ========================================================= */
 
     console.log(
         "GrowtechAxon website initialized successfully."
     );
 
     console.log(
-        "API:",
+        "Backend API:",
         API_URL
     );
 
