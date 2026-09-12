@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
-       GROWTECH AXON - PUBLIC WEBSITE SCRIPT
-       Production API + Leads + Team Management
+       GROWTECH AXON - MAIN WEBSITE JS
+       Production Ready
     ========================================================= */
 
 
@@ -12,86 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const API_URL =
         "https://growtechaxon-backend.onrender.com";
-
-
-    /* =========================================================
-       TEAM IMAGE URL FIX
-       Handles old localhost / HTTP URLs
-    ========================================================= */
-
-    function getTeamPhotoUrl(photo) {
-
-        if (!photo) {
-            return "";
-        }
-
-        let photoUrl =
-            String(photo).trim();
-
-
-        /* Old localhost URL */
-
-        if (
-            photoUrl.startsWith(
-                "http://localhost:5000"
-            )
-        ) {
-
-            photoUrl =
-                photoUrl.replace(
-                    "http://localhost:5000",
-                    API_URL
-                );
-        }
-
-
-        /* Old 127.0.0.1 URL */
-
-        if (
-            photoUrl.startsWith(
-                "http://127.0.0.1:5000"
-            )
-        ) {
-
-            photoUrl =
-                photoUrl.replace(
-                    "http://127.0.0.1:5000",
-                    API_URL
-                );
-        }
-
-
-        /* Render HTTP URL */
-
-        if (
-            photoUrl.startsWith(
-                "http://growtechaxon-backend.onrender.com"
-            )
-        ) {
-
-            photoUrl =
-                photoUrl.replace(
-                    "http://growtechaxon-backend.onrender.com",
-                    API_URL
-                );
-        }
-
-
-        /* Relative upload path */
-
-        if (
-            photoUrl.startsWith(
-                "/uploads/"
-            )
-        ) {
-
-            photoUrl =
-                API_URL + photoUrl;
-        }
-
-
-        return photoUrl;
-    }
 
 
     /* =========================================================
@@ -106,37 +26,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (preloader) {
 
-            preloader.style.opacity =
-                "0";
+            preloader.style.opacity = "0";
+            preloader.style.visibility = "hidden";
+            preloader.style.pointerEvents = "none";
 
-            preloader.style.visibility =
-                "hidden";
-
-            preloader.style.pointerEvents =
-                "none";
         }
+
     }
 
 
-    window.addEventListener(
-        "load",
-        () => {
+    window.addEventListener("load", () => {
 
-            setTimeout(
-                hidePreloader,
-                500
-            );
+        setTimeout(hidePreloader, 500);
 
-        }
-    );
+    });
 
 
-    /* Safety fallback */
+    // Safety fallback
+    setTimeout(hidePreloader, 3000);
 
-    setTimeout(
-        hidePreloader,
-        3000
-    );
 
 
     /* =========================================================
@@ -154,30 +62,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (window.scrollY > 50) {
 
-            header?.classList.add(
-                "scrolled"
-            );
+            header?.classList.add("scrolled");
 
         } else {
 
-            header?.classList.remove(
-                "scrolled"
-            );
+            header?.classList.remove("scrolled");
+
         }
 
 
         if (window.scrollY > 500) {
 
-            backToTop?.classList.add(
-                "show"
-            );
+            backToTop?.classList.add("show");
 
         } else {
 
-            backToTop?.classList.remove(
-                "show"
-            );
+            backToTop?.classList.remove("show");
+
         }
+
     }
 
 
@@ -190,63 +93,48 @@ document.addEventListener("DOMContentLoaded", () => {
     handleScroll();
 
 
+
     /* =========================================================
        MOBILE MENU
     ========================================================= */
 
     const menuToggle =
-        document.getElementById(
-            "menuToggle"
-        );
+        document.getElementById("menuToggle");
 
     const navMenu =
-        document.getElementById(
-            "navMenu"
-        );
+        document.getElementById("navMenu");
 
 
     menuToggle?.addEventListener(
         "click",
         () => {
 
-            navMenu?.classList.toggle(
-                "open"
-            );
+            navMenu?.classList.toggle("open");
 
 
             const icon =
-                menuToggle.querySelector(
-                    "i"
-                );
+                menuToggle.querySelector("i");
 
 
             if (
-                navMenu?.classList.contains(
-                    "open"
-                )
+                navMenu?.classList.contains("open")
             ) {
 
-                icon?.classList.remove(
-                    "fa-bars"
-                );
+                icon?.classList.remove("fa-bars");
 
-                icon?.classList.add(
-                    "fa-xmark"
-                );
+                icon?.classList.add("fa-xmark");
 
             } else {
 
-                icon?.classList.remove(
-                    "fa-xmark"
-                );
+                icon?.classList.remove("fa-xmark");
 
-                icon?.classList.add(
-                    "fa-bars"
-                );
+                icon?.classList.add("fa-bars");
+
             }
 
         }
     );
+
 
 
     /* =========================================================
@@ -254,29 +142,24 @@ document.addEventListener("DOMContentLoaded", () => {
     ========================================================= */
 
     document
-        .querySelectorAll(
-            ".nav-link, .nav-cta"
-        )
+        .querySelectorAll(".nav-link, .nav-cta")
         .forEach(link => {
 
             link.addEventListener(
                 "click",
                 () => {
 
-                    navMenu?.classList.remove(
-                        "open"
-                    );
+                    navMenu?.classList.remove("open");
 
 
                     const icon =
-                        menuToggle?.querySelector(
-                            "i"
-                        );
+                        menuToggle?.querySelector("i");
 
 
                     icon?.classList.remove(
                         "fa-xmark"
                     );
+
 
                     icon?.classList.add(
                         "fa-bars"
@@ -288,6 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
 
+
     /* =========================================================
        ACTIVE NAVIGATION
     ========================================================= */
@@ -296,6 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(
             "section[id]"
         );
+
 
     const navLinks =
         document.querySelectorAll(
@@ -308,56 +193,45 @@ document.addEventListener("DOMContentLoaded", () => {
         let current = "";
 
 
-        sections.forEach(
-            section => {
+        sections.forEach(section => {
 
-                const sectionTop =
-                    section.offsetTop - 160;
-
-                const sectionHeight =
-                    section.offsetHeight;
+            const sectionTop =
+                section.offsetTop - 160;
 
 
-                if (
-                    window.scrollY >=
-                        sectionTop &&
-                    window.scrollY <
-                        sectionTop +
-                        sectionHeight
-                ) {
+            const sectionHeight =
+                section.offsetHeight;
 
-                    current =
-                        section.getAttribute(
-                            "id"
-                        );
-                }
+
+            if (
+                window.scrollY >= sectionTop &&
+                window.scrollY <
+                    sectionTop + sectionHeight
+            ) {
+
+                current =
+                    section.getAttribute("id");
 
             }
-        );
+
+        });
 
 
-        navLinks.forEach(
-            link => {
+        navLinks.forEach(link => {
 
-                link.classList.remove(
-                    "active"
-                );
+            link.classList.remove("active");
 
 
-                if (
-                    link.getAttribute(
-                        "href"
-                    ) ===
-                    `#${current}`
-                ) {
+            if (
+                link.getAttribute("href") ===
+                `#${current}`
+            ) {
 
-                    link.classList.add(
-                        "active"
-                    );
-                }
+                link.classList.add("active");
 
             }
-        );
+
+        });
 
     }
 
@@ -369,6 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     updateActiveNav();
+
 
 
     /* =========================================================
@@ -391,6 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
+
     /* =========================================================
        PROJECT FILTER
     ========================================================= */
@@ -400,98 +276,87 @@ document.addEventListener("DOMContentLoaded", () => {
             ".filter-btn"
         );
 
+
     const projectCards =
         document.querySelectorAll(
             ".project-card"
         );
 
 
-    filterButtons.forEach(
-        button => {
+    filterButtons.forEach(button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-                    filterButtons.forEach(
-                        btn => {
+                filterButtons.forEach(btn => {
 
-                            btn.classList.remove(
-                                "active"
-                            );
-
-                        }
-                    );
-
-
-                    button.classList.add(
+                    btn.classList.remove(
                         "active"
                     );
 
-
-                    const filter =
-                        button.dataset.filter;
+                });
 
 
-                    projectCards.forEach(
-                        card => {
-
-                            const category =
-                                card.dataset.category;
+                button.classList.add(
+                    "active"
+                );
 
 
-                            if (
-                                filter ===
-                                    "all" ||
-                                category ===
-                                    filter
-                            ) {
-
-                                card.style.display =
-                                    "block";
+                const filter =
+                    button.dataset.filter;
 
 
-                                setTimeout(
-                                    () => {
+                projectCards.forEach(card => {
 
-                                        card.style.opacity =
-                                            "1";
-
-                                        card.style.transform =
-                                            "scale(1)";
-
-                                    },
-                                    30
-                                );
-
-                            } else {
-
-                                card.style.opacity =
-                                    "0";
-
-                                card.style.transform =
-                                    "scale(0.95)";
+                    const category =
+                        card.dataset.category;
 
 
-                                setTimeout(
-                                    () => {
+                    if (
+                        filter === "all" ||
+                        category === filter
+                    ) {
 
-                                        card.style.display =
-                                            "none";
+                        card.style.display =
+                            "block";
 
-                                    },
-                                    250
-                                );
-                            }
 
-                        }
-                    );
+                        setTimeout(() => {
 
-                }
-            );
+                            card.style.opacity =
+                                "1";
 
-        }
-    );
+                            card.style.transform =
+                                "scale(1)";
+
+                        }, 30);
+
+                    } else {
+
+                        card.style.opacity =
+                            "0";
+
+                        card.style.transform =
+                            "scale(0.95)";
+
+
+                        setTimeout(() => {
+
+                            card.style.display =
+                                "none";
+
+                        }, 250);
+
+                    }
+
+                });
+
+            }
+        );
+
+    });
+
 
 
     /* =========================================================
@@ -505,114 +370,104 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     if (
-        "IntersectionObserver"
-        in window
+        "IntersectionObserver" in window
     ) {
 
         const counterObserver =
             new IntersectionObserver(
-
                 entries => {
 
-                    entries.forEach(
-                        entry => {
+                    entries.forEach(entry => {
 
-                            if (
-                                !entry.isIntersecting
-                            ) {
-                                return;
-                            }
-
-
-                            const counter =
-                                entry.target;
+                        if (
+                            !entry.isIntersecting
+                        ) {
+                            return;
+                        }
 
 
-                            const target =
-                                Number(
-                                    counter.dataset.target
+                        const counter =
+                            entry.target;
+
+
+                        const target =
+                            Number(
+                                counter.dataset.target
+                            );
+
+
+                        let current = 0;
+
+
+                        const duration =
+                            1500;
+
+
+                        const startTime =
+                            performance.now();
+
+
+                        function updateCounter(
+                            currentTime
+                        ) {
+
+                            const progress =
+                                Math.min(
+                                    (
+                                        currentTime -
+                                        startTime
+                                    ) / duration,
+                                    1
                                 );
 
 
-                            let current =
-                                0;
+                            const easedProgress =
+                                1 -
+                                Math.pow(
+                                    1 - progress,
+                                    3
+                                );
 
 
-                            const duration =
-                                1500;
+                            current =
+                                Math.floor(
+                                    easedProgress *
+                                    target
+                                );
 
 
-                            const startTime =
-                                performance.now();
+                            counter.textContent =
+                                current;
 
 
-                            function updateCounter(
-                                currentTime
+                            if (
+                                progress < 1
                             ) {
 
-                                const progress =
-                                    Math.min(
+                                requestAnimationFrame(
+                                    updateCounter
+                                );
 
-                                        (
-                                            currentTime -
-                                            startTime
-                                        ) /
-                                        duration,
-
-                                        1
-
-                                    );
-
-
-                                const easedProgress =
-                                    1 -
-                                    Math.pow(
-                                        1 -
-                                        progress,
-                                        3
-                                    );
-
-
-                                current =
-                                    Math.floor(
-                                        easedProgress *
-                                        target
-                                    );
-
+                            } else {
 
                                 counter.textContent =
-                                    current;
-
-
-                                if (
-                                    progress < 1
-                                ) {
-
-                                    requestAnimationFrame(
-                                        updateCounter
-                                    );
-
-                                } else {
-
-                                    counter.textContent =
-                                        target +
-                                        "+";
-                                }
+                                    target + "+";
 
                             }
 
-
-                            requestAnimationFrame(
-                                updateCounter
-                            );
-
-
-                            counterObserver.unobserve(
-                                counter
-                            );
-
                         }
-                    );
+
+
+                        requestAnimationFrame(
+                            updateCounter
+                        );
+
+
+                        counterObserver.unobserve(
+                            counter
+                        );
+
+                    });
 
                 },
                 {
@@ -621,17 +476,16 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-        counters.forEach(
-            counter => {
+        counters.forEach(counter => {
 
-                counterObserver.observe(
-                    counter
-                );
+            counterObserver.observe(
+                counter
+            );
 
-            }
-        );
+        });
 
     }
+
 
 
     /* =========================================================
@@ -640,59 +494,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const revealElements =
         document.querySelectorAll(
-            ".service-card, .project-card, .feature, .stat-card, .process-step, .testimonial-card, .pricing-card, .team-card"
+            `
+            .service-card,
+            .project-card,
+            .feature,
+            .stat-card,
+            .process-step,
+            .testimonial-card,
+            .pricing-card,
+            .team-card
+            `
         );
 
 
-    revealElements.forEach(
-        element => {
+    revealElements.forEach(element => {
 
-            element.style.opacity =
-                "0";
+        element.style.opacity = "0";
 
-            element.style.transform =
-                "translateY(25px)";
+        element.style.transform =
+            "translateY(25px)";
 
-            element.style.transition =
-                "opacity 0.7s ease, transform 0.7s ease";
+        element.style.transition =
+            "opacity 0.7s ease, transform 0.7s ease";
 
-        }
-    );
+    });
 
 
     if (
-        "IntersectionObserver"
-        in window
+        "IntersectionObserver" in window
     ) {
 
         const revealObserver =
             new IntersectionObserver(
-
                 entries => {
 
-                    entries.forEach(
-                        entry => {
+                    entries.forEach(entry => {
 
-                            if (
-                                !entry.isIntersecting
-                            ) {
-                                return;
-                            }
-
-
-                            entry.target.style.opacity =
-                                "1";
-
-                            entry.target.style.transform =
-                                "translateY(0)";
-
-
-                            revealObserver.unobserve(
-                                entry.target
-                            );
-
+                        if (
+                            !entry.isIntersecting
+                        ) {
+                            return;
                         }
-                    );
+
+
+                        entry.target.style.opacity =
+                            "1";
+
+
+                        entry.target.style.transform =
+                            "translateY(0)";
+
+
+                        revealObserver.unobserve(
+                            entry.target
+                        );
+
+                    });
 
                 },
                 {
@@ -701,30 +558,27 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-        revealElements.forEach(
-            element => {
+        revealElements.forEach(element => {
 
-                revealObserver.observe(
-                    element
-                );
+            revealObserver.observe(
+                element
+            );
 
-            }
-        );
+        });
 
     } else {
 
-        revealElements.forEach(
-            element => {
+        revealElements.forEach(element => {
 
-                element.style.opacity =
-                    "1";
+            element.style.opacity = "1";
 
-                element.style.transform =
-                    "translateY(0)";
+            element.style.transform =
+                "translateY(0)";
 
-            }
-        );
+        });
+
     }
+
 
 
     /* =========================================================
@@ -735,6 +589,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById(
             "projectForm"
         );
+
 
     const formMessage =
         document.getElementById(
@@ -777,7 +632,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     .trim();
 
 
-            /* Required fields */
+
+            /* ================= REQUIRED ================= */
 
             if (
                 !name ||
@@ -793,22 +649,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     formMessage.style.color =
                         "#f87171";
+
                 }
 
                 return;
+
             }
 
 
-            /* Email validation */
+
+            /* ================= EMAIL ================= */
 
             const emailPattern =
                 /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 
             if (
-                !emailPattern.test(
-                    email
-                )
+                !emailPattern.test(email)
             ) {
 
                 if (formMessage) {
@@ -818,19 +675,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     formMessage.style.color =
                         "#f87171";
+
                 }
 
                 return;
+
             }
 
 
-            /* Phone validation */
+
+            /* ================= PHONE ================= */
 
             const phoneDigits =
-                phone.replace(
-                    /\D/g,
-                    ""
-                );
+                phone.replace(/\D/g, "");
 
 
             if (
@@ -844,95 +701,71 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     formMessage.style.color =
                         "#f87171";
+
                 }
 
                 return;
+
             }
 
 
-            /* =================================================
-               FORM DATA
-            ================================================= */
+
+            /* ================= FORM DATA ================= */
 
             const formData = {
 
                 name:
                     document
-                        .getElementById(
-                            "name"
-                        )
-                        ?.value ||
-                    "",
+                        .getElementById("name")
+                        ?.value || "",
 
 
                 business:
                     document
-                        .getElementById(
-                            "business"
-                        )
-                        ?.value ||
-                    "",
+                        .getElementById("business")
+                        ?.value || "",
 
 
                 email:
                     document
-                        .getElementById(
-                            "email"
-                        )
-                        ?.value ||
-                    "",
+                        .getElementById("email")
+                        ?.value || "",
 
 
                 phone:
                     document
-                        .getElementById(
-                            "phone"
-                        )
-                        ?.value ||
-                    "",
+                        .getElementById("phone")
+                        ?.value || "",
 
 
                 city:
                     document
-                        .getElementById(
-                            "city"
-                        )
-                        ?.value ||
-                    "",
+                        .getElementById("city")
+                        ?.value || "",
 
 
                 service:
                     document
-                        .getElementById(
-                            "service"
-                        )
-                        ?.value ||
-                    "",
+                        .getElementById("service")
+                        ?.value || "",
 
 
                 budget:
                     document
-                        .getElementById(
-                            "budget"
-                        )
-                        ?.value ||
-                    "",
+                        .getElementById("budget")
+                        ?.value || "",
 
 
                 message:
                     document
-                        .getElementById(
-                            "message"
-                        )
-                        ?.value ||
-                    ""
+                        .getElementById("message")
+                        ?.value || ""
 
             };
 
 
-            /* =================================================
-               SUBMIT BUTTON
-            ================================================= */
+
+            /* ================= BUTTON ================= */
 
             const submitButton =
                 projectForm.querySelector(
@@ -946,18 +779,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (submitButton) {
 
-                submitButton.disabled =
-                    true;
+                submitButton.disabled = true;
 
 
                 submitButton.innerHTML =
                     'Sending... <i class="fa-solid fa-spinner fa-spin"></i>';
+
             }
 
 
-            /* =================================================
-               SEND TO RENDER BACKEND
-            ================================================= */
+
+            /* ================= SEND ================= */
 
             try {
 
@@ -965,21 +797,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     await fetch(
                         `${API_URL}/api/leads`,
                         {
-
                             method: "POST",
 
                             headers: {
-
                                 "Content-Type":
                                     "application/json"
-
                             },
 
                             body:
                                 JSON.stringify(
                                     formData
                                 )
-
                         }
                     );
 
@@ -988,20 +816,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     await response.json();
 
 
-                if (
-                    !response.ok
-                ) {
+                if (!response.ok) {
 
                     throw new Error(
                         result.message ||
                         "Unable to submit request."
                     );
+
                 }
 
 
-                /* =================================================
-                   SUCCESS
-                ================================================= */
+
+                /* ================= SUCCESS ================= */
 
                 if (formMessage) {
 
@@ -1010,6 +836,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     formMessage.style.color =
                         "#60a5fa";
+
                 }
 
 
@@ -1022,25 +849,23 @@ document.addEventListener("DOMContentLoaded", () => {
                         'Request Sent <i class="fa-solid fa-check"></i>';
 
 
-                    setTimeout(
-                        () => {
+                    setTimeout(() => {
 
-                            submitButton.innerHTML =
-                                originalButtonText ||
-                                "Send Project Request";
+                        submitButton.innerHTML =
+                            originalButtonText ||
+                            "Send Project Request";
 
 
-                            submitButton.disabled =
-                                false;
+                        submitButton.disabled =
+                            false;
 
-                        },
-                        3000
-                    );
+                    }, 3000);
+
                 }
 
 
                 console.log(
-                    "Lead successfully sent to backend:",
+                    "Lead successfully sent:",
                     result
                 );
 
@@ -1060,6 +885,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     formMessage.style.color =
                         "#f87171";
+
                 }
 
 
@@ -1072,12 +898,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     submitButton.innerHTML =
                         originalButtonText ||
                         "Send Project Request";
+
                 }
 
             }
 
         }
     );
+
 
 
     /* =========================================================
@@ -1090,11 +918,147 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 
+
+    /* =========================================================
+       HTML ESCAPE
+    ========================================================= */
+
+    function escapeHTML(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+
+    /* =========================================================
+       TEAM IMAGE URL FIX
+       
+       Converts old localhost URLs:
+       
+       http://localhost:5000/uploads/team/...
+       
+       into:
+       
+       https://growtechaxon-backend.onrender.com/uploads/team/...
+    ========================================================= */
+
+    function getTeamPhotoUrl(photo) {
+
+        if (!photo) {
+            return "";
+        }
+
+
+        let photoUrl =
+            String(photo).trim();
+
+
+        /* Old localhost URL */
+
+        if (
+            photoUrl.startsWith(
+                "http://localhost:5000"
+            )
+        ) {
+
+            photoUrl =
+                photoUrl.replace(
+                    "http://localhost:5000",
+                    API_URL
+                );
+
+        }
+
+
+        /* Old 127.0.0.1 URL */
+
+        if (
+            photoUrl.startsWith(
+                "http://127.0.0.1:5000"
+            )
+        ) {
+
+            photoUrl =
+                photoUrl.replace(
+                    "http://127.0.0.1:5000",
+                    API_URL
+                );
+
+        }
+
+
+        /* Relative upload URL */
+
+        if (
+            photoUrl.startsWith(
+                "/uploads/"
+            )
+        ) {
+
+            photoUrl =
+                API_URL +
+                photoUrl;
+
+        }
+
+
+        return photoUrl;
+
+    }
+
+
+
+    /* =========================================================
+       TEAM PLACEHOLDER
+    ========================================================= */
+
+    function getTeamPlaceholder(
+        name
+    ) {
+
+        const firstLetter =
+            String(name || "G")
+                .trim()
+                .charAt(0)
+                .toUpperCase() ||
+            "G";
+
+
+        return `
+            <div
+                class="team-photo-placeholder"
+                aria-label="Team member placeholder"
+            >
+                <span>${escapeHTML(firstLetter)}</span>
+            </div>
+        `;
+
+    }
+
+
+
+    /* =========================================================
+       LOAD TEAM MEMBERS
+    ========================================================= */
+
     async function loadTeamMembers() {
 
         if (!teamGrid) {
             return;
         }
+
+
+        teamGrid.innerHTML = `
+            <div class="team-empty">
+                Loading our team...
+            </div>
+        `;
 
 
         try {
@@ -1103,18 +1067,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 await fetch(
                     `${API_URL}/api/team`,
                     {
-                        method: "GET"
+                        method: "GET",
+
+                        headers: {
+                            "Accept":
+                                "application/json"
+                        },
+
+                        cache: "no-store"
                     }
                 );
 
 
-            if (
-                !response.ok
-            ) {
+            if (!response.ok) {
 
                 throw new Error(
-                    "Failed to load team members"
+                    `Team API error: ${response.status}`
                 );
+
             }
 
 
@@ -1122,23 +1092,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 await response.json();
 
 
-            /* Support different backend response formats */
+            /*
+                Backend currently returns:
+                { success: true, team: [...] }
+
+                This also supports:
+                [...]
+                { data: [...] }
+            */
 
             const members =
                 Array.isArray(result)
                     ? result
-                    : Array.isArray(
-                        result.team
-                    )
+                    : Array.isArray(result.team)
                         ? result.team
-                        : Array.isArray(
-                            result.data
-                        )
+                        : Array.isArray(result.data)
                             ? result.data
                             : [];
 
-
-            /* Only active members */
 
             const activeMembers =
                 members
@@ -1148,20 +1119,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     )
                     .sort(
                         (a, b) =>
-                            (
-                                Number(
-                                    a.displayOrder
-                                ) || 0
+                            Number(
+                                a.displayOrder || 0
                             ) -
-                            (
-                                Number(
-                                    b.displayOrder
-                                ) || 0
+                            Number(
+                                b.displayOrder || 0
                             )
                     );
 
-
-            /* No members */
 
             if (
                 !activeMembers.length
@@ -1174,168 +1139,249 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
 
                 return;
+
             }
 
 
-            /* =================================================
-               TEAM HTML
-            ================================================= */
+
+            /* ================= RENDER TEAM ================= */
 
             teamGrid.innerHTML =
                 activeMembers
-                    .map(
-                        member => {
+                    .map(member => {
 
-                            const photo =
-                                getTeamPhotoUrl(
-                                    member.photo
+                        const name =
+                            member.name ||
+                            "Team Member";
+
+
+                        const designation =
+                            member.designation ||
+                            "";
+
+
+                        const description =
+                            member.description ||
+                            "";
+
+
+                        const photo =
+                            getTeamPhotoUrl(
+                                member.photo
+                            );
+
+
+                        const safeName =
+                            escapeHTML(
+                                name
+                            );
+
+
+                        const safeDesignation =
+                            escapeHTML(
+                                designation
+                            );
+
+
+                        const safeDescription =
+                            escapeHTML(
+                                description
+                            );
+
+
+                        const photoHTML =
+                            photo
+
+                                ? `
+                                    <img
+                                        src="${escapeHTML(photo)}"
+                                        alt="${safeName}"
+                                        loading="lazy"
+                                        onerror="
+                                            this.style.display='none';
+                                            this.parentElement.classList.add('photo-error');
+                                            this.parentElement.insertAdjacentHTML(
+                                                'beforeend',
+                                                '<div class=&quot;team-photo-placeholder&quot;><span>${escapeHTML(
+                                                    String(name).trim().charAt(0).toUpperCase() || "G"
+                                                )}</span></div>'
+                                            );
+                                        "
+                                    >
+                                `
+
+                                : getTeamPlaceholder(
+                                    name
                                 );
 
 
-                            const name =
-                                escapeHTML(
-                                    member.name ||
-                                    "Team Member"
-                                );
+
+                        /* ================= SOCIAL LINKS ================= */
+
+                        let socialHTML =
+                            "";
 
 
-                            const designation =
-                                escapeHTML(
-                                    member.designation ||
-                                    ""
-                                );
+                        if (
+                            member.linkedin
+                        ) {
 
-
-                            const description =
-                                escapeHTML(
-                                    member.description ||
-                                    ""
-                                );
-
-
-                            const linkedin =
-                                safeExternalUrl(
-                                    member.linkedin
-                                );
-
-
-                            const instagram =
-                                safeExternalUrl(
-                                    member.instagram
-                                );
-
-
-                            const github =
-                                safeExternalUrl(
-                                    member.github
-                                );
-
-
-                            const imageSource =
-                                photo ||
-                                "images/default-team.jpg";
-
-
-                            return `
-
-                                <article class="team-card">
-
-                                    <div class="team-photo">
-
-                                        <img
-                                            src="${escapeHTML(
-                                                imageSource
-                                            )}"
-                                            alt="${name}"
-                                            loading="lazy"
-                                            onerror="this.onerror=null;this.src='images/default-team.jpg';"
-                                        >
-
-                                    </div>
-
-
-                                    <div class="team-info">
-
-                                        <h3>
-                                            ${name}
-                                        </h3>
-
-
-                                        <span class="team-designation">
-                                            ${designation}
-                                        </span>
-
-
-                                        <p>
-                                            ${description}
-                                        </p>
-
-
-                                        <div class="team-socials">
-
-                                            ${
-                                                linkedin
-                                                    ? `
-                                                        <a
-                                                            href="${escapeHTML(
-                                                                linkedin
-                                                            )}"
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            aria-label="LinkedIn"
-                                                        >
-                                                            <i class="fa-brands fa-linkedin-in"></i>
-                                                        </a>
-                                                    `
-                                                    : ""
-                                            }
-
-
-                                            ${
-                                                instagram
-                                                    ? `
-                                                        <a
-                                                            href="${escapeHTML(
-                                                                instagram
-                                                            )}"
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            aria-label="Instagram"
-                                                        >
-                                                            <i class="fa-brands fa-instagram"></i>
-                                                        </a>
-                                                    `
-                                                    : ""
-                                            }
-
-
-                                            ${
-                                                github
-                                                    ? `
-                                                        <a
-                                                            href="${escapeHTML(
-                                                                github
-                                                            )}"
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            aria-label="GitHub"
-                                                        >
-                                                            <i class="fa-brands fa-github"></i>
-                                                        </a>
-                                                    `
-                                                    : ""
-                                            }
-
-                                        </div>
-
-                                    </div>
-
-                                </article>
-
+                            socialHTML += `
+                                <a
+                                    href="${escapeHTML(
+                                        member.linkedin
+                                    )}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="LinkedIn"
+                                >
+                                    <i class="fa-brands fa-linkedin-in"></i>
+                                </a>
                             `;
+
                         }
-                    )
+
+
+                        if (
+                            member.instagram
+                        ) {
+
+                            socialHTML += `
+                                <a
+                                    href="${escapeHTML(
+                                        member.instagram
+                                    )}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="Instagram"
+                                >
+                                    <i class="fa-brands fa-instagram"></i>
+                                </a>
+                            `;
+
+                        }
+
+
+                        if (
+                            member.github
+                        ) {
+
+                            socialHTML += `
+                                <a
+                                    href="${escapeHTML(
+                                        member.github
+                                    )}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="GitHub"
+                                >
+                                    <i class="fa-brands fa-github"></i>
+                                </a>
+                            `;
+
+                        }
+
+
+
+                        return `
+                            <article
+                                class="team-card"
+                            >
+
+                                <div
+                                    class="team-photo"
+                                >
+
+                                    ${photoHTML}
+
+                                </div>
+
+
+                                <div
+                                    class="team-info"
+                                >
+
+                                    <h3>
+                                        ${safeName}
+                                    </h3>
+
+
+                                    <span
+                                        class="team-designation"
+                                    >
+                                        ${safeDesignation}
+                                    </span>
+
+
+                                    ${
+                                        description
+                                            ? `
+                                                <p>
+                                                    ${safeDescription}
+                                                </p>
+                                            `
+                                            : ""
+                                    }
+
+
+                                    ${
+                                        socialHTML
+                                            ? `
+                                                <div
+                                                    class="team-socials"
+                                                >
+                                                    ${socialHTML}
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                </div>
+
+                            </article>
+                        `;
+
+                    })
                     .join("");
+
+
+            /*
+                Because team cards are inserted dynamically,
+                apply reveal animation manually.
+            */
+
+            const newTeamCards =
+                teamGrid.querySelectorAll(
+                    ".team-card"
+                );
+
+
+            newTeamCards.forEach(card => {
+
+                card.style.opacity = "0";
+
+                card.style.transform =
+                    "translateY(25px)";
+
+                card.style.transition =
+                    "opacity 0.7s ease, transform 0.7s ease";
+
+
+                requestAnimationFrame(() => {
+
+                    requestAnimationFrame(() => {
+
+                        card.style.opacity =
+                            "1";
+
+                        card.style.transform =
+                            "translateY(0)";
+
+                    });
+
+                });
+
+            });
 
 
         } catch (error) {
@@ -1357,85 +1403,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =========================================================
-       ESCAPE HTML
-       Prevents unsafe HTML from database fields
-    ========================================================= */
-
-    function escapeHTML(value) {
-
-        return String(
-            value ?? ""
-        )
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-            .replace(
-                /</g,
-                "&lt;"
-            )
-            .replace(
-                />/g,
-                "&gt;"
-            )
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-            .replace(
-                /'/g,
-                "&#039;"
-            );
-
-    }
-
-
-    /* =========================================================
-       SAFE SOCIAL URL
-    ========================================================= */
-
-    function safeExternalUrl(value) {
-
-        if (!value) {
-            return "";
-        }
-
-
-        const url =
-            String(value).trim();
-
-
-        try {
-
-            const parsed =
-                new URL(url);
-
-
-            if (
-                parsed.protocol ===
-                    "http:" ||
-                parsed.protocol ===
-                    "https:"
-            ) {
-
-                return parsed.href;
-            }
-
-
-            return "";
-
-        } catch {
-
-            return "";
-        }
-
-    }
-
-
-    /* Load team */
-
     loadTeamMembers();
+
 
 
     /* =========================================================
@@ -1446,58 +1415,55 @@ document.addEventListener("DOMContentLoaded", () => {
         .querySelectorAll(
             'a[href^="#"]'
         )
-        .forEach(
-            link => {
+        .forEach(link => {
 
-                link.addEventListener(
-                    "click",
-                    event => {
+            link.addEventListener(
+                "click",
+                event => {
 
-                        const targetId =
-                            link.getAttribute(
-                                "href"
-                            );
-
-
-                        if (
-                            !targetId ||
-                            targetId === "#"
-                        ) {
-
-                            return;
-                        }
+                    const targetId =
+                        link.getAttribute(
+                            "href"
+                        );
 
 
-                        const target =
-                            document.querySelector(
-                                targetId
-                            );
+                    if (
+                        !targetId ||
+                        targetId === "#"
+                    ) {
 
-
-                        if (!target) {
-
-                            return;
-                        }
-
-
-                        event.preventDefault();
-
-
-                        target.scrollIntoView({
-
-                            behavior:
-                                "smooth",
-
-                            block:
-                                "start"
-
-                        });
+                        return;
 
                     }
-                );
 
-            }
-        );
+
+                    const target =
+                        document.querySelector(
+                            targetId
+                        );
+
+
+                    if (!target) {
+                        return;
+                    }
+
+
+                    event.preventDefault();
+
+
+                    target.scrollIntoView({
+
+                        behavior: "smooth",
+
+                        block: "start"
+
+                    });
+
+                }
+            );
+
+        });
+
 
 
     /* =========================================================
@@ -1513,26 +1479,34 @@ document.addEventListener("DOMContentLoaded", () => {
     cursorGlow.style.position =
         "fixed";
 
+
     cursorGlow.style.width =
         "180px";
+
 
     cursorGlow.style.height =
         "180px";
 
+
     cursorGlow.style.borderRadius =
         "50%";
+
 
     cursorGlow.style.pointerEvents =
         "none";
 
+
     cursorGlow.style.zIndex =
         "0";
+
 
     cursorGlow.style.background =
         "radial-gradient(circle, rgba(37,99,235,0.08), transparent 70%)";
 
+
     cursorGlow.style.transform =
         "translate(-50%, -50%)";
+
 
     cursorGlow.style.display =
         "none";
@@ -1558,6 +1532,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 cursorGlow.style.left =
                     event.clientX + "px";
 
+
                 cursorGlow.style.top =
                     event.clientY + "px";
 
@@ -1565,6 +1540,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
     }
+
 
 
     /* =========================================================
@@ -1576,8 +1552,7 @@ document.addEventListener("DOMContentLoaded", () => {
         event => {
 
             if (
-                event.key ===
-                "Escape"
+                event.key === "Escape"
             ) {
 
                 navMenu?.classList.remove(
@@ -1595,6 +1570,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     "fa-xmark"
                 );
 
+
                 icon?.classList.add(
                     "fa-bars"
                 );
@@ -1603,6 +1579,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
     );
+
 
 
     /* =========================================================
