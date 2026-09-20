@@ -2094,3 +2094,58 @@ img {
     }
 
 }
+/* ================= TEAM VISIBILITY FIX ================= */
+
+.team,
+.team-grid {
+    display: block;
+    width: 100%;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.team-card {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+    position: relative;
+    width: 100%;
+    min-height: 100px;
+}
+
+.team-photo {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100%;
+}
+
+.team-photo img {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.team-info {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Mobile */
+@media (max-width: 1000px) {
+    .team-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+}
