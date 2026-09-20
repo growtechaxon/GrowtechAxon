@@ -7,8 +7,20 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 require("dotenv").config();
 
+const cloudinary = require("cloudinary").v2;
+
 const Lead = require("./MODELS/Lead");
 const Team = require("./MODELS/Team");
+
+// =====================================================
+// CLOUDINARY CONFIGURATION
+// =====================================================
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 // =====================================================
 // APP SETUP
@@ -25,64 +37,18 @@ app.use(cors());
 app.use(express.json());
 
 // =====================================================
-// TEAM IMAGE UPLOAD SETUP
+// TEAM IMAGE UPLOAD - CLOUDINARY
 // =====================================================
 
-const teamUploadFolder = path.join(
-    __dirname,
-    "uploads",
-    "team"
-);
+const teamUploadFolder = "growtechaxon/team";
 
-// Create uploads/team folder automatically
-if (!fs.existsSync(teamUploadFolder)) {
-    fs.mkdirSync(teamUploadFolder, {
-        recursive: true
-    });
-}
+// =====================================================
+// MULTER MEMORY STORAGE
+// =====================================================
 
-// -----------------------------------------------------
-// MULTER STORAGE
-// -----------------------------------------------------
-
-const teamStorage = multer.diskStorage({
-
-    destination: (req, file, cb) => {
-
-        cb(
-            null,
-            teamUploadFolder
-        );
-
-    },
-
-    filename: (req, file, cb) => {
-
-        const extension =
-            path.extname(
-                file.originalname
-            ).toLowerCase();
-
-        const uniqueName =
-            `team-${Date.now()}-${Math.round(
-                Math.random() * 1e9
-            )}${extension}`;
-
-        cb(
-            null,
-            uniqueName
-        );
-
-    }
-
-});
-
-// -----------------------------------------------------
-// MULTER CONFIGURATION
-// -----------------------------------------------------
+const teamStorage = multer.memoryStorage();
 
 const uploadTeamPhoto = multer({
-
     storage: teamStorage,
 
     limits: {
@@ -90,7 +56,6 @@ const uploadTeamPhoto = multer({
     },
 
     fileFilter: (req, file, cb) => {
-
         const allowedTypes = [
             "image/jpeg",
             "image/jpg",
@@ -98,87 +63,145 @@ const uploadTeamPhoto = multer({
             "image/webp"
         ];
 
-        if (
-            allowedTypes.includes(
-                file.mimetype
-            )
-        ) {
-
-            cb(
-                null,
-                true
-            );
-
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
         } else {
-
             cb(
                 new Error(
                     "Only JPG, PNG and WEBP images are allowed."
                 )
             );
-
         }
-
     }
-
 });
 
 // =====================================================
-// SERVE UPLOADED TEAM IMAGES
+// CLOUDINARY UPLOAD HELPER
 // =====================================================
 
-app.use(
-    "/uploads",
-    express.static(
-        path.join(
-            __dirname,
-            "uploads"
-        )
-    )
-);
+function uploadToCloudinary(buffer) {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            {
+                folder: teamUploadFolder,
+                resource_type: "image"
+            },
+            (error, result) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            }
+        );
+
+        stream.end(buffer);
+    });
+}
+
+// =====================================================
+// CLOUDINARY DELETE HELPER
+// =====================================================
+
+async function deleteCloudinaryImage(photoUrl) {
+    try {
+        if (!photoUrl) {
+            return;
+        }
+
+        if (!photoUrl.includes("res.cloudinary.com")) {
+            return;
+        }
+
+        const url = new URL(photoUrl);
+
+        const pathParts = url.pathname
+            .split("/")
+            .filter(Boolean);
+
+        const uploadIndex = pathParts.indexOf("upload");
+
+        if (uploadIndex === -1) {
+            return;
+        }
+
+        let publicParts = pathParts.slice(
+            uploadIndex + 1
+        );
+
+        // Remove transformation parameters if present
+        if (
+            publicParts.length &&
+            (
+                publicParts[0].includes(",") ||
+                publicParts[0].includes("_") ||
+                publicParts[0].includes("=")
+            )
+        ) {
+            publicParts.shift();
+        }
+
+        let publicId = publicParts.join("/");
+
+        // Remove file extension
+        publicId = publicId.replace(
+            /\.(jpg|jpeg|png|webp|gif|avif)$/i,
+            ""
+        );
+
+        if (!publicId) {
+            return;
+        }
+
+        await cloudinary.uploader.destroy(
+            publicId,
+            {
+                resource_type: "image",
+                type: "upload"
+            }
+        );
+
+        console.log(
+            "Cloudinary image deleted:",
+            publicId
+        );
+
+    } catch (error) {
+        console.error(
+            "Cloudinary image delete error:",
+            error.message
+        );
+    }
+}
 
 // =====================================================
 // OLD DATA FILE
 // =====================================================
 
-const dataFolder =
-    path.join(
-        __dirname,
-        "data"
-    );
+const dataFolder = path.join(
+    __dirname,
+    "data"
+);
 
-const leadsFile =
-    path.join(
-        dataFolder,
-        "leads.json"
-    );
+const leadsFile = path.join(
+    dataFolder,
+    "leads.json"
+);
 
-if (
-    !fs.existsSync(
-        dataFolder
-    )
-) {
-
+if (!fs.existsSync(dataFolder)) {
     fs.mkdirSync(
         dataFolder,
         {
             recursive: true
         }
     );
-
 }
 
-if (
-    !fs.existsSync(
-        leadsFile
-    )
-) {
-
+if (!fs.existsSync(leadsFile)) {
     fs.writeFileSync(
         leadsFile,
         "[]"
     );
-
 }
 
 // =====================================================
@@ -190,19 +213,15 @@ mongoose
         process.env.MONGODB_URI
     )
     .then(() => {
-
         console.log(
             "MongoDB connected successfully!"
         );
-
     })
     .catch((error) => {
-
         console.error(
             "MongoDB connection failed:",
             error.message
         );
-
     });
 
 // =====================================================
@@ -224,16 +243,11 @@ app.post(
                 !username ||
                 !password
             ) {
-
                 return res.status(400).json({
-
                     success: false,
-
                     message:
                         "Username and password are required."
-
                 });
-
             }
 
             if (
@@ -242,48 +256,29 @@ app.post(
                 password !==
                     process.env.ADMIN_PASSWORD
             ) {
-
                 return res.status(401).json({
-
                     success: false,
-
                     message:
                         "Invalid username or password."
-
                 });
-
             }
 
-            const token =
-                jwt.sign(
-
-                    {
-                        username:
-                            username,
-
-                        role:
-                            "admin"
-                    },
-
-                    process.env.JWT_SECRET,
-
-                    {
-                        expiresIn:
-                            "8h"
-                    }
-
-                );
+            const token = jwt.sign(
+                {
+                    username: username,
+                    role: "admin"
+                },
+                process.env.JWT_SECRET,
+                {
+                    expiresIn: "8h"
+                }
+            );
 
             res.json({
-
                 success: true,
-
                 message:
                     "Login successful!",
-
-                token:
-                    token
-
+                token: token
             });
 
         } catch (error) {
@@ -294,16 +289,11 @@ app.post(
             );
 
             res.status(500).json({
-
                 success: false,
-
                 message:
                     "Login server error."
-
             });
-
         }
-
     }
 );
 
@@ -322,20 +312,13 @@ function verifyAdmin(
 
     if (
         !authHeader ||
-        !authHeader.startsWith(
-            "Bearer "
-        )
+        !authHeader.startsWith("Bearer ")
     ) {
-
         return res.status(401).json({
-
             success: false,
-
             message:
                 "Unauthorized access."
-
         });
-
     }
 
     const token =
@@ -350,39 +333,27 @@ function verifyAdmin(
             );
 
         if (
-            decoded.role !==
-            "admin"
+            decoded.role !== "admin"
         ) {
-
             return res.status(403).json({
-
                 success: false,
-
                 message:
                     "Admin access required."
-
             });
-
         }
 
-        req.admin =
-            decoded;
+        req.admin = decoded;
 
         next();
 
     } catch (error) {
 
         return res.status(401).json({
-
             success: false,
-
             message:
                 "Invalid or expired token."
-
         });
-
     }
-
 }
 
 // =====================================================
@@ -394,14 +365,10 @@ app.get(
     (req, res) => {
 
         res.json({
-
             success: true,
-
             message:
                 "GrowtechAxon Backend is running 🚀"
-
         });
-
     }
 );
 
@@ -414,14 +381,10 @@ app.get(
     (req, res) => {
 
         res.json({
-
             success: true,
-
             message:
                 "API connection successful!"
-
         });
-
     }
 );
 
@@ -456,32 +419,24 @@ app.post(
                 !phone ||
                 !message
             ) {
-
                 return res.status(400).json({
-
                     success: false,
-
                     message:
                         "Please fill all required fields."
-
                 });
-
             }
 
             const newLead =
                 await Lead.create({
 
-                    name:
-                        name,
+                    name: name,
 
                     business:
                         business || "",
 
-                    email:
-                        email,
+                    email: email,
 
-                    phone:
-                        phone,
+                    phone: phone,
 
                     city:
                         city || "",
@@ -492,24 +447,16 @@ app.post(
                     budget:
                         budget || "",
 
-                    message:
-                        message,
+                    message: message,
 
-                    status:
-                        "New"
-
+                    status: "New"
                 });
 
             res.status(201).json({
-
                 success: true,
-
                 message:
                     "Project request received successfully!",
-
-                lead:
-                    newLead
-
+                lead: newLead
             });
 
         } catch (error) {
@@ -520,16 +467,11 @@ app.post(
             );
 
             res.status(500).json({
-
                 success: false,
-
                 message:
                     "Server error."
-
             });
-
         }
-
     }
 );
 
@@ -547,20 +489,13 @@ app.get(
             const leads =
                 await Lead.find()
                     .sort({
-                        createdAt:
-                            -1
+                        createdAt: -1
                     });
 
             res.json({
-
                 success: true,
-
-                count:
-                    leads.length,
-
-                leads:
-                    leads
-
+                count: leads.length,
+                leads: leads
             });
 
         } catch (error) {
@@ -571,16 +506,11 @@ app.get(
             );
 
             res.status(500).json({
-
                 success: false,
-
                 message:
                     "Unable to load leads."
-
             });
-
         }
-
     }
 );
 
@@ -611,58 +541,37 @@ app.put(
                     status
                 )
             ) {
-
                 return res.status(400).json({
-
                     success: false,
-
                     message:
                         "Invalid status."
-
                 });
-
             }
 
             const lead =
                 await Lead.findByIdAndUpdate(
-
                     req.params.id,
-
                     {
-                        status:
-                            status
+                        status: status
                     },
-
                     {
-                        new:
-                            true
+                        new: true
                     }
-
                 );
 
             if (!lead) {
-
                 return res.status(404).json({
-
                     success: false,
-
                     message:
                         "Lead not found."
-
                 });
-
             }
 
             res.json({
-
                 success: true,
-
                 message:
                     "Lead status updated successfully.",
-
-                lead:
-                    lead
-
+                lead: lead
             });
 
         } catch (error) {
@@ -673,16 +582,11 @@ app.put(
             );
 
             res.status(500).json({
-
                 success: false,
-
                 message:
                     "Unable to update lead status."
-
             });
-
         }
-
     }
 );
 
@@ -703,25 +607,17 @@ app.delete(
                 );
 
             if (!lead) {
-
                 return res.status(404).json({
-
                     success: false,
-
                     message:
                         "Lead not found."
-
                 });
-
             }
 
             res.json({
-
                 success: true,
-
                 message:
                     "Lead deleted successfully."
-
             });
 
         } catch (error) {
@@ -732,16 +628,11 @@ app.delete(
             );
 
             res.status(500).json({
-
                 success: false,
-
                 message:
                     "Unable to delete lead."
-
             });
-
         }
-
     }
 );
 
@@ -761,31 +652,16 @@ app.get(
 
             const team =
                 await Team.find({
-
-                    active:
-                        true
-
+                    active: true
                 }).sort({
-
-                    displayOrder:
-                        1,
-
-                    createdAt:
-                        1
-
+                    displayOrder: 1,
+                    createdAt: 1
                 });
 
             res.json({
-
-                success:
-                    true,
-
-                count:
-                    team.length,
-
-                team:
-                    team
-
+                success: true,
+                count: team.length,
+                team: team
             });
 
         } catch (error) {
@@ -796,17 +672,11 @@ app.get(
             );
 
             res.status(500).json({
-
-                success:
-                    false,
-
+                success: false,
                 message:
                     "Unable to load team members."
-
             });
-
         }
-
     }
 );
 
@@ -824,26 +694,14 @@ app.get(
             const team =
                 await Team.find()
                     .sort({
-
-                        displayOrder:
-                            1,
-
-                        createdAt:
-                            1
-
+                        displayOrder: 1,
+                        createdAt: 1
                     });
 
             res.json({
-
-                success:
-                    true,
-
-                count:
-                    team.length,
-
-                team:
-                    team
-
+                success: true,
+                count: team.length,
+                team: team
             });
 
         } catch (error) {
@@ -854,17 +712,11 @@ app.get(
             );
 
             res.status(500).json({
-
-                success:
-                    false,
-
+                success: false,
                 message:
                     "Unable to load team members."
-
             });
-
         }
-
     }
 );
 
@@ -899,49 +751,33 @@ app.post(
                 !name ||
                 !designation
             ) {
-
-                if (req.file) {
-
-                    try {
-
-                        fs.unlinkSync(
-                            req.file.path
-                        );
-
-                    } catch (error) {
-
-                        console.error(
-                            "Image cleanup error:",
-                            error
-                        );
-
-                    }
-
-                }
-
                 return res.status(400).json({
-
-                    success:
-                        false,
-
+                    success: false,
                     message:
                         "Name and designation are required."
-
                 });
-
             }
 
             // ---------------------------------------------
-            // IMAGE URL
+            // UPLOAD IMAGE TO CLOUDINARY
             // ---------------------------------------------
 
             let photo = "";
 
             if (req.file) {
 
-                photo =
-                    `${req.protocol}://${req.get("host")}/uploads/team/${req.file.filename}`;
+                const cloudinaryResult =
+                    await uploadToCloudinary(
+                        req.file.buffer
+                    );
 
+                photo =
+                    cloudinaryResult.secure_url;
+
+                console.log(
+                    "Team image uploaded:",
+                    photo
+                );
             }
 
             // ---------------------------------------------
@@ -996,42 +832,16 @@ app.post(
 
                     active:
                         activeValue
-
                 });
 
             res.status(201).json({
-
-                success:
-                    true,
-
+                success: true,
                 message:
                     "Team member added successfully.",
-
-                team:
-                    newMember
-
+                team: newMember
             });
 
         } catch (error) {
-
-            if (req.file) {
-
-                try {
-
-                    fs.unlinkSync(
-                        req.file.path
-                    );
-
-                } catch (deleteError) {
-
-                    console.error(
-                        "Uploaded image cleanup error:",
-                        deleteError
-                    );
-
-                }
-
-            }
 
             console.error(
                 "Add team member error:",
@@ -1039,17 +849,13 @@ app.post(
             );
 
             res.status(500).json({
-
-                success:
-                    false,
-
+                success: false,
                 message:
-                    "Unable to add team member."
-
+                    "Unable to add team member.",
+                error:
+                    error.message
             });
-
         }
-
     }
 );
 
@@ -1084,36 +890,11 @@ app.put(
                 !name ||
                 !designation
             ) {
-
-                if (req.file) {
-
-                    try {
-
-                        fs.unlinkSync(
-                            req.file.path
-                        );
-
-                    } catch (error) {
-
-                        console.error(
-                            "Image cleanup error:",
-                            error
-                        );
-
-                    }
-
-                }
-
                 return res.status(400).json({
-
-                    success:
-                        false,
-
+                    success: false,
                     message:
                         "Name and designation are required."
-
                 });
-
             }
 
             // ---------------------------------------------
@@ -1126,36 +907,11 @@ app.put(
                 );
 
             if (!existingMember) {
-
-                if (req.file) {
-
-                    try {
-
-                        fs.unlinkSync(
-                            req.file.path
-                        );
-
-                    } catch (error) {
-
-                        console.error(
-                            "Image cleanup error:",
-                            error
-                        );
-
-                    }
-
-                }
-
                 return res.status(404).json({
-
-                    success:
-                        false,
-
+                    success: false,
                     message:
                         "Team member not found."
-
                 });
-
             }
 
             // ---------------------------------------------
@@ -1199,7 +955,6 @@ app.put(
                     active === undefined
                         ? true
                         : String(active) === "true"
-
             };
 
             // ---------------------------------------------
@@ -1208,17 +963,22 @@ app.put(
 
             if (req.file) {
 
+                const cloudinaryResult =
+                    await uploadToCloudinary(
+                        req.file.buffer
+                    );
+
                 updateData.photo =
-                    `${req.protocol}://${req.get("host")}/uploads/team/${req.file.filename}`;
+                    cloudinaryResult.secure_url;
 
+                console.log(
+                    "New team image uploaded:",
+                    updateData.photo
+                );
             } else {
-
-                // No new image
-                // Keep old image
 
                 updateData.photo =
                     existingMember.photo || "";
-
             }
 
             // ---------------------------------------------
@@ -1227,113 +987,35 @@ app.put(
 
             const updatedMember =
                 await Team.findByIdAndUpdate(
-
                     req.params.id,
-
                     updateData,
-
                     {
-                        new:
-                            true,
-
-                        runValidators:
-                            true
-
+                        new: true,
+                        runValidators: true
                     }
-
                 );
 
             // ---------------------------------------------
-            // DELETE OLD IMAGE
+            // DELETE OLD CLOUDINARY IMAGE
             // ---------------------------------------------
 
             if (
                 req.file &&
-                existingMember.photo &&
-                existingMember.photo.includes(
-                    "/uploads/team/"
-                )
+                existingMember.photo
             ) {
-
-                try {
-
-                    const oldImageName =
-                        path.basename(
-
-                            new URL(
-                                existingMember.photo
-                            ).pathname
-
-                        );
-
-                    const oldImagePath =
-                        path.join(
-
-                            teamUploadFolder,
-
-                            oldImageName
-
-                        );
-
-                    if (
-                        fs.existsSync(
-                            oldImagePath
-                        )
-                    ) {
-
-                        fs.unlinkSync(
-                            oldImagePath
-                        );
-
-                    }
-
-                } catch (error) {
-
-                    console.error(
-                        "Old team image delete error:",
-                        error
-                    );
-
-                }
-
+                await deleteCloudinaryImage(
+                    existingMember.photo
+                );
             }
 
             res.json({
-
-                success:
-                    true,
-
+                success: true,
                 message:
                     "Team member updated successfully.",
-
-                team:
-                    updatedMember
-
+                team: updatedMember
             });
 
         } catch (error) {
-
-            // Delete newly uploaded image
-            // if database update failed
-
-            if (req.file) {
-
-                try {
-
-                    fs.unlinkSync(
-                        req.file.path
-                    );
-
-                } catch (deleteError) {
-
-                    console.error(
-                        "New image cleanup error:",
-                        deleteError
-                    );
-
-                }
-
-            }
 
             console.error(
                 "Update team member error:",
@@ -1341,17 +1023,13 @@ app.put(
             );
 
             res.status(500).json({
-
-                success:
-                    false,
-
+                success: false,
                 message:
-                    "Unable to update team member."
-
+                    "Unable to update team member.",
+                error:
+                    error.message
             });
-
         }
-
     }
 );
 
@@ -1366,87 +1044,47 @@ app.delete(
 
         try {
 
+            // ---------------------------------------------
+            // FIND MEMBER
+            // ---------------------------------------------
+
             const deletedMember =
-                await Team.findByIdAndDelete(
+                await Team.findById(
                     req.params.id
                 );
 
             if (!deletedMember) {
-
                 return res.status(404).json({
-
-                    success:
-                        false,
-
+                    success: false,
                     message:
                         "Team member not found."
-
                 });
-
             }
 
             // ---------------------------------------------
-            // DELETE TEAM IMAGE
+            // DELETE DATABASE RECORD
+            // ---------------------------------------------
+
+            await Team.findByIdAndDelete(
+                req.params.id
+            );
+
+            // ---------------------------------------------
+            // DELETE CLOUDINARY IMAGE
             // ---------------------------------------------
 
             if (
-                deletedMember.photo &&
-                deletedMember.photo.includes(
-                    "/uploads/team/"
-                )
+                deletedMember.photo
             ) {
-
-                try {
-
-                    const imageName =
-                        path.basename(
-
-                            new URL(
-                                deletedMember.photo
-                            ).pathname
-
-                        );
-
-                    const imagePath =
-                        path.join(
-
-                            teamUploadFolder,
-
-                            imageName
-
-                        );
-
-                    if (
-                        fs.existsSync(
-                            imagePath
-                        )
-                    ) {
-
-                        fs.unlinkSync(
-                            imagePath
-                        );
-
-                    }
-
-                } catch (error) {
-
-                    console.error(
-                        "Delete team image error:",
-                        error
-                    );
-
-                }
-
+                await deleteCloudinaryImage(
+                    deletedMember.photo
+                );
             }
 
             res.json({
-
-                success:
-                    true,
-
+                success: true,
                 message:
                     "Team member deleted successfully."
-
             });
 
         } catch (error) {
@@ -1457,17 +1095,13 @@ app.delete(
             );
 
             res.status(500).json({
-
-                success:
-                    false,
-
+                success: false,
                 message:
-                    "Unable to delete team member."
-
+                    "Unable to delete team member.",
+                error:
+                    error.message
             });
-
         }
-
     }
 );
 
@@ -1486,29 +1120,18 @@ app.use(
                 error.code ===
                 "LIMIT_FILE_SIZE"
             ) {
-
                 return res.status(400).json({
-
-                    success:
-                        false,
-
+                    success: false,
                     message:
                         "Image size must be less than 5MB."
-
                 });
-
             }
 
             return res.status(400).json({
-
-                success:
-                    false,
-
+                success: false,
                 message:
                     error.message
-
             });
-
         }
 
         if (
@@ -1516,21 +1139,14 @@ app.use(
             error.message ===
                 "Only JPG, PNG and WEBP images are allowed."
         ) {
-
             return res.status(400).json({
-
-                success:
-                    false,
-
+                success: false,
                 message:
                     error.message
-
             });
-
         }
 
         next(error);
-
     }
 );
 
