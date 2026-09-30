@@ -32,6 +32,10 @@
 }
 
 
+/* =========================================================
+   RESET
+   ========================================================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -68,12 +72,19 @@ body {
 
     overflow-x: hidden;
 }
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
 .brand {
     display: flex;
     align-items: center;
     gap: 10px;
     text-decoration: none;
 }
+
 
 .brand-logo {
     width: 42px;
@@ -83,10 +94,16 @@ body {
     display: block;
 }
 
+
 .logo-text {
     font-size: 18px;
     font-weight: 700;
 }
+
+
+/* =========================================================
+   BACKGROUND GRID
+   ========================================================= */
 
 body::before {
     content: "";
@@ -113,12 +130,18 @@ body::before {
     z-index: -2;
 }
 
+
+/* =========================================================
+   HERO VISUAL
+   ========================================================= */
+
 .hero-visual {
     position: relative;
     overflow: hidden;
     border-radius: 24px;
     min-height: 420px;
 }
+
 
 .hero-visual img {
     width: 100%;
@@ -128,45 +151,61 @@ body::before {
     display: block;
 }
 
+
 .hero-visual::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        180deg,
-        rgba(0, 20, 70, 0.08),
-        rgba(0, 25, 100, 0.45)
-    );
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0, 20, 70, 0.08),
+            rgba(0, 25, 100, 0.45)
+        );
+
     pointer-events: none;
 }
 
+
 .hero-visual-overlay {
     position: absolute;
+
     left: 25px;
     right: 25px;
     bottom: 25px;
+
     z-index: 4;
 
     display: flex;
+
     align-items: center;
+
     gap: 14px;
 
     padding: 16px 20px;
+
     border-radius: 16px;
 
     background: rgba(0, 82, 210, 0.82);
+
     backdrop-filter: blur(10px);
+
     color: #fff;
 }
+
 
 .hero-visual-overlay i {
     font-size: 24px;
 }
 
+
 .hero-visual-overlay span {
     font-size: 15px;
     font-weight: 600;
 }
+
+
 a {
     color: inherit;
     text-decoration: none;
@@ -191,6 +230,10 @@ img {
     display: block;
 }
 
+
+/* =========================================================
+   CONTAINER
+   ========================================================= */
 
 .container {
     width: min(
@@ -239,6 +282,7 @@ img {
     border-radius: 20px;
 
     display: grid;
+
     place-items: center;
 
     margin: auto;
@@ -246,6 +290,7 @@ img {
     font-family: "Poppins", sans-serif;
 
     font-size: 25px;
+
     font-weight: 800;
 
     background:
@@ -334,7 +379,8 @@ img {
 
     border-bottom: 1px solid var(--border);
 
-    box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+    box-shadow:
+        0 10px 40px rgba(0,0,0,0.12);
 }
 
 
@@ -513,6 +559,7 @@ img {
     min-height: 100vh;
 
     padding-top: 120px;
+
     padding-bottom: 90px;
 }
 
@@ -727,6 +774,7 @@ img {
 
 .hero-image img {
     width: 100%;
+
     height: 100%;
 
     min-height: 490px;
@@ -1423,8 +1471,14 @@ img {
         repeat(3, 1fr);
 
     gap: 22px;
+
+    align-items: stretch;
 }
 
+
+/* ---------------------------------------------------------
+   NORMAL TEAM CARD
+   --------------------------------------------------------- */
 
 .team-card {
     overflow: hidden;
@@ -1434,8 +1488,67 @@ img {
     background: var(--bg-card);
 
     border: 1px solid var(--border);
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
+
+.team-card:hover {
+    transform: translateY(-5px);
+
+    border-color:
+        rgba(96,165,250,0.28);
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ---------------------------------------------------------
+   FOUNDER / CEO FEATURED CARD
+   --------------------------------------------------------- */
+
+.team-card.founder-card {
+    grid-column: 1 / -1;
+
+    display: grid;
+
+    grid-template-columns:
+        0.8fr
+        1.2fr;
+
+    min-height: 390px;
+
+    border-color:
+        rgba(201, 164, 92, 0.35);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,0.035),
+            rgba(37,99,235,0.055)
+        );
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.20);
+}
+
+
+.team-card.founder-card:hover {
+    border-color:
+        rgba(201, 164, 92, 0.55);
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,0.28);
+}
+
+
+/* ---------------------------------------------------------
+   TEAM PHOTO
+   --------------------------------------------------------- */
 
 .team-photo {
     aspect-ratio: 1 / 1;
@@ -1443,16 +1556,49 @@ img {
     overflow: hidden;
 
     background: #08152b;
+
+    position: relative;
 }
 
 
 .team-photo img {
     width: 100%;
+
     height: 100%;
 
     object-fit: cover;
+
+    display: block;
+
+    transition:
+        transform 0.5s ease;
 }
 
+
+.team-card:hover .team-photo img {
+    transform: scale(1.03);
+}
+
+
+/* Founder photo */
+
+.team-card.founder-card .team-photo {
+    height: 100%;
+
+    min-height: 390px;
+
+    aspect-ratio: auto;
+}
+
+
+.team-card.founder-card .team-photo img {
+    object-position: center center;
+}
+
+
+/* ---------------------------------------------------------
+   TEAM INFO
+   --------------------------------------------------------- */
 
 .team-info {
     padding: 23px;
@@ -1481,33 +1627,86 @@ img {
     color: var(--text-muted);
 
     font-size: 13px;
+
+    line-height: 1.65;
 }
 
+
+/* Founder information */
+
+.team-card.founder-card .team-info {
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    padding: 42px;
+}
+
+
+.team-card.founder-card .team-info h3 {
+    font-size: 28px;
+
+    line-height: 1.25;
+
+    margin-bottom: 7px;
+}
+
+
+.team-card.founder-card .team-designation {
+    font-size: 14px;
+
+    margin-bottom: 16px;
+
+    color: #e7c77a;
+}
+
+
+.team-card.founder-card .team-info p {
+    font-size: 14px;
+
+    max-width: 650px;
+
+    line-height: 1.8;
+}
+
+
+/* ---------------------------------------------------------
+   TEAM SOCIALS
+   --------------------------------------------------------- */
 
 .team-socials {
     display: flex;
 
+    flex-wrap: wrap;
+
     gap: 8px;
 
-    margin-top: 15px;
+    margin-top: 18px;
 }
 
 
 .team-socials a {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+
+    height: 36px;
 
     display: grid;
 
     place-items: center;
 
-    border-radius: 8px;
+    border-radius: 9px;
 
     color: var(--text-muted);
 
     border: 1px solid var(--border);
 
+    background: rgba(255,255,255,0.015);
+
     transition: var(--transition);
+
+    text-decoration: none;
 }
 
 
@@ -1517,8 +1716,27 @@ img {
     background: var(--primary);
 
     border-color: var(--primary);
+
+    transform: translateY(-2px);
 }
 
+
+/* Founder social icons */
+
+.team-card.founder-card .team-socials a {
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+}
+
+
+/* ---------------------------------------------------------
+   EMPTY TEAM
+   --------------------------------------------------------- */
 
 .team-empty {
     grid-column: 1 / -1;
@@ -2029,15 +2247,18 @@ img {
         gap: 0;
     }
 
+
     .nav-link {
         padding-inline: 8px;
 
         font-size: 12px;
     }
 
+
     .nav-cta {
         padding-inline: 13px;
     }
+
 
     .hero-grid {
         gap: 35px;
@@ -2045,6 +2266,10 @@ img {
 
 }
 
+
+/* =========================================================
+   TABLET
+   ========================================================= */
 
 @media (max-width: 900px) {
 
@@ -2149,8 +2374,35 @@ img {
             repeat(2, 1fr);
     }
 
+
+    /* Founder tablet layout */
+
+    .team-card.founder-card {
+        grid-column: 1 / -1;
+
+        grid-template-columns:
+            0.85fr
+            1.15fr;
+
+        min-height: 350px;
+    }
+
+
+    .team-card.founder-card .team-photo {
+        min-height: 350px;
+    }
+
+
+    .team-card.founder-card .team-info {
+        padding: 30px;
+    }
+
 }
 
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
 @media (max-width: 700px) {
 
@@ -2229,8 +2481,54 @@ img {
         padding: 28px 22px;
     }
 
+
+    /* Founder mobile */
+
+    .team-card.founder-card {
+        grid-column: 1;
+
+        display: block;
+
+        min-height: auto;
+    }
+
+
+    .team-card.founder-card .team-photo {
+        height: auto;
+
+        min-height: 0;
+
+        aspect-ratio: 1 / 1;
+    }
+
+
+    .team-card.founder-card .team-info {
+        padding: 23px;
+    }
+
+
+    .team-card.founder-card .team-info h3 {
+        font-size: 22px;
+    }
+
+
+    .team-card.founder-card .team-designation {
+        font-size: 13px;
+    }
+
+
+    .team-card.founder-card .team-info p {
+        font-size: 13px;
+
+        line-height: 1.65;
+    }
+
 }
 
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
 
 @media (max-width: 480px) {
 
@@ -2269,6 +2567,24 @@ img {
     #backToTop {
         right: 15px;
         bottom: 78px;
+    }
+
+
+    /* Founder small mobile */
+
+    .team-card.founder-card .team-info {
+        padding: 20px;
+    }
+
+
+    .team-card.founder-card .team-info h3 {
+        font-size: 20px;
+    }
+
+
+    .team-socials a {
+        width: 34px;
+        height: 34px;
     }
 
 }
