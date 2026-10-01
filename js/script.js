@@ -2,17 +2,36 @@
    GROWTECHAXON - MAIN JAVASCRIPT
 ========================================================= */
 
-
 /* =========================================================
    API CONFIGURATION
 ========================================================= */
 
-const API_URL =
+const PRODUCTION_API_URL =
     "https://growtechaxon-backend.onrender.com";
+
+/*
+ * Localhost par agar backend kisi aur port par chal raha ho
+ * to index.html ke pehle ye set kar sakte ho:
+ *
+ * window.GROWTECHAXON_API_URL = "http://localhost:5000";
+ *
+ * Agar ye set nahi hai to production backend use hoga.
+ */
+const API_URL =
+    window.GROWTECHAXON_API_URL ||
+    PRODUCTION_API_URL;
 
 const INTERNSHIP_WEBSITE_URL =
     "YOUR_INTERNSHIP_WEBSITE_URL";
 
+/* =========================================================
+   API CACHE / REQUEST CONTROL
+========================================================= */
+
+let teamMembersPromise = null;
+let teamMembersCache = null;
+
+const TEAM_API_TIMEOUT = 8000;
 
 /* =========================================================
    FOUNDER SEO CONFIGURATION
@@ -23,7 +42,6 @@ const FOUNDER_NAME =
 
 const FOUNDER_INSTAGRAM =
     "https://www.instagram.com/devloper_512/";
-
 
 /* =========================================================
    OFFICIAL SOCIAL LINKS
@@ -45,7 +63,6 @@ const SOCIAL_LINKS = {
 
 };
 
-
 /* =========================================================
    DOM READY
 ========================================================= */
@@ -62,11 +79,14 @@ document.addEventListener(
 
         routeChange();
 
+        /*
+         * Founder SEO background mein load hoga.
+         * Team page kholne par duplicate API request nahi hogi.
+         */
         loadFounderForSEO();
 
     }
 );
-
 
 /* =========================================================
    NAVIGATION
@@ -94,6 +114,10 @@ function initializeNavigation() {
                 return;
             }
 
+            /*
+             * Sirf simple hash routes ko smooth scroll/router
+             * ke through handle karo.
+             */
             const target =
                 document.querySelector(href);
 
@@ -111,14 +135,12 @@ function initializeNavigation() {
         }
     );
 
-
     window.addEventListener(
         "hashchange",
         routeChange
     );
 
 }
-
 
 /* =========================================================
    MOBILE MENU
@@ -151,12 +173,11 @@ function initializeMenu() {
 
             menuToggle.setAttribute(
                 "aria-expanded",
-                isOpen
+                String(isOpen)
             );
 
         }
     );
-
 
     navLinks.addEventListener(
         "click",
@@ -182,7 +203,6 @@ function initializeMenu() {
 
 }
 
-
 /* =========================================================
    ROUTER
 ========================================================= */
@@ -199,7 +219,6 @@ function getCurrentRoute() {
 
 }
 
-
 function routeChange() {
 
     const route =
@@ -208,7 +227,6 @@ function routeChange() {
     initializePage(route);
 
 }
-
 
 /* =========================================================
    PAGE INITIALIZER
@@ -222,7 +240,6 @@ function initializePage(route) {
     if (!app) {
         return;
     }
-
 
     switch (route) {
 
@@ -270,7 +287,6 @@ function initializePage(route) {
 
 }
 
-
 /* =========================================================
    PAGE TITLE / DESCRIPTION
 ========================================================= */
@@ -307,7 +323,6 @@ function updateSEO(
     meta.content =
         description;
 
-
     const canonical =
         document.querySelector(
             'link[rel="canonical"]'
@@ -322,7 +337,6 @@ function updateSEO(
 
 }
 
-
 /* =========================================================
    HOME PAGE
 ========================================================= */
@@ -336,7 +350,6 @@ function createHomePage() {
         "GrowtechAxon | Website Development, Apps & Digital Solutions",
         "GrowtechAxon provides website development, app development, UI/UX design, software development, digital solutions and technology training."
     );
-
 
     app.innerHTML = `
 
@@ -485,9 +498,7 @@ function createHomePage() {
         </section>
 
 
-        <section
-            class="section"
-        >
+        <section class="section">
 
             <div class="section-heading">
 
@@ -532,7 +543,6 @@ function createHomePage() {
 
 }
 
-
 /* =========================================================
    SERVICE CARD
 ========================================================= */
@@ -560,7 +570,6 @@ function serviceCard(
 
 }
 
-
 /* =========================================================
    ABOUT PAGE
 ========================================================= */
@@ -574,7 +583,6 @@ function createAboutPage() {
         "About GrowtechAxon | Digital Solutions & Technology",
         "Learn about GrowtechAxon and its focus on practical technology solutions, websites, applications, UI/UX, software development and technology training."
     );
-
 
     app.innerHTML = `
 
@@ -651,7 +659,6 @@ function createAboutPage() {
 
 }
 
-
 /* =========================================================
    SERVICES PAGE
 ========================================================= */
@@ -665,7 +672,6 @@ function createServicesPage() {
         "GrowtechAxon Services | Web, App, UI/UX & Software Development",
         "Explore GrowtechAxon services including website development, app development, UI/UX design, software development, digital solutions and technology training."
     );
-
 
     const services = [
 
@@ -706,7 +712,6 @@ function createServicesPage() {
         }
 
     ];
-
 
     app.innerHTML = `
 
@@ -763,7 +768,6 @@ function createServicesPage() {
 
 }
 
-
 /* =========================================================
    PROJECTS PAGE
 ========================================================= */
@@ -777,7 +781,6 @@ function createProjectsPage() {
         "GrowtechAxon Projects | Web & Software Projects",
         "Explore projects and digital solutions developed by GrowtechAxon including exam systems, portfolio websites, e-commerce and business websites."
     );
-
 
     const projects = [
 
@@ -820,7 +823,6 @@ function createProjectsPage() {
         }
 
     ];
-
 
     app.innerHTML = `
 
@@ -869,19 +871,22 @@ function createProjectsPage() {
                             ?
 
                             `
+
                                 <a
-                                    href="${project.url}"
+                                    href="${escapeAttribute(project.url)}"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     class="btn btn-primary"
                                 >
                                     View Project
                                 </a>
+
                             `
 
                             :
 
                             ""
+
                         }
 
                     </article>
@@ -896,7 +901,6 @@ function createProjectsPage() {
 
 }
 
-
 /* =========================================================
    PROCESS PAGE
 ========================================================= */
@@ -910,7 +914,6 @@ function createProcessPage() {
         "GrowtechAxon Development Process",
         "Learn about the GrowtechAxon process for planning, designing, developing, testing and launching digital products."
     );
-
 
     const steps = [
 
@@ -952,7 +955,6 @@ function createProcessPage() {
 
     ];
 
-
     app.innerHTML = `
 
         <section class="page-hero">
@@ -977,7 +979,7 @@ function createProcessPage() {
                     <article class="process-card">
 
                         <span>
-                            ${step[0]}
+                            ${escapeHTML(step[0])}
                         </span>
 
                         <h2>
@@ -1000,7 +1002,6 @@ function createProcessPage() {
 
 }
 
-
 /* =========================================================
    PRICING PAGE
 ========================================================= */
@@ -1014,7 +1015,6 @@ function createPricingPage() {
         "GrowtechAxon Pricing | Digital Development Services",
         "Explore GrowtechAxon digital development services and discuss your website, application, software or digital solution requirements."
     );
-
 
     app.innerHTML = `
 
@@ -1110,7 +1110,6 @@ function createPricingPage() {
 
 }
 
-
 /* =========================================================
    TRAINING PAGE
 ========================================================= */
@@ -1125,7 +1124,6 @@ function createTrainingPage() {
         "GrowtechAxon provides practical technology learning, training and internship opportunities for students and aspiring developers."
     );
 
-
     const internshipButton =
         INTERNSHIP_WEBSITE_URL &&
         INTERNSHIP_WEBSITE_URL !==
@@ -1134,27 +1132,30 @@ function createTrainingPage() {
         ?
 
         `
+
             <a
-                href="${INTERNSHIP_WEBSITE_URL}"
+                href="${escapeAttribute(INTERNSHIP_WEBSITE_URL)}"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="btn btn-primary"
             >
                 Internship Website
             </a>
+
         `
 
         :
 
         `
+
             <a
                 href="#contact"
                 class="btn btn-primary"
             >
                 Contact For Internship
             </a>
-        `;
 
+        `;
 
     app.innerHTML = `
 
@@ -1220,7 +1221,6 @@ function createTrainingPage() {
 
 }
 
-
 /* =========================================================
    TEAM PAGE
 ========================================================= */
@@ -1234,7 +1234,6 @@ function createTeamPage() {
         "GrowtechAxon Team | RAM BHAROSA PRASAD",
         "Meet the GrowtechAxon team and RAM BHAROSA PRASAD, Founder of GrowtechAxon."
     );
-
 
     app.innerHTML = `
 
@@ -1276,11 +1275,241 @@ function createTeamPage() {
 
     `;
 
-
     loadTeamMembers();
 
 }
 
+/* =========================================================
+   FETCH JSON WITH TIMEOUT
+========================================================= */
+
+async function fetchJSONWithTimeout(
+    url,
+    options = {},
+    timeout = TEAM_API_TIMEOUT
+) {
+
+    const controller =
+        new AbortController();
+
+    const timeoutId =
+        setTimeout(
+            () => controller.abort(),
+            timeout
+        );
+
+    try {
+
+        const response =
+            await fetch(
+                url,
+                {
+                    ...options,
+                    signal:
+                        controller.signal
+                }
+            );
+
+        return response;
+
+    } catch (error) {
+
+        if (
+            error &&
+            error.name === "AbortError"
+        ) {
+
+            throw new Error(
+                "Team API request timed out."
+            );
+
+        }
+
+        throw error;
+
+    } finally {
+
+        clearTimeout(timeoutId);
+
+    }
+
+}
+
+/* =========================================================
+   NORMALIZE TEAM API RESPONSE
+========================================================= */
+
+/*
+ * Backend different formats support:
+ *
+ * [
+ *   {...}
+ * ]
+ *
+ * {
+ *   team: [...]
+ * }
+ *
+ * {
+ *   members: [...]
+ * }
+ *
+ * {
+ *   data: [...]
+ * }
+ *
+ * {
+ *   data: {
+ *      team: [...]
+ *   }
+ * }
+ *
+ * {
+ *   data: {
+ *      members: [...]
+ *   }
+ * }
+ */
+
+function normalizeTeamResponse(data) {
+
+    if (Array.isArray(data)) {
+        return data;
+    }
+
+    if (
+        data &&
+        Array.isArray(data.team)
+    ) {
+        return data.team;
+    }
+
+    if (
+        data &&
+        Array.isArray(data.members)
+    ) {
+        return data.members;
+    }
+
+    if (
+        data &&
+        Array.isArray(data.data)
+    ) {
+        return data.data;
+    }
+
+    if (
+        data &&
+        data.data &&
+        Array.isArray(data.data.team)
+    ) {
+        return data.data.team;
+    }
+
+    if (
+        data &&
+        data.data &&
+        Array.isArray(data.data.members)
+    ) {
+        return data.data.members;
+    }
+
+    return null;
+
+}
+
+/* =========================================================
+   GET TEAM MEMBERS
+========================================================= */
+
+/*
+ * Important:
+ *
+ * Team page aur Founder SEO dono same promise use karenge.
+ * Isse /api/team par duplicate request nahi jayegi.
+ */
+
+async function getTeamMembers() {
+
+    if (Array.isArray(teamMembersCache)) {
+
+        return teamMembersCache;
+
+    }
+
+    if (teamMembersPromise) {
+
+        return teamMembersPromise;
+
+    }
+
+    teamMembersPromise =
+        (async () => {
+
+            const response =
+                await fetchJSONWithTimeout(
+                    `${API_URL}/api/team`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Accept":
+                                "application/json"
+                        },
+
+                        cache: "no-store"
+                    }
+                );
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `Team API returned ${response.status}`
+                );
+
+            }
+
+            const data =
+                await response.json();
+
+            console.log(
+                "GrowtechAxon Team API response:",
+                data
+            );
+
+            const members =
+                normalizeTeamResponse(data);
+
+            if (!members) {
+
+                throw new Error(
+                    "Invalid team API response"
+                );
+
+            }
+
+            teamMembersCache =
+                members;
+
+            return members;
+
+        })()
+        .catch(error => {
+
+            /*
+             * Promise ko reset karo taaki Retry button
+             * dobara request kar sake.
+             */
+            teamMembersPromise =
+                null;
+
+            throw error;
+
+        });
+
+    return teamMembersPromise;
+
+}
 
 /* =========================================================
    LOAD TEAM MEMBERS
@@ -1297,74 +1526,71 @@ async function loadTeamMembers() {
         return;
     }
 
+    /*
+     * Retry/loading state
+     */
+    container.innerHTML = `
+
+        <div class="loading-state">
+
+            <p>
+                Loading team members...
+            </p>
+
+        </div>
+
+    `;
 
     try {
 
-        const response =
-            await fetch(
-                `${API_URL}/api/team`
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                `Team API returned ${response.status}`
-            );
-
-        }
-
-
         const members =
-            await response.json();
+            await getTeamMembers();
 
-
-        if (!Array.isArray(members)) {
-
-            throw new Error(
-                "Invalid team API response"
-            );
-
-        }
-
-
+        /*
+         * Active members filter
+         */
         const activeMembers =
             members
-                .filter(member =>
-                    member.isActive !== false
+                .filter(
+                    member =>
+                        member &&
+                        member.isActive !== false
                 )
                 .sort(
                     (a, b) =>
-                        (a.displayOrder || 0) -
-                        (b.displayOrder || 0)
+                        (
+                            Number(
+                                a.displayOrder
+                            ) || 0
+                        ) -
+                        (
+                            Number(
+                                b.displayOrder
+                            ) || 0
+                        )
                 );
 
-
-        /* =====================================================
-           FIND FOUNDER
-        ====================================================== */
-
+        /*
+         * Founder structured data
+         */
         const founder =
             activeMembers.find(
                 member => {
 
                     const name =
-                        (
-                            member.name ||
-                            ""
+                        String(
+                            member?.name || ""
                         )
                             .trim()
                             .toLowerCase();
 
                     return (
                         name ===
-                        FOUNDER_NAME
-                            .toLowerCase()
+                        FOUNDER_NAME.toLowerCase()
                     );
 
                 }
             );
-
 
         if (founder) {
 
@@ -1374,7 +1600,9 @@ async function loadTeamMembers() {
 
         }
 
-
+        /*
+         * Empty team
+         */
         if (!activeMembers.length) {
 
             container.innerHTML = `
@@ -1393,14 +1621,16 @@ async function loadTeamMembers() {
 
         }
 
-
+        /*
+         * Render team
+         */
         container.innerHTML =
             activeMembers
-                .map(member =>
-                    createTeamCard(member)
+                .map(
+                    member =>
+                        createTeamCard(member)
                 )
                 .join("");
-
 
     } catch (error) {
 
@@ -1409,19 +1639,18 @@ async function loadTeamMembers() {
             error
         );
 
-
         container.innerHTML = `
 
             <div class="error-state">
 
                 <p>
-                    Unable to load team members.
+                    Unable to load team members right now.
                 </p>
 
                 <button
                     type="button"
                     class="btn btn-primary"
-                    onclick="loadTeamMembers()"
+                    onclick="retryTeamLoading()"
                 >
                     Try Again
                 </button>
@@ -1434,6 +1663,24 @@ async function loadTeamMembers() {
 
 }
 
+/* =========================================================
+   RETRY TEAM
+========================================================= */
+
+function retryTeamLoading() {
+
+    /*
+     * Cache reset
+     */
+    teamMembersCache =
+        null;
+
+    teamMembersPromise =
+        null;
+
+    loadTeamMembers();
+
+}
 
 /* =========================================================
    TEAM CARD
@@ -1459,19 +1706,17 @@ function createTeamCard(member) {
         ) ||
         getDefaultTeamImage();
 
-
     const socialLinks = [];
-
 
     if (member.linkedin) {
 
         socialLinks.push(`
 
             <a
-                href="${member.linkedin}"
+                href="${escapeAttribute(member.linkedin)}"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="${escapeHTML(name)} LinkedIn"
+                aria-label="${escapeAttribute(name)} LinkedIn"
             >
                 LinkedIn
             </a>
@@ -1480,16 +1725,15 @@ function createTeamCard(member) {
 
     }
 
-
     if (member.instagram) {
 
         socialLinks.push(`
 
             <a
-                href="${member.instagram}"
+                href="${escapeAttribute(member.instagram)}"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="${escapeHTML(name)} Instagram"
+                aria-label="${escapeAttribute(name)} Instagram"
             >
                 Instagram
             </a>
@@ -1498,16 +1742,15 @@ function createTeamCard(member) {
 
     }
 
-
     if (member.github) {
 
         socialLinks.push(`
 
             <a
-                href="${member.github}"
+                href="${escapeAttribute(member.github)}"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="${escapeHTML(name)} GitHub"
+                aria-label="${escapeAttribute(name)} GitHub"
             >
                 GitHub
             </a>
@@ -1515,7 +1758,6 @@ function createTeamCard(member) {
         `);
 
     }
-
 
     return `
 
@@ -1526,11 +1768,11 @@ function createTeamCard(member) {
             <div class="team-image">
 
                 <img
-                    src="${image}"
-                    alt="${escapeHTML(
-                        name
-                    )}"
+                    src="${escapeAttribute(image)}"
+                    alt="${escapeAttribute(name)}"
                     loading="lazy"
+                    decoding="async"
+                    onerror="this.onerror=null;this.src=getDefaultTeamImage();"
                 >
 
             </div>
@@ -1543,15 +1785,11 @@ function createTeamCard(member) {
                 </h2>
 
                 <h3>
-                    ${escapeHTML(
-                        designation
-                    )}
+                    ${escapeHTML(designation)}
                 </h3>
 
                 <p>
-                    ${escapeHTML(
-                        description
-                    )}
+                    ${escapeHTML(description)}
                 </p>
 
 
@@ -1560,11 +1798,15 @@ function createTeamCard(member) {
                     ?
 
                     `
+
                         <div
                             class="team-social"
                         >
+
                             ${socialLinks.join("")}
+
                         </div>
+
                     `
 
                     :
@@ -1580,7 +1822,6 @@ function createTeamCard(member) {
 
 }
 
-
 /* =========================================================
    TEAM PHOTO URL
 ========================================================= */
@@ -1591,20 +1832,16 @@ function getTeamPhotoUrl(photo) {
         return "";
     }
 
-
     let photoUrl =
         String(photo).trim();
-
 
     if (!photoUrl) {
         return "";
     }
 
-
     /*
-     * Already an absolute URL.
+     * Absolute URL
      */
-
     if (
         photoUrl.startsWith(
             "http://"
@@ -1615,35 +1852,39 @@ function getTeamPhotoUrl(photo) {
     ) {
 
         /*
-         * Convert old localhost/backend URLs
-         * to the production backend.
+         * Old localhost URLs
          */
-
         photoUrl =
-            photoUrl
-                .replace(
-                    /^https?:\/\/localhost(?::\d+)?/i,
-                    API_URL
-                )
-                .replace(
-                    /^https?:\/\/127\.0\.0\.1(?::\d+)?/i,
-                    API_URL
-                )
-                .replace(
-                    /^https?:\/\/growtechaxon-backend\.onrender\.com/i,
-                    API_URL
-                );
+            photoUrl.replace(
+                /^https?:\/\/localhost(?::\d+)?/i,
+                API_URL
+            );
 
+        /*
+         * Old 127.0.0.1 URLs
+         */
+        photoUrl =
+            photoUrl.replace(
+                /^https?:\/\/127\.0\.0\.1(?::\d+)?/i,
+                API_URL
+            );
+
+        /*
+         * Existing production backend
+         */
+        photoUrl =
+            photoUrl.replace(
+                /^https?:\/\/growtechaxon-backend\.onrender\.com/i,
+                API_URL
+            );
 
         return photoUrl;
 
     }
 
-
     /*
-     * Upload paths.
+     * /uploads/photo.jpg
      */
-
     if (
         photoUrl.startsWith(
             "/uploads/"
@@ -1657,7 +1898,9 @@ function getTeamPhotoUrl(photo) {
 
     }
 
-
+    /*
+     * uploads/photo.jpg
+     */
     if (
         photoUrl.startsWith(
             "uploads/"
@@ -1672,11 +1915,9 @@ function getTeamPhotoUrl(photo) {
 
     }
 
-
     /*
-     * Root-relative backend path.
+     * Any root-relative backend path
      */
-
     if (
         photoUrl.startsWith("/")
     ) {
@@ -1688,11 +1929,9 @@ function getTeamPhotoUrl(photo) {
 
     }
 
-
     /*
-     * Relative upload filename.
+     * Filename only
      */
-
     return (
         API_URL +
         "/uploads/" +
@@ -1700,7 +1939,6 @@ function getTeamPhotoUrl(photo) {
     );
 
 }
-
 
 /* =========================================================
    DEFAULT TEAM IMAGE
@@ -1731,10 +1969,12 @@ function getDefaultTeamImage() {
             />
 
             <path
-                d="M100 470
-                   C100 350 170 290 250 290
-                   C330 290 400 350 400 470
-                   Z"
+                d="
+                    M100 470
+                    C100 350 170 290 250 290
+                    C330 290 400 350 400 470
+                    Z
+                "
                 fill="#aaaaaa"
             />
 
@@ -1742,14 +1982,12 @@ function getDefaultTeamImage() {
 
     `;
 
-
     return (
         "data:image/svg+xml;charset=UTF-8," +
         encodeURIComponent(svg)
     );
 
 }
-
 
 /* =========================================================
    FOUNDER SEO IMAGE
@@ -1765,7 +2003,6 @@ function getFounderImageUrl(photo) {
 
 }
 
-
 /* =========================================================
    DYNAMIC FOUNDER STRUCTURED DATA
 ========================================================= */
@@ -1778,40 +2015,31 @@ function injectFounderStructuredData(
         return;
     }
 
-
     const founderName =
         member.name ||
         FOUNDER_NAME;
-
 
     const founderImage =
         getFounderImageUrl(
             member.photo
         );
 
-
     const founderInstagram =
         member.instagram ||
         FOUNDER_INSTAGRAM;
 
-
     const founderDescription =
         member.description ||
         "RAM BHAROSA PRASAD is the Founder of GrowtechAxon, a digital solutions and technology company focused on website development, app development, software solutions, UI/UX design and digital technology services.";
-
 
     const existing =
         document.getElementById(
             "growtechaxon-founder-schema"
         );
 
-
     if (existing) {
-
         existing.remove();
-
     }
-
 
     const schema = {
 
@@ -1857,13 +2085,10 @@ function injectFounderStructuredData(
         },
 
         "sameAs": [
-
             founderInstagram
-
         ]
 
     };
-
 
     if (founderImage) {
 
@@ -1872,20 +2097,16 @@ function injectFounderStructuredData(
 
     }
 
-
     const script =
         document.createElement(
             "script"
         );
 
-
     script.type =
         "application/ld+json";
 
-
     script.id =
         "growtechaxon-founder-schema";
-
 
     script.textContent =
         JSON.stringify(
@@ -1894,11 +2115,9 @@ function injectFounderStructuredData(
             2
         );
 
-
     document.head.appendChild(
         script
     );
-
 
     console.log(
         "Founder SEO schema added:",
@@ -1907,70 +2126,38 @@ function injectFounderStructuredData(
 
 }
 
-
 /* =========================================================
    LOAD FOUNDER SEO DATA
-   Runs immediately on website load.
-   
-   This is important because the Team page may not
-   be opened by the visitor.
 ========================================================= */
 
 async function loadFounderForSEO() {
 
     try {
 
-        const response =
-            await fetch(
-                `${API_URL}/api/team`
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                `Founder API returned ${response.status}`
-            );
-
-        }
-
-
+        /*
+         * Same cached Team API request use hoga.
+         */
         const members =
-            await response.json();
-
-
-        if (!Array.isArray(members)) {
-
-            console.warn(
-                "Founder SEO: invalid Team API response."
-            );
-
-            return;
-
-        }
-
+            await getTeamMembers();
 
         const founder =
             members.find(
                 member => {
 
                     const name =
-                        (
-                            member.name ||
-                            ""
+                        String(
+                            member?.name || ""
                         )
                             .trim()
                             .toLowerCase();
 
                     return (
                         name ===
-                        FOUNDER_NAME
-                            .toLowerCase()
+                        FOUNDER_NAME.toLowerCase()
                     );
 
                 }
             );
-
 
         if (!founder) {
 
@@ -1982,23 +2169,23 @@ async function loadFounderForSEO() {
 
         }
 
-
         injectFounderStructuredData(
             founder
         );
 
-
     } catch (error) {
 
-        console.error(
-            "Founder SEO loading failed:",
+        /*
+         * SEO API fail hone par website crash nahi hogi.
+         */
+        console.warn(
+            "Founder SEO: Team API unavailable.",
             error
         );
 
     }
 
 }
-
 
 /* =========================================================
    CONTACT PAGE
@@ -2009,12 +2196,10 @@ function createContactPage() {
     const app =
         document.getElementById("app");
 
-
     updateSEO(
         "Contact GrowtechAxon | Website & Digital Solutions",
         "Contact GrowtechAxon for website development, app development, software development, UI/UX design, digital solutions and technology services."
     );
-
 
     app.innerHTML = `
 
@@ -2268,11 +2453,9 @@ function createContactPage() {
 
     `;
 
-
     initializeContactForm();
 
 }
-
 
 /* =========================================================
    CONTACT FORM
@@ -2289,35 +2472,29 @@ function initializeContactForm() {
         return;
     }
 
-
     form.addEventListener(
         "submit",
         async event => {
 
             event.preventDefault();
 
-
             const submitButton =
                 form.querySelector(
                     'button[type="submit"]'
                 );
-
 
             const messageBox =
                 document.getElementById(
                     "form-message"
                 );
 
-
             const formData =
                 new FormData(form);
-
 
             const data =
                 Object.fromEntries(
                     formData.entries()
                 );
-
 
             if (submitButton) {
 
@@ -2329,14 +2506,12 @@ function initializeContactForm() {
 
             }
 
-
             if (messageBox) {
 
                 messageBox.textContent =
                     "";
 
             }
-
 
             try {
 
@@ -2363,13 +2538,11 @@ function initializeContactForm() {
                         }
                     );
 
-
                 const result =
                     await response.json()
                         .catch(
                             () => ({})
                         );
-
 
                 if (!response.ok) {
 
@@ -2380,7 +2553,6 @@ function initializeContactForm() {
 
                 }
 
-
                 if (messageBox) {
 
                     messageBox.textContent =
@@ -2389,9 +2561,7 @@ function initializeContactForm() {
 
                 }
 
-
                 form.reset();
-
 
             } catch (error) {
 
@@ -2399,7 +2569,6 @@ function initializeContactForm() {
                     "Contact form error:",
                     error
                 );
-
 
                 if (messageBox) {
 
@@ -2428,7 +2597,6 @@ function initializeContactForm() {
 
 }
 
-
 /* =========================================================
    FOOTER
 ========================================================= */
@@ -2449,7 +2617,6 @@ function initializeFooter() {
 
 }
 
-
 /* =========================================================
    HTML ESCAPE
 ========================================================= */
@@ -2465,24 +2632,28 @@ function escapeHTML(value) {
 
     }
 
-
     return String(value)
+
         .replace(
             /&/g,
             "&amp;"
         )
+
         .replace(
             /</g,
             "&lt;"
         )
+
         .replace(
             />/g,
             "&gt;"
         )
+
         .replace(
             /"/g,
             "&quot;"
         )
+
         .replace(
             /'/g,
             "&#039;"
@@ -2490,6 +2661,15 @@ function escapeHTML(value) {
 
 }
 
+/* =========================================================
+   ATTRIBUTE ESCAPE
+========================================================= */
+
+function escapeAttribute(value) {
+
+    return escapeHTML(value);
+
+}
 
 /* =========================================================
    INITIALIZE FOOTER YEAR AFTER DYNAMIC CONTENT
@@ -2507,7 +2687,6 @@ window.addEventListener(
     }
 );
 
-
 /* =========================================================
    GLOBAL ERROR HANDLING
 ========================================================= */
@@ -2518,12 +2697,12 @@ window.addEventListener(
 
         console.error(
             "GrowtechAxon JavaScript error:",
-            event.error || event.message
+            event.error ||
+            event.message
         );
 
     }
 );
-
 
 window.addEventListener(
     "unhandledrejection",
