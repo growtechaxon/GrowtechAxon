@@ -1,431 +1,452 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <!-- =========================================================
+         BASIC SEO
+    ========================================================== -->
 
-    <title>GrowtechAxon | Digital Solutions & Technology</title>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>GrowtechAxon | Website Development, Apps & Digital Solutions</title>
 
     <meta
-        name="description"
-        content="GrowtechAxon provides professional web development, app development, UI/UX, digital solutions, training and internship programs."
-    >
+      name="description"
+      content="GrowtechAxon is a digital solutions and technology company founded by RAM BHAROSA PRASAD, offering website development, app development, UI/UX design, software solutions, digital services and technology training."
+    />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="author" content="RAM BHAROSA PRASAD, Founder of GrowtechAxon" />
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
+    <link rel="canonical" href="https://growtechaxon.in/" />
 
-    <link rel="stylesheet" href="css/style.css">
-</head>
+    <!-- =========================================================
+         OPEN GRAPH
+    ========================================================== -->
 
-<body>
+    <meta property="og:type" content="website" />
 
-<!-- =========================================================
-     PRELOADER
-     ========================================================= -->
+    <meta
+      property="og:title"
+      content="GrowtechAxon | Website Development, Apps & Digital Solutions"
+    />
 
-<div id="preloader">
-    <div class="loader-content">
+    <meta
+      property="og:description"
+      content="GrowtechAxon provides website development, app development, UI/UX design, software solutions, digital services and technology training."
+    />
 
-        <div class="loader-logo">
-            <img
-                src="images/logo.jpeg"
-                alt="GrowtechAxon Logo"
-                class="brand-logo"
-            >
-        </div>
+    <meta property="og:url" content="https://growtechaxon.in/" />
 
-        <div class="loader-line"></div>
+    <meta property="og:site_name" content="GrowtechAxon" />
 
-        <p>GrowtechAxon</p>
+    <meta
+      property="og:image"
+      content="https://growtechaxon.in/images/logo.jpeg"
+    />
 
-    </div>
-</div>
+    <meta property="og:image:alt" content="GrowtechAxon Logo" />
 
+    <!-- =========================================================
+         TWITTER / X
+    ========================================================== -->
 
-<!-- =========================================================
-     HEADER
-     ========================================================= -->
+    <meta name="twitter:card" content="summary_large_image" />
 
-<header id="header">
+    <meta
+      name="twitter:title"
+      content="GrowtechAxon | Website Development, Apps & Digital Solutions"
+    />
 
-    <div class="container header-inner">
+    <meta
+      name="twitter:description"
+      content="GrowtechAxon delivers modern website, app, software, UI/UX and digital technology solutions."
+    />
 
-        <a href="#home" class="brand page-link">
+    <meta
+      name="twitter:image"
+      content="https://growtechaxon.in/images/logo.jpeg"
+    />
 
-            <img
-                src="images/logo.jpeg"
-                alt="GrowtechAxon Logo"
-                class="brand-logo"
-            >
+    <!-- =========================================================
+         FAVICON
+    ========================================================== -->
 
-            <span class="logo-text">
-                Growtech<span>Axon</span>
-            </span>
+    <link rel="icon" type="image/jpeg" href="images/logo.jpeg" />
 
+    <!-- =========================================================
+         STYLESHEET
+    ========================================================== -->
+
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- =========================================================
+         GOOGLE / SEARCH ENGINE STRUCTURED DATA
+         
+         IMPORTANT:
+         Founder photo is NOT hardcoded here because the
+         team data comes from your backend API.
+         
+         script.js will add the actual founder image dynamically.
+    ========================================================== -->
+
+    <script type="application/ld+json" id="growtechaxon-schema">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://growtechaxon.in/#organization",
+
+            "name": "GrowtechAxon",
+
+            "alternateName": ["Growtech Axon", "GrowtechAxon Technologies"],
+
+            "url": "https://growtechaxon.in/",
+
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://growtechaxon.in/images/logo.jpeg"
+            },
+
+            "description": "GrowtechAxon is a digital solutions and technology company providing website development, app development, UI/UX design, software solutions, digital services and technology training.",
+
+            "email": "growtechaxon@gmail.com",
+
+            "telephone": "+91-9219226570",
+
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Lucknow",
+              "addressRegion": "Uttar Pradesh",
+              "addressCountry": "IN"
+            },
+
+            "founder": {
+              "@id": "https://growtechaxon.in/#ram-bharosa-prasad"
+            },
+
+            "sameAs": [
+              "https://www.instagram.com/growtechaxon/",
+              "https://www.facebook.com/profile.php?id=61593886546973",
+              "https://www.linkedin.com/company/growtech-axon/",
+              "https://youtube.com/@growtechaxon"
+            ],
+
+            "contactPoint": [
+              {
+                "@type": "ContactPoint",
+                "contactType": "customer support",
+                "telephone": "+91-9219226570",
+                "email": "growtechaxon@gmail.com",
+                "availableLanguage": ["English", "Hindi"]
+              }
+            ]
+          },
+
+          {
+            "@type": "Person",
+            "@id": "https://growtechaxon.in/#ram-bharosa-prasad",
+
+            "name": "RAM BHAROSA PRASAD",
+
+            "alternateName": "Ram Bharosa Prasad",
+
+            "jobTitle": "Founder",
+
+            "description": "RAM BHAROSA PRASAD is the Founder of GrowtechAxon, a digital solutions and technology company focused on website development, digital products and technology solutions.",
+
+            "url": "https://growtechaxon.in/#team",
+
+            "worksFor": {
+              "@id": "https://growtechaxon.in/#organization"
+            },
+
+            "sameAs": ["https://www.instagram.com/devloper_512/"]
+          },
+
+          {
+            "@type": "WebSite",
+            "@id": "https://growtechaxon.in/#website",
+
+            "url": "https://growtechaxon.in/",
+
+            "name": "GrowtechAxon",
+
+            "description": "GrowtechAxon digital solutions and technology website.",
+
+            "publisher": {
+              "@id": "https://growtechaxon.in/#organization"
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+
+  <body>
+    <!-- =========================================================
+         HEADER / NAVIGATION
+    ========================================================== -->
+
+    <header id="header">
+      <nav class="navbar">
+        <a href="#home" class="logo" aria-label="GrowtechAxon Home">
+          <img src="images/logo.jpeg" alt="GrowtechAxon Logo" />
+
+          <span> GrowtechAxon </span>
         </a>
-
-
-        <nav id="navMenu">
-
-            <a href="#home" class="nav-link active">
-                Home
-            </a>
-
-            <a href="#about" class="nav-link">
-                About
-            </a>
-
-            <a href="#services" class="nav-link">
-                Services
-            </a>
-
-            <a href="#projects" class="nav-link">
-                Projects
-            </a>
-
-            <a href="#process" class="nav-link">
-                Process
-            </a>
-
-            <a href="#pricing" class="nav-link">
-                Pricing
-            </a>
-
-            <a href="#training" class="nav-link">
-                Training
-            </a>
-
-            <a href="#team" class="nav-link">
-                Team
-            </a>
-
-            <a href="#contact" class="nav-link">
-                Contact
-            </a>
-
-        </nav>
-
-
-        <a href="#contact" class="nav-cta page-link">
-
-            Get Started
-
-            <i class="fa-solid fa-arrow-right"></i>
-
-        </a>
-
 
         <button
-            id="menuToggle"
-            class="menu-toggle"
-            aria-label="Toggle navigation"
-            type="button"
+          class="menu-toggle"
+          id="menu-toggle"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
         >
-
-            <i class="fa-solid fa-bars"></i>
-
+          ☰
         </button>
 
-    </div>
-
-</header>
-
-
-<!-- =========================================================
-     MAIN SPA APPLICATION
-     ========================================================= -->
-
-<main id="app"></main>
-
-
-<!-- =========================================================
-     FOOTER
-     ========================================================= -->
-
-<footer id="footer">
-
-    <div class="container">
-
-        <div class="footer-grid">
-
-
-            <!-- =================================================
-                 FOOTER BRAND
-                 ================================================= -->
-
-            <div class="footer-brand">
-
-                <a href="#home" class="brand page-link">
-
-                    <img
-                        src="images/logo.jpeg"
-                        alt="GrowtechAxon Logo"
-                        class="brand-logo"
-                    >
-
-                    <span class="logo-text">
-                        Growtech<span>Axon</span>
-                    </span>
-
-                </a>
-
-
-                <p>
-                    Building modern digital experiences, scalable
-                    technology solutions and future-ready skills.
-                </p>
-
-
-                <div class="footer-socials">
-
-                    <a
-                        href="https://www.instagram.com/growtechaxon?utm_source=qr&stkn=MXBsb2VhMjRwYjcwcw=="
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Instagram"
-                    >
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
-
-
-                    <a
-                        href="https://www.facebook.com/profile.php?id=61593886546973&sk=friends"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Facebook"
-                    >
-                        <i class="fa-brands fa-facebook-f"></i>
-                    </a>
-
-
-                    <a
-                        href="https://www.linkedin.com/company/growtech-axon/posts/?feedView=all"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="LinkedIn"
-                    >
-                        <i class="fa-brands fa-linkedin-in"></i>
-                    </a>
-
-
-                    <a
-                        href="https://youtube.com/@growtechaxon?si=GbI0Q2iEkTDRu0HE"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="YouTube"
-                    >
-                        <i class="fa-brands fa-youtube"></i>
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 COMPANY
-                 ================================================= -->
-
-            <div class="footer-column">
-
-                <h4>Company</h4>
-
-                <a href="#home" class="page-link">
-                    Home
-                </a>
-
-                <a href="#about" class="page-link">
-                    About
-                </a>
-
-                <a href="#projects" class="page-link">
-                    Projects
-                </a>
-
-                <a href="#process" class="page-link">
-                    Process
-                </a>
-
-                <a href="#training" class="page-link">
-                    Training
-                </a>
-
-                <a href="#team" class="page-link">
-                    Team
-                </a>
-
-                <a href="#contact" class="page-link">
-                    Contact
-                </a>
-
-            </div>
-
-
-            <!-- =================================================
-                 SERVICES
-                 IMPORTANT: THESE ARE NOT LINKS
-                 ================================================= -->
-
-            <div class="footer-column footer-services">
-
-                <h4>Services</h4>
-
-                <span>
-                    Web Development
-                </span>
-
-                <span>
-                    App Development
-                </span>
-
-                <span>
-                    UI / UX Design
-                </span>
-
-                <span>
-                    Digital Solutions
-                </span>
-
-                <span>
-                    Software Development
-                </span>
-
-                <span>
-                    Training & Internship
-                </span>
-
-            </div>
-
-
-            <!-- =================================================
-                 GET IN TOUCH
-                 ================================================= -->
-
-            <div class="footer-column">
-
-                <h4>Get In Touch</h4>
-
-
-                <a href="#contact" class="page-link">
-
-                    <i class="fa-solid fa-arrow-right"></i>
-
-                    Start a Project
-
-                </a>
-
-
-                <a href="mailto:growtechaxon@gmail.com">
-
-                    <i class="fa-solid fa-envelope"></i>
-
-                    Email Us
-
-                </a>
-
-
-                <a href="tel:+919219226570">
-
-                    <i class="fa-solid fa-phone"></i>
-
-                    +91 92192 26570
-
-                </a>
-
-
-                <a
-                    href="https://wa.me/919219226570?text=Hello%20GrowtechAxon%2C%20I%20am%20interested%20in%20your%20services."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-
-                    <i class="fa-brands fa-whatsapp"></i>
-
-                    WhatsApp Us
-
-                </a>
-
-
-                <a href="#contact" class="page-link">
-
-                    <i class="fa-solid fa-file-invoice"></i>
-
-                    Request a Quote
-
-                </a>
-
-            </div>
-
+        <ul class="nav-links" id="nav-links">
+          <li>
+            <a href="#home"> Home </a>
+          </li>
+
+          <li>
+            <a href="#about"> About </a>
+          </li>
+
+          <li>
+            <a href="#services"> Services </a>
+          </li>
+
+          <li>
+            <a href="#projects"> Projects </a>
+          </li>
+
+          <li>
+            <a href="#process"> Process </a>
+          </li>
+
+          <li>
+            <a href="#pricing"> Pricing </a>
+          </li>
+
+          <li>
+            <a href="#training"> Training </a>
+          </li>
+
+          <li>
+            <a href="#team"> Team </a>
+          </li>
+
+          <li>
+            <a href="#contact"> Contact </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- =========================================================
+         MAIN APPLICATION
+         
+         Your existing script.js dynamically renders:
+         Home
+         About
+         Services
+         Projects
+         Process
+         Pricing
+         Training
+         Team
+         Contact
+    ========================================================== -->
+
+    <main id="app">
+      <noscript>
+        <section>
+          <h1>GrowtechAxon</h1>
+
+          <p>
+            GrowtechAxon is a digital solutions and technology company founded
+            by RAM BHAROSA PRASAD.
+          </p>
+
+          <p>
+            We provide website development, app development, UI/UX design,
+            software development, digital solutions and technology training.
+          </p>
+
+          <h2>Founder</h2>
+
+          <p>RAM BHAROSA PRASAD — Founder of GrowtechAxon.</p>
+
+          <p>Email: growtechaxon@gmail.com</p>
+
+          <p>Phone: +91 9219226570</p>
+
+          <p>Location: Lucknow, Uttar Pradesh, India</p>
+        </section>
+      </noscript>
+    </main>
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+
+    <footer id="footer">
+      <div class="footer-container">
+        <!-- COMPANY -->
+
+        <div class="footer-column">
+          <a href="#home" class="footer-logo">
+            <img src="images/logo.jpeg" alt="GrowtechAxon" />
+
+            <span> GrowtechAxon </span>
+          </a>
+
+          <p>
+            GrowtechAxon provides modern website, application, software, UI/UX
+            and digital technology solutions.
+          </p>
         </div>
 
+        <!-- QUICK LINKS -->
 
-        <!-- =================================================
-             FOOTER BOTTOM
-             ================================================= -->
+        <div class="footer-column">
+          <h3>Quick Links</h3>
 
-        <div class="footer-bottom">
+          <a href="#home"> Home </a>
 
-            <p>
-                ©
-                <span id="currentYear"></span>
-                GrowtechAxon.
-                All rights reserved.
-            </p>
+          <a href="#about"> About </a>
 
-            <div>
-                Lucknow, Uttar Pradesh, India
-            </div>
+          <a href="#services"> Services </a>
 
+          <a href="#projects"> Projects </a>
+
+          <a href="#team"> Team </a>
+
+          <a href="#contact"> Contact </a>
         </div>
 
-    </div>
+        <!-- SERVICES -->
 
-</footer>
+        <div class="footer-column">
+          <h3>Services</h3>
 
+          <a href="#services"> Web Development </a>
 
-<!-- =========================================================
-     FLOATING WHATSAPP
-     ========================================================= -->
+          <a href="#services"> App Development </a>
 
-<a
-    class="whatsapp-float"
-    href="https://wa.me/919219226570?text=Hello%20GrowtechAxon%2C%20I%20am%20interested%20in%20your%20services."
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Chat on WhatsApp"
->
+          <a href="#services"> UI/UX Design </a>
 
-    <i class="fa-brands fa-whatsapp"></i>
+          <a href="#services"> Software Development </a>
 
-</a>
+          <a href="#services"> Digital Solutions </a>
 
+          <a href="#training"> Training & Internship </a>
+        </div>
 
-<!-- =========================================================
-     BACK TO TOP
-     ========================================================= -->
+        <!-- CONTACT -->
 
-<button
-    id="backToTop"
-    aria-label="Back to top"
-    type="button"
->
+        <div class="footer-column">
+          <h3>Contact</h3>
 
-    <i class="fa-solid fa-arrow-up"></i>
+          <p>Lucknow, Uttar Pradesh, India</p>
 
-</button>
+          <p>
+            <a href="tel:+919219226570"> +91 92192 26570 </a>
+          </p>
 
+          <p>
+            <a href="mailto:growtechaxon@gmail.com"> growtechaxon@gmail.com </a>
+          </p>
 
-<script src="js/script.js"></script>
+          <p>
+            <a
+              href="https://wa.me/919219226570"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WhatsApp
+            </a>
+          </p>
+        </div>
+      </div>
 
-</body>
+      <!-- =====================================================
+             SOCIAL MEDIA
+        ====================================================== -->
+
+      <div class="footer-social">
+        <a
+          href="https://www.instagram.com/growtechaxon/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GrowtechAxon Instagram"
+        >
+          Instagram
+        </a>
+
+        <a
+          href="https://www.facebook.com/profile.php?id=61593886546973"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GrowtechAxon Facebook"
+        >
+          Facebook
+        </a>
+
+        <a
+          href="https://www.linkedin.com/company/growtech-axon/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GrowtechAxon LinkedIn"
+        >
+          LinkedIn
+        </a>
+
+        <a
+          href="https://youtube.com/@growtechaxon"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GrowtechAxon YouTube"
+        >
+          YouTube
+        </a>
+
+        <!-- Founder Personal Instagram -->
+
+        <a
+          href="https://www.instagram.com/devloper_512/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="RAM BHAROSA PRASAD Instagram"
+        >
+          Founder Instagram
+        </a>
+      </div>
+
+      <!-- COPYRIGHT -->
+
+      <div class="footer-bottom">
+        <p>
+          © <span id="current-year"></span>
+          GrowtechAxon. All rights reserved.
+        </p>
+
+        <p>Founded by RAM BHAROSA PRASAD</p>
+      </div>
+    </footer>
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================== -->
+
+    <script src="js/script.js"></script>
+  </body>
 </html>

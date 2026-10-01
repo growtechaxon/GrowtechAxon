@@ -1,153 +1,110 @@
-document.addEventListener("DOMContentLoaded", () => {
-
-    /* =========================================================
-       GROWTECHAXON API
-       ========================================================= */
-
-    const API_URL =
-        "https://growtechaxon-backend.onrender.com";
+/* =========================================================
+   GROWTECHAXON - MAIN JAVASCRIPT
+========================================================= */
 
 
-    /* =========================================================
-       INTERNSHIP WEBSITE LINK
-       =========================================================
-       IMPORTANT:
-       Later replace this URL with your internship website.
-       ========================================================= */
+/* =========================================================
+   API CONFIGURATION
+========================================================= */
 
-    const INTERNSHIP_WEBSITE_URL =
-        "YOUR_INTERNSHIP_WEBSITE_URL";
+const API_URL =
+    "https://growtechaxon-backend.onrender.com";
 
-
-    /* =========================================================
-       PRELOADER
-       ========================================================= */
-
-    const preloader =
-        document.getElementById("preloader");
+const INTERNSHIP_WEBSITE_URL =
+    "YOUR_INTERNSHIP_WEBSITE_URL";
 
 
-    function hidePreloader() {
+/* =========================================================
+   FOUNDER SEO CONFIGURATION
+========================================================= */
 
-        if (!preloader) return;
+const FOUNDER_NAME =
+    "RAM BHAROSA PRASAD";
 
-        preloader.style.opacity = "0";
-        preloader.style.visibility = "hidden";
-        preloader.style.pointerEvents = "none";
-
-    }
-
-
-    window.addEventListener("load", () => {
-
-        setTimeout(hidePreloader, 500);
-
-    });
+const FOUNDER_INSTAGRAM =
+    "https://www.instagram.com/devloper_512/";
 
 
-    setTimeout(hidePreloader, 3000);
+/* =========================================================
+   OFFICIAL SOCIAL LINKS
+========================================================= */
+
+const SOCIAL_LINKS = {
+
+    instagram:
+        "https://www.instagram.com/growtechaxon/",
+
+    facebook:
+        "https://www.facebook.com/profile.php?id=61593886546973",
+
+    linkedin:
+        "https://www.linkedin.com/company/growtech-axon/",
+
+    youtube:
+        "https://youtube.com/@growtechaxon"
+
+};
 
 
-    /* =========================================================
-       HEADER
-       ========================================================= */
+/* =========================================================
+   DOM READY
+========================================================= */
 
-    const header =
-        document.getElementById("header");
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    const backToTop =
-        document.getElementById("backToTop");
+        initializeNavigation();
 
-    const menuToggle =
-        document.getElementById("menuToggle");
+        initializeMenu();
 
-    const navMenu =
-        document.getElementById("navMenu");
+        initializeFooter();
 
+        routeChange();
 
-    function handleScroll() {
-
-        if (window.scrollY > 50) {
-
-            header?.classList.add("scrolled");
-
-        } else {
-
-            header?.classList.remove("scrolled");
-
-        }
-
-
-        if (window.scrollY > 500) {
-
-            backToTop?.classList.add("show");
-
-        } else {
-
-            backToTop?.classList.remove("show");
-
-        }
+        loadFounderForSEO();
 
     }
+);
 
 
-    window.addEventListener(
-        "scroll",
-        handleScroll
-    );
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
-    handleScroll();
+function initializeNavigation() {
 
-
-    /* =========================================================
-       MOBILE MENU
-       ========================================================= */
-
-    function closeMobileMenu() {
-
-        navMenu?.classList.remove("open");
-
-        const icon =
-            menuToggle?.querySelector("i");
-
-        icon?.classList.remove("fa-xmark");
-
-        icon?.classList.add("fa-bars");
-
-    }
-
-
-    menuToggle?.addEventListener(
+    document.addEventListener(
         "click",
-        () => {
+        event => {
 
-            navMenu?.classList.toggle("open");
-
-            const icon =
-                menuToggle.querySelector("i");
-
-
-            if (
-                navMenu?.classList.contains("open")
-            ) {
-
-                icon?.classList.remove(
-                    "fa-bars"
+            const link =
+                event.target.closest(
+                    'a[href^="#"]'
                 );
 
-                icon?.classList.add(
-                    "fa-xmark"
-                );
+            if (!link) {
+                return;
+            }
 
-            } else {
+            const href =
+                link.getAttribute("href");
 
-                icon?.classList.remove(
-                    "fa-xmark"
-                );
+            if (!href || href === "#") {
+                return;
+            }
 
-                icon?.classList.add(
-                    "fa-bars"
-                );
+            const target =
+                document.querySelector(href);
+
+            if (target) {
+
+                event.preventDefault();
+
+                target.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
 
             }
 
@@ -155,1844 +112,2076 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    /* =========================================================
-       PAGE DATA
-       ========================================================= */
-
-    const pageData = {
-
-        home: {
-
-            title: "Digital Solutions Built for Growth",
-
-            description:
-                "GrowtechAxon creates modern websites, applications and digital solutions that help businesses build a stronger digital presence.",
-
-            content: createHomePage
-
-        },
-
-        about: {
-
-            title: "About GrowtechAxon",
-
-            description:
-                "Technology, creativity and practical digital solutions focused on helping businesses and learners move forward.",
-
-            content: createAboutPage
-
-        },
-
-        services: {
-
-            title: "Our Services",
-
-            description:
-                "Professional technology and digital services designed around real business requirements.",
-
-            content: createServicesPage
-
-        },
-
-        projects: {
-
-            title: "Our Projects",
-
-            description:
-                "Explore selected digital products and solutions built by GrowtechAxon.",
-
-            content: createProjectsPage
-
-        },
-
-        process: {
-
-            title: "Our Process",
-
-            description:
-                "A clear and structured approach from initial discussion to final delivery.",
-
-            content: createProcessPage
-
-        },
-
-        pricing: {
-
-            title: "Pricing",
-
-            description:
-                "Flexible service packages that can be adapted to your project requirements.",
-
-            content: createPricingPage
-
-        },
-
-        training: {
-
-            title: "Training & Internship",
-
-            description:
-                "Learn practical technology skills from basic concepts to advanced project development.",
-
-            content: createTrainingPage
-
-        },
-
-        team: {
-
-            title: "Meet Our Team",
-
-            description:
-                "The people working behind GrowtechAxon's technology and digital solutions.",
-
-            content: createTeamPage
-
-        },
-
-        contact: {
-
-            title: "Let's Work Together",
-
-            description:
-                "Tell us about your project, idea or requirement and connect with GrowtechAxon.",
-
-            content: createContactPage
-
-        }
-
-    };
-
-
-    /* =========================================================
-       ROUTER
-       ========================================================= */
-
-    const app =
-        document.getElementById("app");
-
-
-    function getCurrentRoute() {
-
-        const hash =
-            window.location.hash
-                .replace("#", "")
-                .trim()
-                .toLowerCase();
-
-
-        if (
-            hash &&
-            Object.prototype.hasOwnProperty.call(
-                pageData,
-                hash
-            )
-        ) {
-
-            return hash;
-
-        }
-
-
-        return "home";
-
-    }
-
-
-    function updateActiveNavigation(route) {
-
-        document
-            .querySelectorAll(".nav-link")
-            .forEach(link => {
-
-                link.classList.toggle(
-                    "active",
-                    link.getAttribute("href") ===
-                    `#${route}`
-                );
-
-            });
-
-    }
-
-
-    function renderPage(route) {
-
-        if (!pageData[route]) {
-            route = "home";
-        }
-
-
-        closeMobileMenu();
-
-
-        window.scrollTo({
-            top: 0,
-            behavior: "instant"
-        });
-
-
-        updateActiveNavigation(route);
-
-
-        app.innerHTML = "";
-
-
-        const page =
-            pageData[route].content();
-
-
-        app.appendChild(page);
-
-
-        initializePage(route);
-
-
-        document.title =
-            `${pageData[route].title} | GrowtechAxon`;
-
-    }
-
-
-    function routeChange() {
-
-        renderPage(
-            getCurrentRoute()
-        );
-
-    }
-
-
     window.addEventListener(
         "hashchange",
         routeChange
     );
 
+}
 
-    /* =========================================================
-       PAGE INITIALIZATION
-       ========================================================= */
 
-    function initializePage(route) {
+/* =========================================================
+   MOBILE MENU
+========================================================= */
 
-        initializeReveal();
+function initializeMenu() {
 
-        initializeCounters();
+    const menuToggle =
+        document.getElementById(
+            "menu-toggle"
+        );
 
-        initializeProjectFilters();
+    const navLinks =
+        document.getElementById(
+            "nav-links"
+        );
 
-        initializeTrainingLevels();
-
-        initializeContactForm();
-
-        if (route === "team") {
-
-            loadTeamMembers();
-
-        }
-
+    if (!menuToggle || !navLinks) {
+        return;
     }
 
-
-    /* =========================================================
-       HOME PAGE
-       ========================================================= */
-
-    function createHomePage() {
-
-        const section =
-            document.createElement("div");
-
-        section.className = "home-page";
-
-
-        section.innerHTML = `
-
-            <section class="hero">
-
-                <div class="container hero-grid">
-
-                    <div class="hero-content">
-
-                        <span class="eyebrow">
-                            <i class="fa-solid fa-bolt"></i>
-                            Technology • Design • Growth
-                        </span>
-
-                        <h1>
-                            Build Digital.
-                            <span>Grow Smarter.</span>
-                        </h1>
-
-                        <p>
-                            GrowtechAxon delivers modern web,
-                            app and digital solutions for businesses
-                            while helping students build practical
-                            technology skills.
-                        </p>
-
-                        <div class="hero-buttons">
-
-                            <a
-                                href="#services"
-                                class="btn btn-primary page-link"
-                            >
-                                Explore Services
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </a>
-
-                            <a
-                                href="#projects"
-                                class="btn btn-outline page-link"
-                            >
-                                View Projects
-                            </a>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="hero-visual">
-
-                        <div class="hero-image">
-
-                           <div class="hero-visual">
-
-    <img
-        src="images/side.png"
-        alt="Developer working on laptop"
-        loading="eager"
-    >
-
-    <div class="hero-visual-overlay">
-
-        <i class="fas fa-code"></i>
-
-        <span>
-            Digital solutions that turn ideas into reality.
-        </span>
-
-    </div>
-
-</div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <section class="page">
-
-                <div class="container">
-
-                    <div class="page-header">
-
-                        <span class="eyebrow">
-                            Why GrowtechAxon
-                        </span>
-
-                        <h2 class="page-title">
-                            Built Around Your
-                            <span>Goals</span>
-                        </h2>
-
-                        <p class="page-description">
-                            We combine technology, design and
-                            practical execution to create useful
-                            digital experiences.
-                        </p>
-
-                    </div>
-
-
-                    <div class="card-grid">
-
-                        ${serviceMiniCard(
-                            "fa-code",
-                            "Modern Development",
-                            "Responsive and scalable digital products built with modern development practices."
-                        )}
-
-                        ${serviceMiniCard(
-                            "fa-pen-ruler",
-                            "Clean Design",
-                            "User-focused interfaces designed to be professional, clear and easy to use."
-                        )}
-
-                        ${serviceMiniCard(
-                            "fa-graduation-cap",
-                            "Practical Learning",
-                            "Training and internship programs focused on hands-on technology skills."
-                        )}
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <section class="page">
-
-                <div class="container">
-
-                    <div class="cta-box">
-
-                        <h2>
-                            Have a project in mind?
-                        </h2>
-
-                        <p>
-                            Share your requirement with our team
-                            and let's discuss the right solution.
-                        </p>
-
-                        <a
-                            href="#contact"
-                            class="btn btn-primary page-link"
-                        >
-                            Start a Project
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </section>
-        `;
-
-
-        return section;
-
-    }
-
-
-    function serviceMiniCard(icon, title, text) {
-
-        return `
-
-            <article class="card reveal-item">
-
-                <div class="card-icon">
-
-                    <i class="fa-solid ${icon}"></i>
-
-                </div>
-
-                <h3>${title}</h3>
-
-                <p>${text}</p>
-
-            </article>
-
-        `;
-
-    }
-
-
-    /* =========================================================
-       ABOUT
-       ========================================================= */
-
-    function createAboutPage() {
-
-        const section =
-            createStandardPage(
-                "about",
-                "About GrowtechAxon",
-                "Technology with a practical purpose."
+    menuToggle.addEventListener(
+        "click",
+        () => {
+
+            const isOpen =
+                navLinks.classList.toggle(
+                    "active"
+                );
+
+            menuToggle.setAttribute(
+                "aria-expanded",
+                isOpen
             );
 
+        }
+    );
 
-        section.querySelector(".page-body").innerHTML = `
 
-            <div class="about-grid">
+    navLinks.addEventListener(
+        "click",
+        event => {
 
-                <div class="about-content">
+            if (
+                event.target.closest("a")
+            ) {
 
-                    <span class="eyebrow">
-                        Who We Are
-                    </span>
+                navLinks.classList.remove(
+                    "active"
+                );
 
-                    <h2>
-                        Creating Digital Solutions
-                        <span>That Matter.</span>
-                    </h2>
+                menuToggle.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
 
-                    <p>
-                        GrowtechAxon is focused on delivering
-                        practical technology solutions for businesses,
-                        startups, students and growing digital brands.
-                    </p>
+            }
 
-                    <p>
-                        From websites and applications to UI/UX,
-                        software solutions, training and internship
-                        programs, our approach is centered around
-                        useful technology and real-world execution.
-                    </p>
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ROUTER
+========================================================= */
+
+function getCurrentRoute() {
+
+    const hash =
+        window.location.hash
+            .replace("#", "")
+            .trim()
+            .toLowerCase();
+
+    return hash || "home";
+
+}
+
+
+function routeChange() {
+
+    const route =
+        getCurrentRoute();
+
+    initializePage(route);
+
+}
+
+
+/* =========================================================
+   PAGE INITIALIZER
+========================================================= */
+
+function initializePage(route) {
+
+    const app =
+        document.getElementById("app");
+
+    if (!app) {
+        return;
+    }
+
+
+    switch (route) {
+
+        case "home":
+            createHomePage();
+            break;
+
+        case "about":
+            createAboutPage();
+            break;
+
+        case "services":
+            createServicesPage();
+            break;
+
+        case "projects":
+            createProjectsPage();
+            break;
+
+        case "process":
+            createProcessPage();
+            break;
+
+        case "pricing":
+            createPricingPage();
+            break;
+
+        case "training":
+            createTrainingPage();
+            break;
+
+        case "team":
+            createTeamPage();
+            break;
+
+        case "contact":
+            createContactPage();
+            break;
+
+        default:
+            createHomePage();
+            break;
+
+    }
+
+}
+
+
+/* =========================================================
+   PAGE TITLE / DESCRIPTION
+========================================================= */
+
+function updateSEO(
+    title,
+    description
+) {
+
+    document.title =
+        title;
+
+    let meta =
+        document.querySelector(
+            'meta[name="description"]'
+        );
+
+    if (!meta) {
+
+        meta =
+            document.createElement(
+                "meta"
+            );
+
+        meta.name =
+            "description";
+
+        document.head.appendChild(
+            meta
+        );
+
+    }
+
+    meta.content =
+        description;
+
+
+    const canonical =
+        document.querySelector(
+            'link[rel="canonical"]'
+        );
+
+    if (canonical) {
+
+        canonical.href =
+            "https://growtechaxon.in/";
+
+    }
+
+}
+
+
+/* =========================================================
+   HOME PAGE
+========================================================= */
+
+function createHomePage() {
+
+    const app =
+        document.getElementById("app");
+
+    updateSEO(
+        "GrowtechAxon | Website Development, Apps & Digital Solutions",
+        "GrowtechAxon provides website development, app development, UI/UX design, software development, digital solutions and technology training."
+    );
+
+
+    app.innerHTML = `
+
+        <section
+            class="hero"
+            id="home"
+        >
+
+            <div class="hero-content">
+
+                <span class="hero-badge">
+                    Digital Solutions & Technology
+                </span>
+
+                <h1>
+                    Build Digital.
+                    <span>Grow Smarter.</span>
+                </h1>
+
+                <p>
+                    GrowtechAxon delivers modern web,
+                    app and digital solutions for businesses
+                    while helping students build practical
+                    technology skills.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a
+                        href="#services"
+                        class="btn btn-primary"
+                    >
+                        Explore Services
+                    </a>
 
                     <a
                         href="#contact"
-                        class="btn btn-primary page-link"
+                        class="btn btn-secondary"
                     >
-                        Work With Us
-                        <i class="fa-solid fa-arrow-right"></i>
+                        Contact Us
                     </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section
+            class="section"
+            id="why-growtechaxon"
+        >
+
+            <div class="section-heading">
+
+                <span>
+                    Why GrowtechAxon
+                </span>
+
+                <h2>
+                    Technology That Creates Growth
+                </h2>
+
+                <p>
+                    We combine modern development,
+                    clean design and practical technology
+                    solutions.
+                </p>
+
+            </div>
+
+
+            <div class="cards-grid">
+
+                <article class="service-card">
+
+                    <h3>
+                        Modern Development
+                    </h3>
+
+                    <p>
+                        Modern technologies and development
+                        practices for reliable digital products.
+                    </p>
+
+                </article>
+
+
+                <article class="service-card">
+
+                    <h3>
+                        Clean Design
+                    </h3>
+
+                    <p>
+                        User-focused interfaces designed
+                        for clarity, usability and performance.
+                    </p>
+
+                </article>
+
+
+                <article class="service-card">
+
+                    <h3>
+                        Practical Learning
+                    </h3>
+
+                    <p>
+                        Practical training and technology
+                        learning for students and aspiring
+                        developers.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <section
+            class="section founder-home-section"
+        >
+
+            <div class="section-heading">
+
+                <span>
+                    Founder
+                </span>
+
+                <h2>
+                    RAM BHAROSA PRASAD
+                </h2>
+
+                <p>
+                    Founder of GrowtechAxon, focused on
+                    building practical digital solutions,
+                    technology products and learning
+                    opportunities.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section
+            class="section"
+        >
+
+            <div class="section-heading">
+
+                <span>
+                    Our Services
+                </span>
+
+                <h2>
+                    Digital Solutions For Your Needs
+                </h2>
+
+            </div>
+
+
+            <div class="cards-grid">
+
+                ${serviceCard(
+                    "Web Development",
+                    "Responsive, modern and scalable websites for businesses and digital brands."
+                )}
+
+                ${serviceCard(
+                    "App Development",
+                    "Application development focused on useful and engaging digital experiences."
+                )}
+
+                ${serviceCard(
+                    "UI/UX Design",
+                    "Clean and user-friendly interfaces designed around real user needs."
+                )}
+
+                ${serviceCard(
+                    "Software Development",
+                    "Custom software solutions for specific business and technology requirements."
+                )}
+
+            </div>
+
+        </section>
+
+    `;
+
+}
+
+
+/* =========================================================
+   SERVICE CARD
+========================================================= */
+
+function serviceCard(
+    title,
+    description
+) {
+
+    return `
+
+        <article class="service-card">
+
+            <h3>
+                ${escapeHTML(title)}
+            </h3>
+
+            <p>
+                ${escapeHTML(description)}
+            </p>
+
+        </article>
+
+    `;
+
+}
+
+
+/* =========================================================
+   ABOUT PAGE
+========================================================= */
+
+function createAboutPage() {
+
+    const app =
+        document.getElementById("app");
+
+    updateSEO(
+        "About GrowtechAxon | Digital Solutions & Technology",
+        "Learn about GrowtechAxon and its focus on practical technology solutions, websites, applications, UI/UX, software development and technology training."
+    );
+
+
+    app.innerHTML = `
+
+        <section class="page-hero">
+
+            <div>
+
+                <span>
+                    About GrowtechAxon
+                </span>
+
+                <h1>
+                    Technology With A Practical Purpose
+                </h1>
+
+                <p>
+                    GrowtechAxon focuses on practical
+                    technology solutions for businesses,
+                    startups, students and growing digital
+                    brands.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section class="section">
+
+            <div class="content-grid">
+
+                <div>
+
+                    <h2>
+                        What We Do
+                    </h2>
+
+                    <p>
+                        GrowtechAxon provides websites,
+                        applications, UI/UX design, software
+                        solutions, digital services and
+                        technology training.
+                    </p>
+
+                    <p>
+                        Our goal is to create useful digital
+                        products while helping learners gain
+                        practical technology experience.
+                    </p>
 
                 </div>
 
 
                 <div>
 
-                    <div class="stats-grid">
+                    <h2>
+                        Our Approach
+                    </h2>
 
-                        ${statCard(
-                            "10",
-                            "Projects"
-                        )}
-
-                        ${statCard(
-                            "5",
-                            "Core Services"
-                        )}
-
-                        ${statCard(
-                            "5",
-                            "Training Tracks"
-                        )}
-
-                        ${statCard(
-                            "100",
-                            "Focused On Quality"
-                        )}
-
-                    </div>
+                    <p>
+                        We focus on clean development,
+                        understandable interfaces,
+                        practical implementation and
+                        solutions aligned with real needs.
+                    </p>
 
                 </div>
 
             </div>
 
-        `;
+        </section>
+
+    `;
+
+}
 
 
-        return section;
+/* =========================================================
+   SERVICES PAGE
+========================================================= */
 
-    }
+function createServicesPage() {
 
+    const app =
+        document.getElementById("app");
 
-    function statCard(number, label) {
-
-        return `
-
-            <div class="stat-card reveal-item">
-
-                <strong
-                    class="counter"
-                    data-target="${number}"
-                >
-                    0
-                </strong>
-
-                <span>${label}</span>
-
-            </div>
-
-        `;
-
-    }
+    updateSEO(
+        "GrowtechAxon Services | Web, App, UI/UX & Software Development",
+        "Explore GrowtechAxon services including website development, app development, UI/UX design, software development, digital solutions and technology training."
+    );
 
 
-    /* =========================================================
-       SERVICES
-       ========================================================= */
+    const services = [
 
-    function createServicesPage() {
+        {
+            title: "Web Development",
+            description:
+                "Modern responsive websites, business websites, landing pages and custom web applications."
+        },
 
-        const section =
-            createStandardPage(
-                "services",
-                "Our Services",
-                "Technology solutions for modern businesses."
-            );
+        {
+            title: "App Development",
+            description:
+                "Application solutions designed around useful features, usability and business requirements."
+        },
 
+        {
+            title: "UI/UX Design",
+            description:
+                "Clean, practical and user-focused interface design for websites and applications."
+        },
 
-        const services = [
+        {
+            title: "Software Development",
+            description:
+                "Custom software solutions designed for specific business and technology requirements."
+        },
 
-            [
-                "fa-code",
-                "Web Development",
-                "Responsive, modern and scalable websites for businesses and organizations.",
-                [
-                    "Business Websites",
-                    "Landing Pages",
-                    "Web Applications",
-                    "Frontend & Backend"
-                ]
-            ],
+        {
+            title: "Digital Solutions",
+            description:
+                "Technology solutions that help businesses build, improve and manage their digital presence."
+        },
 
-            [
-                "fa-mobile-screen-button",
-                "App Development",
-                "Mobile application solutions designed around practical user requirements.",
-                [
-                    "Android Applications",
-                    "Application UI",
-                    "API Integration",
-                    "Backend Integration"
-                ]
-            ],
+        {
+            title: "Training & Internship",
+            description:
+                "Practical technology learning and project-based experience for students and aspiring developers."
+        }
 
-            [
-                "fa-pen-ruler",
-                "UI / UX Design",
-                "Professional interfaces designed for clarity, usability and modern branding.",
-                [
-                    "Website UI",
-                    "Mobile UI",
-                    "User Flow",
-                    "Responsive Design"
-                ]
-            ],
-
-            [
-                "fa-laptop-code",
-                "Software Development",
-                "Custom digital systems and software solutions for specific business requirements.",
-                [
-                    "Custom Software",
-                    "Database Systems",
-                    "API Development",
-                    "Business Tools"
-                ]
-            ],
-
-            [
-                "fa-chart-line",
-                "Digital Solutions",
-                "Technology-driven solutions to improve digital presence and business workflows.",
-                [
-                    "Digital Presence",
-                    "Automation",
-                    "System Integration",
-                    "Technical Support"
-                ]
-            ],
-
-            [
-                "fa-graduation-cap",
-                "Training & Internship",
-                "Practical learning programs from programming fundamentals to project development.",
-                [
-                    "Web Development",
-                    "App Development",
-                    "C / Python / Java",
-                    "Internship Programs"
-                ]
-            ]
-
-        ];
+    ];
 
 
-        section.querySelector(".page-body").innerHTML = `
+    app.innerHTML = `
 
-            <div class="card-grid">
+        <section class="page-hero">
 
-                ${services.map(
-                    (service, index) => `
+            <span>
+                GrowtechAxon Services
+            </span>
 
-                        <article
-                            class="card service-card reveal-item"
-                        >
+            <h1>
+                Digital Development & Technology Services
+            </h1>
 
-                            <span class="service-number">
-                                ${String(index + 1).padStart(2, "0")}
-                            </span>
+            <p>
+                Practical technology solutions for
+                businesses, startups, students and
+                digital brands.
+            </p>
 
-                            <div class="card-icon">
-
-                                <i class="fa-solid ${service[0]}"></i>
-
-                            </div>
-
-                            <h3>
-                                ${service[1]}
-                            </h3>
-
-                            <p>
-                                ${service[2]}
-                            </p>
-
-                            <ul>
-
-                                ${service[3].map(
-                                    item =>
-                                        `<li>${item}</li>`
-                                ).join("")}
-
-                            </ul>
-
-                        </article>
-
-                    `
-                ).join("")}
-
-            </div>
-
-        `;
+        </section>
 
 
-        return section;
+        <section class="section">
 
-    }
+            <div class="cards-grid">
 
+                ${services.map(service => `
 
-    /* =========================================================
-       PROJECTS
-       ========================================================= */
-
-    function createProjectsPage() {
-
-        const section =
-            createStandardPage(
-                "projects",
-                "Our Projects",
-                "Selected digital products and solutions."
-            );
-
-
-        section.querySelector(".page-body").innerHTML = `
-
-            <div class="filter-bar">
-
-                <button
-                    class="filter-btn active"
-                    data-filter="all"
-                >
-                    All
-                </button>
-
-                <button
-                    class="filter-btn"
-                    data-filter="online-exam"
-                >
-                    Online Exam
-                </button>
-
-                <button
-                    class="filter-btn"
-                    data-filter="ecommerce"
-                >
-                    E-Commerce
-                </button>
-
-                <button
-                    class="filter-btn"
-                    data-filter="portfolio"
-                >
-                    Portfolio
-                </button>
-
-                <button
-                    class="filter-btn"
-                    data-filter="landing"
-                >
-                    Landing Page
-                </button>
-
-            </div>
-
-
-            <div class="card-grid project-grid">
-
-                <article
-                    class="card project-card reveal-item"
-                    data-category="online-exam"
-                >
-
-                <div class="project-image">
-                    <img
-                        src="images/test.png"
-                        alt="Online Exam System"
+                    <article
+                        class="service-card"
                     >
-                </div>
 
-                    <div class="project-info">
-
-                        <h3>
-                            Online Exam System
-                        </h3>
+                        <h2>
+                            ${escapeHTML(
+                                service.title
+                            )}
+                        </h2>
 
                         <p>
-                            A web-based examination platform
-                            designed for online tests and assessments.
+                            ${escapeHTML(
+                                service.description
+                            )}
                         </p>
 
-                        <a
-                            href="https://growtechaxon-exam-system.onrender.com/t"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="project-link"
-                        >
-                            Visit Project
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                    </article>
 
-                    </div>
-
-                </article>
-
-
-                <article
-                    class="card project-card reveal-item"
-                    data-category="portfolio"
-                >
-
-                    <div class="project-image">
-                     <img
-                    src="images/portfolio.png"
-                          alt="Portfolio Website"
-                     >       
-                    </div>
-
-                    <div class="project-info">
-
-                        <h3>
-                            Portfolio Website
-                        </h3>
-
-                        <p>
-                            A professional portfolio experience
-                            focused on presenting skills and projects.
-                        </p>
-
-                        <a
-                            href="https://growtechaxon-frontend.onrender.com/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="project-link"
-                        >
-                            Visit Project
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
-
-                    </div>
-
-                </article>
-
-
-                <article
-                    class="card project-card reveal-item"
-                    data-category="ecommerce"
-                >
-
-                    <div class="project-image">
-
-                        <i class="fa-solid fa-cart-shopping"></i>
-
-                    </div>
-
-                    <div class="project-info">
-
-                        <h3>
-                            E-Commerce Solution
-                        </h3>
-
-                        <p>
-                            A scalable concept for online stores,
-                            product management and digital selling.
-                        </p>
-
-                        <a
-                            href="#contact"
-                            class="project-link page-link"
-                        >
-                            Discuss Project
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </a>
-
-                    </div>
-
-                </article>
-
-
-                <article
-                    class="card project-card reveal-item"
-                    data-category="landing"
-                >
-
-                    <div class="project-image">
-
-                        <i class="fa-solid fa-window-maximize"></i>
-
-                    </div>
-
-                    <div class="project-info">
-
-                        <h3>
-                            Business Landing Page
-                        </h3>
-
-                        <p>
-                            Conversion-focused landing page
-                            concepts for businesses and campaigns.
-                        </p>
-
-                        <a
-                            href="#contact"
-                            class="project-link page-link"
-                        >
-                            Discuss Project
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </a>
-
-                    </div>
-
-                </article>
+                `).join("")}
 
             </div>
 
-        `;
+        </section>
+
+    `;
+
+}
 
 
-        return section;
+/* =========================================================
+   PROJECTS PAGE
+========================================================= */
 
-    }
+function createProjectsPage() {
 
+    const app =
+        document.getElementById("app");
 
-    /* =========================================================
-       PROCESS
-       ========================================================= */
-
-    function createProcessPage() {
-
-        const section =
-            createStandardPage(
-                "process",
-                "Our Process",
-                "A structured path from idea to implementation."
-            );
+    updateSEO(
+        "GrowtechAxon Projects | Web & Software Projects",
+        "Explore projects and digital solutions developed by GrowtechAxon including exam systems, portfolio websites, e-commerce and business websites."
+    );
 
 
-        const steps = [
+    const projects = [
 
-            [
-                "01",
-                "Discover",
-                "We understand your goals, requirements and project expectations."
-            ],
+        {
+            title:
+                "Online Exam System",
 
-            [
-                "02",
-                "Plan",
-                "We define the structure, technology, scope and execution approach."
-            ],
+            description:
+                "An online examination platform designed for digital assessments.",
 
-            [
-                "03",
-                "Design",
-                "We create a clear user experience and visual direction."
-            ],
+            url:
+                "https://growtechaxon-exam-system.onrender.com/t"
+        },
 
-            [
-                "04",
-                "Develop",
-                "The product is developed, integrated and tested."
-            ],
+        {
+            title:
+                "Portfolio Website",
 
-            [
-                "05",
-                "Launch",
-                "After final checks, the project is prepared for delivery."
-            ]
+            description:
+                "A modern portfolio and digital presence solution.",
 
-        ];
+            url:
+                "https://growtechaxon-frontend.onrender.com/"
+        },
+
+        {
+            title:
+                "E-Commerce Solution",
+
+            description:
+                "Digital commerce solution for showcasing and selling products."
+        },
+
+        {
+            title:
+                "Business Landing Page",
+
+            description:
+                "Professional landing pages designed for business communication and online presence."
+        }
+
+    ];
 
 
-        section.querySelector(".page-body").innerHTML = `
+    app.innerHTML = `
 
-            <div class="process-grid">
+        <section class="page-hero">
 
-                ${steps.map(
-                    step => `
+            <span>
+                GrowtechAxon Projects
+            </span>
 
-                        <article
-                            class="card process-step reveal-item"
-                        >
+            <h1>
+                Digital Products & Projects
+            </h1>
 
-                            <div class="process-number">
-                                ${step[0]}
-                            </div>
+            <p>
+                Examples of websites, applications
+                and digital solutions.
+            </p>
 
-                            <h3>
-                                ${step[1]}
-                            </h3>
+        </section>
 
-                            <p>
-                                ${step[2]}
-                            </p>
 
-                        </article>
+        <section class="section">
 
-                    `
-                ).join("")}
+            <div class="cards-grid">
+
+                ${projects.map(project => `
+
+                    <article
+                        class="project-card"
+                    >
+
+                        <h2>
+                            ${escapeHTML(
+                                project.title
+                            )}
+                        </h2>
+
+                        <p>
+                            ${escapeHTML(
+                                project.description
+                            )}
+                        </p>
+
+                        ${
+                            project.url
+                            ?
+
+                            `
+                                <a
+                                    href="${project.url}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="btn btn-primary"
+                                >
+                                    View Project
+                                </a>
+                            `
+
+                            :
+
+                            ""
+                        }
+
+                    </article>
+
+                `).join("")}
 
             </div>
 
-        `;
+        </section>
+
+    `;
+
+}
 
 
-        return section;
+/* =========================================================
+   PROCESS PAGE
+========================================================= */
 
-    }
+function createProcessPage() {
 
+    const app =
+        document.getElementById("app");
 
-    /* =========================================================
-       PRICING
-       ========================================================= */
-
-    function createPricingPage() {
-
-        const section =
-            createStandardPage(
-                "pricing",
-                "Pricing",
-                "Choose a starting package and discuss your exact requirements."
-            );
+    updateSEO(
+        "GrowtechAxon Development Process",
+        "Learn about the GrowtechAxon process for planning, designing, developing, testing and launching digital products."
+    );
 
 
-        section.querySelector(".page-body").innerHTML = `
+    const steps = [
 
-            <div class="card-grid">
+        [
+            "01",
+            "Understand",
+            "We understand the business, users and technology requirements."
+        ],
 
-                <article class="card pricing-card reveal-item">
+        [
+            "02",
+            "Plan",
+            "We define the project structure, features and development approach."
+        ],
 
-                    <h3>
-                        Starter
-                    </h3>
+        [
+            "03",
+            "Design",
+            "We create clear and practical user interfaces and experiences."
+        ],
 
-                    <p>
-                        For individuals and small requirements.
-                    </p>
+        [
+            "04",
+            "Develop",
+            "We build the website, application or software solution."
+        ],
 
-                    <div class="price">
-                        Custom
-                        <small>/ quote</small>
-                    </div>
+        [
+            "05",
+            "Test",
+            "We test important functionality, usability and responsiveness."
+        ],
 
-                    <ul class="pricing-list">
+        [
+            "06",
+            "Launch",
+            "The completed digital solution is prepared for deployment."
+        ]
 
-                        <li>
-                            <i class="fa-solid fa-check"></i>
-                            Requirement discussion
-                        </li>
-
-                        <li>
-                            <i class="fa-solid fa-check"></i>
-                            Responsive design
-                        </li>
-
-                        <li>
-                            <i class="fa-solid fa-check"></i>
-                            Basic development
-                        </li>
-
-                        <li>
-                            <i class="fa-solid fa-check"></i>
-                            Project support
-                        </li>
-
-                    </ul>
-
-                    <a
-                        href="#contact"
-                        class="btn btn-outline page-link"
-                    >
-                        Request Quote
-                    </a>
-
-                </article>
+    ];
 
 
-                <article
-                    class="card pricing-card featured reveal-item"
-                >
+    app.innerHTML = `
 
-                    <span class="pricing-badge">
-                        Popular
-                    </span>
+        <section class="page-hero">
 
-                    <h3>
-                        Business
-                    </h3>
+            <span>
+                Our Process
+            </span>
 
-                    <p>
-                        For growing businesses and digital brands.
-                    </p>
+            <h1>
+                From Idea To Digital Product
+            </h1>
 
-                    <div class="price">
-                        Custom
-                        <small>/ quote</small>
-                    </div>
-
-                    <ul class="pricing-list">
-
-                        <li>
-                            <i class="fa-solid fa-check"></i>
-                            Complete planning
-                        </li>
-
-                        <li>
-                            <i class="fa-solid fa-check"></i>
-                            Professional UI/UX
-                        </li>
-
-                        <li>
-                            <i class="fa-solid fa-check"></i>
-                            Web development
-                        </li>
-
-                        <li>
-                            <i class="fa-solid fa-check"></i>
-                            Backend/API integration
-                        </li>
-
-                    </ul>
-
-                    <a
-                        href="#contact"
-                        class="btn btn-primary page-link"
-                    >
-                        Start a Project
-                    </a>
-
-                </article>
+        </section>
 
 
-                <article class="card pricing-card reveal-item">
+        <section class="section">
 
-                    <h3>
-                        Custom
-                    </h3>
+            <div class="cards-grid">
 
-                    <p>
-                        For advanced and specialized requirements.
-                    </p>
+                ${steps.map(step => `
 
-                    <div class="price">
-                        Custom
-                        <small>/ quote</small>
-                    </div>
+                    <article class="process-card">
 
-                    <ul class="pricing-list">
+                        <span>
+                            ${step[0]}
+                        </span>
 
-                        <li>
-                            <i class="fa-solid fa-check"></i>
-                            Custom architecture
-                        </li>
+                        <h2>
+                            ${escapeHTML(step[1])}
+                        </h2>
 
-                        <li>
-                            <i class="fa-solid fa-check"></i>
-                            Advanced features
-                        </li>
+                        <p>
+                            ${escapeHTML(step[2])}
+                        </p>
 
-                        <li>
-                            <i class="fa-solid fa-check"></i>
-                            Custom integrations
-                        </li>
+                    </article>
 
-                        <li>
-                            <i class="fa-solid fa-check"></i>
-                            Technical consultation
-                        </li>
-
-                    </ul>
-
-                    <a
-                        href="#contact"
-                        class="btn btn-outline page-link"
-                    >
-                        Discuss Requirement
-                    </a>
-
-                </article>
+                `).join("")}
 
             </div>
 
-        `;
+        </section>
+
+    `;
+
+}
 
 
-        return section;
+/* =========================================================
+   PRICING PAGE
+========================================================= */
 
-    }
+function createPricingPage() {
 
+    const app =
+        document.getElementById("app");
 
-    /* =========================================================
-       TRAINING
-       ========================================================= */
-
-    function createTrainingPage() {
-
-        const section =
-            createStandardPage(
-                "training",
-                "Training & Internship",
-                "Build skills. Build projects. Build your future."
-            );
+    updateSEO(
+        "GrowtechAxon Pricing | Digital Development Services",
+        "Explore GrowtechAxon digital development services and discuss your website, application, software or digital solution requirements."
+    );
 
 
-        section.querySelector(".page-body").innerHTML = `
+    app.innerHTML = `
 
-            <div class="training-hero">
+        <section class="page-hero">
 
-                <div class="training-banner">
+            <span>
+                Pricing
+            </span>
 
-                    <span class="eyebrow">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                        Training Programs
-                    </span>
+            <h1>
+                Choose A Solution Around Your Requirements
+            </h1>
+
+            <p>
+                Project pricing depends on scope,
+                features, technology and requirements.
+            </p>
+
+        </section>
+
+
+        <section class="section">
+
+            <div class="cards-grid">
+
+                <article class="pricing-card">
 
                     <h2>
-                        Learn Technology
-                        <span>Step by Step.</span>
+                        Website Development
                     </h2>
 
                     <p>
-                        Our training structure is designed for learners
-                        starting from fundamentals and progressing toward
-                        practical projects and advanced development.
+                        Business websites, landing pages
+                        and custom web development.
                     </p>
 
-                    <div class="hero-buttons">
+                    <a
+                        href="#contact"
+                        class="btn btn-primary"
+                    >
+                        Discuss Project
+                    </a>
 
-                        <a
-                            href="#contact"
-                            class="btn btn-primary page-link"
-                        >
-                            Enquire About Training
-                        </a>
-
-                    </div>
-
-                </div>
+                </article>
 
 
-                <div class="summer-card">
+                <article class="pricing-card">
 
-                    <i class="fa-solid fa-sun"></i>
-
-                    <h3>
-                        Summer Training
-                    </h3>
+                    <h2>
+                        Application Development
+                    </h2>
 
                     <p>
-                        Practical summer training programs for students
-                        who want to strengthen their programming,
-                        development and project-building skills.
+                        Custom application solutions
+                        based on your requirements.
+                    </p>
+
+                    <a
+                        href="#contact"
+                        class="btn btn-primary"
+                    >
+                        Discuss Project
+                    </a>
+
+                </article>
+
+
+                <article class="pricing-card">
+
+                    <h2>
+                        Custom Software
+                    </h2>
+
+                    <p>
+                        Software solutions designed around
+                        specific business workflows.
+                    </p>
+
+                    <a
+                        href="#contact"
+                        class="btn btn-primary"
+                    >
+                        Discuss Project
+                    </a>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    `;
+
+}
+
+
+/* =========================================================
+   TRAINING PAGE
+========================================================= */
+
+function createTrainingPage() {
+
+    const app =
+        document.getElementById("app");
+
+    updateSEO(
+        "GrowtechAxon Training & Internship",
+        "GrowtechAxon provides practical technology learning, training and internship opportunities for students and aspiring developers."
+    );
+
+
+    const internshipButton =
+        INTERNSHIP_WEBSITE_URL &&
+        INTERNSHIP_WEBSITE_URL !==
+            "YOUR_INTERNSHIP_WEBSITE_URL"
+
+        ?
+
+        `
+            <a
+                href="${INTERNSHIP_WEBSITE_URL}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-primary"
+            >
+                Internship Website
+            </a>
+        `
+
+        :
+
+        `
+            <a
+                href="#contact"
+                class="btn btn-primary"
+            >
+                Contact For Internship
+            </a>
+        `;
+
+
+    app.innerHTML = `
+
+        <section class="page-hero">
+
+            <span>
+                Training & Internship
+            </span>
+
+            <h1>
+                Learn Technology Through Practical Work
+            </h1>
+
+            <p>
+                GrowtechAxon focuses on practical
+                technology learning and project-based
+                experience.
+            </p>
+
+        </section>
+
+
+        <section class="section">
+
+            <div class="content-grid">
+
+                <div>
+
+                    <h2>
+                        Practical Learning
+                    </h2>
+
+                    <p>
+                        Learn by working with real development
+                        concepts, projects and modern
+                        technology practices.
                     </p>
 
                 </div>
 
-            </div>
 
+                <div>
 
-            <div>
-
-                <div class="page-header">
-
-                    <span class="eyebrow">
-                        Programs
-                    </span>
-
-                    <h2 class="page-title">
-                        Choose Your
-                        <span>Technology Track</span>
+                    <h2>
+                        Internship
                     </h2>
 
-                </div>
-
-
-                <div class="card-grid">
-
-                    ${courseCard(
-                        "fa-code",
-                        "Web Development",
-                        "HTML, CSS, JavaScript and modern full-stack development."
-                    )}
-
-                    ${courseCard(
-                        "fa-mobile-screen",
-                        "App Development",
-                        "Application fundamentals, UI, APIs, databases and projects."
-                    )}
-
-                    ${courseCard(
-                        "fa-c",
-                        "C Programming",
-                        "Programming fundamentals, problem solving and data structures."
-                    )}
-
-                    ${courseCard(
-                        "fa-python",
-                        "Python",
-                        "Python programming, OOP, automation, APIs and applications."
-                    )}
-
-                    ${courseCard(
-                        "fa-java",
-                        "Java",
-                        "Java fundamentals, OOP, collections, databases and backend concepts."
-                    )}
-
-                    ${courseCard(
-                        "fa-layer-group",
-                        "Full Stack",
-                        "Frontend, backend, databases, APIs and complete web projects."
-                    )}
-
-                </div>
-
-            </div>
-
-
-            <div class="course-levels">
-
-                <div class="page-header">
-
-                    <span class="eyebrow">
-                        Learning Levels
-                    </span>
-
-                    <h2 class="page-title">
-                        Basic to
-                        <span>Advanced</span>
-                    </h2>
-
-                    <p class="page-description">
-                        Select a level to explore the type of topics
-                        covered at that stage.
+                    <p>
+                        Students and aspiring developers can
+                        contact GrowtechAxon to learn about
+                        available internship opportunities.
                     </p>
 
-                </div>
-
-
-                <div class="level-tabs">
-
-                    <button
-                        class="level-btn active"
-                        data-level="basic"
-                    >
-                        Basic
-                    </button>
-
-                    <button
-                        class="level-btn"
-                        data-level="intermediate"
-                    >
-                        Intermediate
-                    </button>
-
-                    <button
-                        class="level-btn"
-                        data-level="advanced"
-                    >
-                        Advanced
-                    </button>
-
-                </div>
-
-
-                <div
-                    class="level-content active"
-                    data-level-content="basic"
-                >
-
-                    ${syllabusCard(
-                        "Web Development",
-                        [
-                            "HTML & CSS fundamentals",
-                            "Responsive design",
-                            "JavaScript basics",
-                            "Git & GitHub basics"
-                        ]
-                    )}
-
-                    ${syllabusCard(
-                        "App Development",
-                        [
-                            "Programming fundamentals",
-                            "Application structure",
-                            "Basic UI development",
-                            "Basic project development"
-                        ]
-                    )}
-
-                    ${syllabusCard(
-                        "C Programming",
-                        [
-                            "Variables & data types",
-                            "Operators",
-                            "Conditions",
-                            "Loops & functions"
-                        ]
-                    )}
-
-                    ${syllabusCard(
-                        "Python",
-                        [
-                            "Python syntax",
-                            "Variables",
-                            "Conditions & loops",
-                            "Functions"
-                        ]
-                    )}
-
-                    ${syllabusCard(
-                        "Java",
-                        [
-                            "Java fundamentals",
-                            "Variables & data types",
-                            "Conditions & loops",
-                            "Methods"
-                        ]
-                    )}
-
-                </div>
-
-
-                <div
-                    class="level-content"
-                    data-level-content="intermediate"
-                >
-
-                    ${syllabusCard(
-                        "Web Development",
-                        [
-                            "Advanced JavaScript",
-                            "DOM & APIs",
-                            "Frontend frameworks",
-                            "Intermediate projects"
-                        ]
-                    )}
-
-                    ${syllabusCard(
-                        "App Development",
-                        [
-                            "Navigation",
-                            "API integration",
-                            "Database concepts",
-                            "Authentication"
-                        ]
-                    )}
-
-                    ${syllabusCard(
-                        "C Programming",
-                        [
-                            "Arrays & strings",
-                            "Pointers",
-                            "Structures",
-                            "File handling"
-                        ]
-                    )}
-
-                    ${syllabusCard(
-                        "Python",
-                        [
-                            "OOP",
-                            "Modules",
-                            "File handling",
-                            "APIs & databases"
-                        ]
-                    )}
-
-                    ${syllabusCard(
-                        "Java",
-                        [
-                            "OOP",
-                            "Collections",
-                            "Exception handling",
-                            "JDBC basics"
-                        ]
-                    )}
-
-                </div>
-
-
-                <div
-                    class="level-content"
-                    data-level-content="advanced"
-                >
-
-                    ${syllabusCard(
-                        "Web Development",
-                        [
-                            "React",
-                            "Node.js & Express",
-                            "REST APIs",
-                            "Database & full-stack projects"
-                        ]
-                    )}
-
-                    ${syllabusCard(
-                        "App Development",
-                        [
-                            "Production-ready application concepts",
-                            "Backend integration",
-                            "Deployment",
-                            "Real-world projects"
-                        ]
-                    )}
-
-                    ${syllabusCard(
-                        "C Programming",
-                        [
-                            "Data structures",
-                            "Advanced problem solving",
-                            "Memory concepts",
-                            "Advanced projects"
-                        ]
-                    )}
-
-                    ${syllabusCard(
-                        "Python",
-                        [
-                            "Automation",
-                            "Advanced applications",
-                            "Web development",
-                            "Real-world projects"
-                        ]
-                    )}
-
-                    ${syllabusCard(
-                        "Java",
-                        [
-                            "Advanced Java",
-                            "Backend development",
-                            "Database integration",
-                            "APIs & projects"
-                        ]
-                    )}
+                    ${internshipButton}
 
                 </div>
 
             </div>
 
+        </section>
 
-            <div class="internship-box">
+    `;
 
-                <span class="eyebrow">
-                    Internship Program
-                </span>
-
-                <h2>
-                    Learn Through Practical Experience
-                </h2>
-
-                <p>
-                    Explore internship opportunities, program details,
-                    application information and practical learning
-                    resources through our internship portal.
-                </p>
-
-                <!--
-                    PASTE YOUR INTERNSHIP WEBSITE LINK HERE
-                    Replace YOUR_INTERNSHIP_WEBSITE_URL in script.js
-                -->
-
-                <a
-                    id="internshipPortalLink"
-                    href="${INTERNSHIP_WEBSITE_URL}"
-                    class="btn btn-primary"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    View Internship Portal
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                </a>
-
-            </div>
-
-        `;
+}
 
 
-        return section;
+/* =========================================================
+   TEAM PAGE
+========================================================= */
 
-    }
+function createTeamPage() {
 
+    const app =
+        document.getElementById("app");
 
-    function courseCard(icon, title, description) {
-
-        return `
-
-            <article class="card reveal-item">
-
-                <div class="card-icon">
-
-                    <i class="fa-solid ${icon}"></i>
-
-                </div>
-
-                <h3>
-                    ${title}
-                </h3>
-
-                <p>
-                    ${description}
-                </p>
-
-            </article>
-
-        `;
-
-    }
+    updateSEO(
+        "GrowtechAxon Team | RAM BHAROSA PRASAD",
+        "Meet the GrowtechAxon team and RAM BHAROSA PRASAD, Founder of GrowtechAxon."
+    );
 
 
-    function syllabusCard(title, items) {
+    app.innerHTML = `
 
-        return `
+        <section class="page-hero">
 
-            <article class="syllabus-card">
+            <span>
+                GrowtechAxon Team
+            </span>
 
-                <h3>
-                    ${title}
-                </h3>
+            <h1>
+                Meet Our Team
+            </h1>
 
-                <ul>
+            <p>
+                People working on technology,
+                digital solutions and practical learning.
+            </p>
 
-                    ${items.map(
-                        item =>
-                            `<li>${item}</li>`
-                    ).join("")}
-
-                </ul>
-
-            </article>
-
-        `;
-
-    }
+        </section>
 
 
-    /* =========================================================
-       TEAM
-       ========================================================= */
-
-    function createTeamPage() {
-
-        const section =
-            createStandardPage(
-                "team",
-                "Meet Our Team",
-                "Our team members will be loaded from the GrowtechAxon backend."
-            );
-
-
-        section.querySelector(".page-body").innerHTML = `
+        <section
+            class="section"
+            id="team-members-section"
+        >
 
             <div
-                class="team-grid"
-                id="teamGrid"
+                id="team-container"
+                class="cards-grid"
             >
 
-                <div class="team-empty">
+                <div class="loading">
                     Loading team members...
                 </div>
 
             </div>
 
+        </section>
+
+    `;
+
+
+    loadTeamMembers();
+
+}
+
+
+/* =========================================================
+   LOAD TEAM MEMBERS
+========================================================= */
+
+async function loadTeamMembers() {
+
+    const container =
+        document.getElementById(
+            "team-container"
+        );
+
+    if (!container) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/team`
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Team API returned ${response.status}`
+            );
+
+        }
+
+
+        const members =
+            await response.json();
+
+
+        if (!Array.isArray(members)) {
+
+            throw new Error(
+                "Invalid team API response"
+            );
+
+        }
+
+
+        const activeMembers =
+            members
+                .filter(member =>
+                    member.isActive !== false
+                )
+                .sort(
+                    (a, b) =>
+                        (a.displayOrder || 0) -
+                        (b.displayOrder || 0)
+                );
+
+
+        /* =====================================================
+           FIND FOUNDER
+        ====================================================== */
+
+        const founder =
+            activeMembers.find(
+                member => {
+
+                    const name =
+                        (
+                            member.name ||
+                            ""
+                        )
+                            .trim()
+                            .toLowerCase();
+
+                    return (
+                        name ===
+                        FOUNDER_NAME
+                            .toLowerCase()
+                    );
+
+                }
+            );
+
+
+        if (founder) {
+
+            injectFounderStructuredData(
+                founder
+            );
+
+        }
+
+
+        if (!activeMembers.length) {
+
+            container.innerHTML = `
+
+                <div class="empty-state">
+
+                    <p>
+                        No team members are currently available.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            activeMembers
+                .map(member =>
+                    createTeamCard(member)
+                )
+                .join("");
+
+
+    } catch (error) {
+
+        console.error(
+            "Team loading error:",
+            error
+        );
+
+
+        container.innerHTML = `
+
+            <div class="error-state">
+
+                <p>
+                    Unable to load team members.
+                </p>
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    onclick="loadTeamMembers()"
+                >
+                    Try Again
+                </button>
+
+            </div>
+
         `;
 
+    }
 
-        return section;
+}
+
+
+/* =========================================================
+   TEAM CARD
+========================================================= */
+
+function createTeamCard(member) {
+
+    const name =
+        member.name ||
+        "Team Member";
+
+    const designation =
+        member.designation ||
+        "Team Member";
+
+    const description =
+        member.description ||
+        "";
+
+    const image =
+        getTeamPhotoUrl(
+            member.photo
+        ) ||
+        getDefaultTeamImage();
+
+
+    const socialLinks = [];
+
+
+    if (member.linkedin) {
+
+        socialLinks.push(`
+
+            <a
+                href="${member.linkedin}"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="${escapeHTML(name)} LinkedIn"
+            >
+                LinkedIn
+            </a>
+
+        `);
 
     }
 
 
-    /* =========================================================
-       CONTACT
-       ========================================================= */
+    if (member.instagram) {
 
-    function createContactPage() {
+        socialLinks.push(`
 
-        const section =
-            createStandardPage(
-                "contact",
-                "Let's Work Together",
-                "Have a project, business requirement or learning enquiry? Get in touch."
+            <a
+                href="${member.instagram}"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="${escapeHTML(name)} Instagram"
+            >
+                Instagram
+            </a>
+
+        `);
+
+    }
+
+
+    if (member.github) {
+
+        socialLinks.push(`
+
+            <a
+                href="${member.github}"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="${escapeHTML(name)} GitHub"
+            >
+                GitHub
+            </a>
+
+        `);
+
+    }
+
+
+    return `
+
+        <article
+            class="team-card"
+        >
+
+            <div class="team-image">
+
+                <img
+                    src="${image}"
+                    alt="${escapeHTML(
+                        name
+                    )}"
+                    loading="lazy"
+                >
+
+            </div>
+
+
+            <div class="team-content">
+
+                <h2>
+                    ${escapeHTML(name)}
+                </h2>
+
+                <h3>
+                    ${escapeHTML(
+                        designation
+                    )}
+                </h3>
+
+                <p>
+                    ${escapeHTML(
+                        description
+                    )}
+                </p>
+
+
+                ${
+                    socialLinks.length
+                    ?
+
+                    `
+                        <div
+                            class="team-social"
+                        >
+                            ${socialLinks.join("")}
+                        </div>
+                    `
+
+                    :
+
+                    ""
+                }
+
+            </div>
+
+        </article>
+
+    `;
+
+}
+
+
+/* =========================================================
+   TEAM PHOTO URL
+========================================================= */
+
+function getTeamPhotoUrl(photo) {
+
+    if (!photo) {
+        return "";
+    }
+
+
+    let photoUrl =
+        String(photo).trim();
+
+
+    if (!photoUrl) {
+        return "";
+    }
+
+
+    /*
+     * Already an absolute URL.
+     */
+
+    if (
+        photoUrl.startsWith(
+            "http://"
+        ) ||
+        photoUrl.startsWith(
+            "https://"
+        )
+    ) {
+
+        /*
+         * Convert old localhost/backend URLs
+         * to the production backend.
+         */
+
+        photoUrl =
+            photoUrl
+                .replace(
+                    /^https?:\/\/localhost(?::\d+)?/i,
+                    API_URL
+                )
+                .replace(
+                    /^https?:\/\/127\.0\.0\.1(?::\d+)?/i,
+                    API_URL
+                )
+                .replace(
+                    /^https?:\/\/growtechaxon-backend\.onrender\.com/i,
+                    API_URL
+                );
+
+
+        return photoUrl;
+
+    }
+
+
+    /*
+     * Upload paths.
+     */
+
+    if (
+        photoUrl.startsWith(
+            "/uploads/"
+        )
+    ) {
+
+        return (
+            API_URL +
+            photoUrl
+        );
+
+    }
+
+
+    if (
+        photoUrl.startsWith(
+            "uploads/"
+        )
+    ) {
+
+        return (
+            API_URL +
+            "/" +
+            photoUrl
+        );
+
+    }
+
+
+    /*
+     * Root-relative backend path.
+     */
+
+    if (
+        photoUrl.startsWith("/")
+    ) {
+
+        return (
+            API_URL +
+            photoUrl
+        );
+
+    }
+
+
+    /*
+     * Relative upload filename.
+     */
+
+    return (
+        API_URL +
+        "/uploads/" +
+        photoUrl
+    );
+
+}
+
+
+/* =========================================================
+   DEFAULT TEAM IMAGE
+========================================================= */
+
+function getDefaultTeamImage() {
+
+    const svg = `
+
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="500"
+            height="500"
+            viewBox="0 0 500 500"
+        >
+
+            <rect
+                width="500"
+                height="500"
+                fill="#eeeeee"
+            />
+
+            <circle
+                cx="250"
+                cy="190"
+                r="85"
+                fill="#aaaaaa"
+            />
+
+            <path
+                d="M100 470
+                   C100 350 170 290 250 290
+                   C330 290 400 350 400 470
+                   Z"
+                fill="#aaaaaa"
+            />
+
+        </svg>
+
+    `;
+
+
+    return (
+        "data:image/svg+xml;charset=UTF-8," +
+        encodeURIComponent(svg)
+    );
+
+}
+
+
+/* =========================================================
+   FOUNDER SEO IMAGE
+========================================================= */
+
+function getFounderImageUrl(photo) {
+
+    if (!photo) {
+        return "";
+    }
+
+    return getTeamPhotoUrl(photo);
+
+}
+
+
+/* =========================================================
+   DYNAMIC FOUNDER STRUCTURED DATA
+========================================================= */
+
+function injectFounderStructuredData(
+    member
+) {
+
+    if (!member) {
+        return;
+    }
+
+
+    const founderName =
+        member.name ||
+        FOUNDER_NAME;
+
+
+    const founderImage =
+        getFounderImageUrl(
+            member.photo
+        );
+
+
+    const founderInstagram =
+        member.instagram ||
+        FOUNDER_INSTAGRAM;
+
+
+    const founderDescription =
+        member.description ||
+        "RAM BHAROSA PRASAD is the Founder of GrowtechAxon, a digital solutions and technology company focused on website development, app development, software solutions, UI/UX design and digital technology services.";
+
+
+    const existing =
+        document.getElementById(
+            "growtechaxon-founder-schema"
+        );
+
+
+    if (existing) {
+
+        existing.remove();
+
+    }
+
+
+    const schema = {
+
+        "@context":
+            "https://schema.org",
+
+        "@type":
+            "Person",
+
+        "@id":
+            "https://growtechaxon.in/#ram-bharosa-prasad",
+
+        "name":
+            founderName,
+
+        "alternateName":
+            "Ram Bharosa Prasad",
+
+        "jobTitle":
+            member.designation ||
+            "Founder",
+
+        "description":
+            founderDescription,
+
+        "url":
+            "https://growtechaxon.in/#team",
+
+        "worksFor": {
+
+            "@type":
+                "Organization",
+
+            "@id":
+                "https://growtechaxon.in/#organization",
+
+            "name":
+                "GrowtechAxon",
+
+            "url":
+                "https://growtechaxon.in/"
+
+        },
+
+        "sameAs": [
+
+            founderInstagram
+
+        ]
+
+    };
+
+
+    if (founderImage) {
+
+        schema.image =
+            founderImage;
+
+    }
+
+
+    const script =
+        document.createElement(
+            "script"
+        );
+
+
+    script.type =
+        "application/ld+json";
+
+
+    script.id =
+        "growtechaxon-founder-schema";
+
+
+    script.textContent =
+        JSON.stringify(
+            schema,
+            null,
+            2
+        );
+
+
+    document.head.appendChild(
+        script
+    );
+
+
+    console.log(
+        "Founder SEO schema added:",
+        schema
+    );
+
+}
+
+
+/* =========================================================
+   LOAD FOUNDER SEO DATA
+   Runs immediately on website load.
+   
+   This is important because the Team page may not
+   be opened by the visitor.
+========================================================= */
+
+async function loadFounderForSEO() {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/team`
             );
 
 
-        section.querySelector(".page-body").innerHTML = `
+        if (!response.ok) {
+
+            throw new Error(
+                `Founder API returned ${response.status}`
+            );
+
+        }
+
+
+        const members =
+            await response.json();
+
+
+        if (!Array.isArray(members)) {
+
+            console.warn(
+                "Founder SEO: invalid Team API response."
+            );
+
+            return;
+
+        }
+
+
+        const founder =
+            members.find(
+                member => {
+
+                    const name =
+                        (
+                            member.name ||
+                            ""
+                        )
+                            .trim()
+                            .toLowerCase();
+
+                    return (
+                        name ===
+                        FOUNDER_NAME
+                            .toLowerCase()
+                    );
+
+                }
+            );
+
+
+        if (!founder) {
+
+            console.warn(
+                `Founder "${FOUNDER_NAME}" was not found in Team API.`
+            );
+
+            return;
+
+        }
+
+
+        injectFounderStructuredData(
+            founder
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Founder SEO loading failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CONTACT PAGE
+========================================================= */
+
+function createContactPage() {
+
+    const app =
+        document.getElementById("app");
+
+
+    updateSEO(
+        "Contact GrowtechAxon | Website & Digital Solutions",
+        "Contact GrowtechAxon for website development, app development, software development, UI/UX design, digital solutions and technology services."
+    );
+
+
+    app.innerHTML = `
+
+        <section class="page-hero">
+
+            <span>
+                Contact GrowtechAxon
+            </span>
+
+            <h1>
+                Let's Build Something Digital
+            </h1>
+
+            <p>
+                Tell us about your project,
+                business requirement or learning goal.
+            </p>
+
+        </section>
+
+
+        <section class="section contact-section">
 
             <div class="contact-grid">
 
+
                 <div class="contact-info">
+
+                    <h2>
+                        Contact Information
+                    </h2>
+
 
                     <div class="contact-item">
 
-                        <div class="contact-item-icon">
-                            <i class="fa-solid fa-location-dot"></i>
-                        </div>
+                        <strong>
+                            Location
+                        </strong>
 
-                        <div>
-
-                            <h4>
-                                Location
-                            </h4>
-
-                            <span>
-                                Lucknow, Uttar Pradesh, India
-                            </span>
-
-                        </div>
+                        <p>
+                            Lucknow, Uttar Pradesh, India
+                        </p>
 
                     </div>
 
 
                     <div class="contact-item">
 
-                        <div class="contact-item-icon">
-                            <i class="fa-solid fa-phone"></i>
-                        </div>
+                        <strong>
+                            Phone
+                        </strong>
 
-                        <div>
+                        <p>
 
-                            <h4>
-                                Phone
-                            </h4>
-
-                            <a href="tel:+919219226570">
+                            <a
+                                href="tel:+919219226570"
+                            >
                                 +91 92192 26570
                             </a>
 
-                        </div>
+                        </p>
 
                     </div>
 
 
                     <div class="contact-item">
 
-                        <div class="contact-item-icon">
-                            <i class="fa-solid fa-envelope"></i>
-                        </div>
+                        <strong>
+                            Email
+                        </strong>
 
-                        <div>
+                        <p>
 
-                            <h4>
-                                Email
-                            </h4>
-
-                            <a href="mailto:growtechaxon@gmail.com">
+                            <a
+                                href="mailto:growtechaxon@gmail.com"
+                            >
                                 growtechaxon@gmail.com
                             </a>
 
-                        </div>
+                        </p>
 
                     </div>
 
 
                     <div class="contact-item">
 
-                        <div class="contact-item-icon">
-                            <i class="fa-brands fa-whatsapp"></i>
-                        </div>
+                        <strong>
+                            WhatsApp
+                        </strong>
 
-                        <div>
-
-                            <h4>
-                                WhatsApp
-                            </h4>
+                        <p>
 
                             <a
-                                href="https://wa.me/919219226570?text=Hello%20GrowtechAxon%2C%20I%20am%20interested%20in%20your%20services."
+                                href="https://wa.me/919219226570"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Chat with GrowtechAxon
+                                Chat on WhatsApp
                             </a>
 
-                        </div>
+                        </p>
 
                     </div>
 
 
-                    <div class="contact-item">
+                    <div class="contact-social">
 
-                        <div>
+                        <a
+                            href="${SOCIAL_LINKS.instagram}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Instagram
+                        </a>
 
-                            <h4>
-                                Connect With Us
-                            </h4>
+                        <a
+                            href="${SOCIAL_LINKS.facebook}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Facebook
+                        </a>
 
-                            <div class="contact-socials">
+                        <a
+                            href="${SOCIAL_LINKS.linkedin}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            LinkedIn
+                        </a>
 
-                                <a
-                                    href="https://www.instagram.com/growtechaxon?utm_source=qr&stkn=MXBsb2VhMjRwYjcwcw=="
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="Instagram"
-                                >
-                                    <i class="fa-brands fa-instagram"></i>
-                                </a>
-
-                                <a
-                                    href="https://www.facebook.com/profile.php?id=61593886546973&sk=friends"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="Facebook"
-                                >
-                                    <i class="fa-brands fa-facebook-f"></i>
-                                </a>
-
-                                <a
-                                    href="https://www.linkedin.com/company/growtech-axon/posts/?feedView=all"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="LinkedIn"
-                                >
-                                    <i class="fa-brands fa-linkedin-in"></i>
-                                </a>
-
-                                <a
-                                    href="https://youtube.com/@growtechaxon?si=GbI0Q2iEkTDRu0HE"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="YouTube"
-                                >
-                                    <i class="fa-brands fa-youtube"></i>
-                                </a>
-
-                            </div>
-
-                        </div>
+                        <a
+                            href="${SOCIAL_LINKS.youtube}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            YouTube
+                        </a>
 
                     </div>
 
                 </div>
 
 
-                <form
-                    id="projectForm"
-                    class="contact-form"
-                >
+                <div class="contact-form-wrapper">
 
-                    <div class="form-grid">
+                    <h2>
+                        Send Us A Message
+                    </h2>
+
+
+                    <form
+                        id="contact-form"
+                    >
 
                         <div class="form-group">
 
-                            <label for="name">
-                                Name *
+                            <label
+                                for="name"
+                            >
+                                Name
                             </label>
 
                             <input
+                                type="text"
                                 id="name"
                                 name="name"
-                                type="text"
                                 placeholder="Your name"
                                 required
                             >
@@ -2002,31 +2191,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         <div class="form-group">
 
-                            <label for="business">
-                                Business / Company
-                            </label>
-
-                            <input
-                                id="business"
-                                name="business"
-                                type="text"
-                                placeholder="Business name"
+                            <label
+                                for="email"
                             >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label for="email">
-                                Email *
+                                Email
                             </label>
 
                             <input
+                                type="email"
                                 id="email"
                                 name="email"
-                                type="email"
-                                placeholder="you@example.com"
+                                placeholder="Your email"
                                 required
                             >
 
@@ -2035,16 +2210,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         <div class="form-group">
 
-                            <label for="phone">
-                                Phone *
+                            <label
+                                for="phone"
+                            >
+                                Phone
                             </label>
 
                             <input
+                                type="tel"
                                 id="phone"
                                 name="phone"
-                                type="tel"
-                                placeholder="+91"
-                                required
+                                placeholder="Your phone number"
                             >
 
                         </div>
@@ -2052,1372 +2228,196 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         <div class="form-group">
 
-                            <label for="city">
-                                City
-                            </label>
-
-                            <input
-                                id="city"
-                                name="city"
-                                type="text"
-                                placeholder="Your city"
+                            <label
+                                for="message"
                             >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label for="service">
-                                Service
-                            </label>
-
-                            <select
-                                id="service"
-                                name="service"
-                            >
-
-                                <option value="">
-                                    Select service
-                                </option>
-
-                                <option value="Web Development">
-                                    Web Development
-                                </option>
-
-                                <option value="App Development">
-                                    App Development
-                                </option>
-
-                                <option value="UI UX Design">
-                                    UI / UX Design
-                                </option>
-
-                                <option value="Software Development">
-                                    Software Development
-                                </option>
-
-                                <option value="Digital Solutions">
-                                    Digital Solutions
-                                </option>
-
-                                <option value="Training">
-                                    Training
-                                </option>
-
-                                <option value="Internship">
-                                    Internship
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label for="budget">
-                                Budget
-                            </label>
-
-                            <select
-                                id="budget"
-                                name="budget"
-                            >
-
-                                <option value="">
-                                    Select budget
-                                </option>
-
-                                <option value="Under 25K">
-                                    Under ₹25K
-                                </option>
-
-                                <option value="25K - 50K">
-                                    ₹25K - ₹50K
-                                </option>
-
-                                <option value="50K - 1L">
-                                    ₹50K - ₹1L
-                                </option>
-
-                                <option value="Above 1L">
-                                    Above ₹1L
-                                </option>
-
-                                <option value="Not Decided">
-                                    Not Decided
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-                        <div class="form-group full">
-
-                            <label for="message">
-                                Message *
+                                Message
                             </label>
 
                             <textarea
                                 id="message"
                                 name="message"
-                                placeholder="Tell us about your project..."
+                                rows="6"
+                                placeholder="Tell us about your requirement"
                                 required
                             ></textarea>
 
                         </div>
 
-                    </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Send Message
+                        </button>
 
 
-                    <button
-                        type="submit"
-                        class="btn btn-primary form-submit"
-                    >
-                        Send Project Request
-                        <i class="fa-solid fa-paper-plane"></i>
-                    </button>
+                        <div
+                            id="form-message"
+                            class="form-message"
+                        ></div>
 
-
-                    <div id="formMessage"></div>
-
-                </form>
-
-            </div>
-
-        `;
-
-
-        return section;
-
-    }
-
-
-    /* =========================================================
-       STANDARD PAGE
-       ========================================================= */
-
-    function createStandardPage(
-        route,
-        title,
-        description
-    ) {
-
-        const section =
-            document.createElement("section");
-
-        section.className = "page";
-
-        section.dataset.page = route;
-
-
-        section.innerHTML = `
-
-            <div class="container">
-
-                <div class="page-header">
-
-                    <span class="eyebrow">
-                        GrowtechAxon
-                    </span>
-
-                    <h1 class="page-title">
-                        ${title}
-                    </h1>
-
-                    <p class="page-description">
-                        ${description}
-                    </p>
+                    </form>
 
                 </div>
 
-
-                <div class="page-body"></div>
-
             </div>
 
-        `;
+        </section>
+
+    `;
 
 
-        return section;
+    initializeContactForm();
 
+}
+
+
+/* =========================================================
+   CONTACT FORM
+========================================================= */
+
+function initializeContactForm() {
+
+    const form =
+        document.getElementById(
+            "contact-form"
+        );
+
+    if (!form) {
+        return;
     }
 
 
-    /* =========================================================
-       PROJECT FILTER
-       ========================================================= */
+    form.addEventListener(
+        "submit",
+        async event => {
 
-    function initializeProjectFilters() {
-
-        const buttons =
-            document.querySelectorAll(".filter-btn");
-
-        const cards =
-            document.querySelectorAll(".project-card");
+            event.preventDefault();
 
 
-        buttons.forEach(button => {
+            const submitButton =
+                form.querySelector(
+                    'button[type="submit"]'
+                );
 
-            button.addEventListener(
-                "click",
-                () => {
 
-                    buttons.forEach(
-                        btn =>
-                            btn.classList.remove("active")
+            const messageBox =
+                document.getElementById(
+                    "form-message"
+                );
+
+
+            const formData =
+                new FormData(form);
+
+
+            const data =
+                Object.fromEntries(
+                    formData.entries()
+                );
+
+
+            if (submitButton) {
+
+                submitButton.disabled =
+                    true;
+
+                submitButton.textContent =
+                    "Sending...";
+
+            }
+
+
+            if (messageBox) {
+
+                messageBox.textContent =
+                    "";
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/leads`,
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    data
+                                )
+
+                        }
                     );
 
 
-                    button.classList.add("active");
-
-
-                    const filter =
-                        button.dataset.filter;
-
-
-                    cards.forEach(card => {
-
-                        const category =
-                            card.dataset.category;
-
-
-                        if (
-                            filter === "all" ||
-                            category === filter
-                        ) {
-
-                            card.style.display = "block";
-
-                            requestAnimationFrame(() => {
-
-                                card.style.opacity = "1";
-
-                                card.style.transform =
-                                    "scale(1)";
-
-                            });
-
-                        } else {
-
-                            card.style.opacity = "0";
-
-                            card.style.transform =
-                                "scale(0.95)";
-
-
-                            setTimeout(() => {
-
-                                card.style.display =
-                                    "none";
-
-                            }, 250);
-
-                        }
-
-                    });
-
-                }
-            );
-
-        });
-
-    }
-
-
-    /* =========================================================
-       TRAINING LEVELS
-       ========================================================= */
-
-    function initializeTrainingLevels() {
-
-        const buttons =
-            document.querySelectorAll(".level-btn");
-
-        const contents =
-            document.querySelectorAll(
-                ".level-content"
-            );
-
-
-        buttons.forEach(button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const level =
-                        button.dataset.level;
-
-
-                    buttons.forEach(
-                        btn =>
-                            btn.classList.toggle(
-                                "active",
-                                btn === button
-                            )
-                    );
-
-
-                    contents.forEach(content => {
-
-                        content.classList.toggle(
-                            "active",
-                            content.dataset.levelContent ===
-                            level
-                        );
-
-                    });
-
-                }
-            );
-
-        });
-
-    }
-
-
-    /* =========================================================
-       COUNTERS
-       ========================================================= */
-
-    function initializeCounters() {
-
-        const counters =
-            document.querySelectorAll(".counter");
-
-
-        if (!("IntersectionObserver" in window)) {
-
-            counters.forEach(counter => {
-
-                counter.textContent =
-                    `${counter.dataset.target}+`;
-
-            });
-
-            return;
-
-        }
-
-
-        const observer =
-            new IntersectionObserver(
-                entries => {
-
-                    entries.forEach(entry => {
-
-                        if (!entry.isIntersecting) {
-                            return;
-                        }
-
-
-                        const counter =
-                            entry.target;
-
-                        const target =
-                            Number(
-                                counter.dataset.target
-                            ) || 0;
-
-
-                        const duration = 1300;
-
-                        const startTime =
-                            performance.now();
-
-
-                        function update(time) {
-
-                            const progress =
-                                Math.min(
-                                    (time - startTime) /
-                                    duration,
-                                    1
-                                );
-
-
-                            const eased =
-                                1 -
-                                Math.pow(
-                                    1 - progress,
-                                    3
-                                );
-
-
-                            counter.textContent =
-                                Math.floor(
-                                    eased * target
-                                );
-
-
-                            if (progress < 1) {
-
-                                requestAnimationFrame(
-                                    update
-                                );
-
-                            } else {
-
-                                counter.textContent =
-                                    `${target}+`;
-
-                            }
-
-                        }
-
-
-                        requestAnimationFrame(
-                            update
+                const result =
+                    await response.json()
+                        .catch(
+                            () => ({})
                         );
 
 
-                        observer.unobserve(
-                            counter
-                        );
+                if (!response.ok) {
 
-                    });
-
-                },
-                {
-                    threshold: 0.4
-                }
-            );
-
-
-        counters.forEach(counter => {
-
-            observer.observe(counter);
-
-        });
-
-    }
-
-
-    /* =========================================================
-       REVEAL ANIMATION
-       ========================================================= */
-
-    function initializeReveal() {
-
-        const elements =
-            document.querySelectorAll(
-                ".reveal-item"
-            );
-
-
-        elements.forEach(element => {
-
-            element.style.opacity = "0";
-
-            element.style.transform =
-                "translateY(25px)";
-
-            element.style.transition =
-                "opacity 0.7s ease, transform 0.7s ease";
-
-        });
-
-
-        if (
-            !("IntersectionObserver" in window)
-        ) {
-
-            elements.forEach(element => {
-
-                element.style.opacity = "1";
-
-                element.style.transform =
-                    "translateY(0)";
-
-            });
-
-            return;
-
-        }
-
-
-        const observer =
-            new IntersectionObserver(
-                entries => {
-
-                    entries.forEach(entry => {
-
-                        if (
-                            !entry.isIntersecting
-                        ) {
-                            return;
-                        }
-
-
-                        entry.target.style.opacity =
-                            "1";
-
-                        entry.target.style.transform =
-                            "translateY(0)";
-
-
-                        observer.unobserve(
-                            entry.target
-                        );
-
-                    });
-
-                },
-                {
-                    threshold: 0.12
-                }
-            );
-
-
-        elements.forEach(element => {
-
-            observer.observe(element);
-
-        });
-
-    }
-
-
-    /* =========================================================
-       CONTACT FORM
-       ========================================================= */
-
-    function initializeContactForm() {
-
-        const form =
-            document.getElementById(
-                "projectForm"
-            );
-
-        const message =
-            document.getElementById(
-                "formMessage"
-            );
-
-
-        if (!form) return;
-
-
-        form.addEventListener(
-            "submit",
-            async event => {
-
-                event.preventDefault();
-
-
-                const name =
-                    document.getElementById(
-                        "name"
-                    )?.value.trim();
-
-
-                const email =
-                    document.getElementById(
-                        "email"
-                    )?.value.trim();
-
-
-                const phone =
-                    document.getElementById(
-                        "phone"
-                    )?.value.trim();
-
-
-                const text =
-                    document.getElementById(
-                        "message"
-                    )?.value.trim();
-
-
-                if (
-                    !name ||
-                    !email ||
-                    !phone ||
-                    !text
-                ) {
-
-                    showFormMessage(
-                        "Please fill all required fields.",
-                        "#f87171"
+                    throw new Error(
+                        result.message ||
+                        "Unable to submit your message."
                     );
 
-                    return;
+                }
+
+
+                if (messageBox) {
+
+                    messageBox.textContent =
+                        result.message ||
+                        "Thank you. Your message has been sent successfully.";
 
                 }
 
 
-                const emailPattern =
-                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                form.reset();
 
 
-                if (
-                    !emailPattern.test(email)
-                ) {
+            } catch (error) {
 
-                    showFormMessage(
-                        "Please enter a valid email address.",
-                        "#f87171"
-                    );
-
-                    return;
-
-                }
+                console.error(
+                    "Contact form error:",
+                    error
+                );
 
 
-                const phoneDigits =
-                    phone.replace(/\D/g, "");
+                if (messageBox) {
 
-
-                if (
-                    phoneDigits.length < 10
-                ) {
-
-                    showFormMessage(
-                        "Please enter a valid phone number.",
-                        "#f87171"
-                    );
-
-                    return;
+                    messageBox.textContent =
+                        error.message ||
+                        "Something went wrong. Please try again.";
 
                 }
 
-
-                const formData = {
-
-                    name:
-                        document.getElementById(
-                            "name"
-                        )?.value || "",
-
-                    business:
-                        document.getElementById(
-                            "business"
-                        )?.value || "",
-
-                    email:
-                        document.getElementById(
-                            "email"
-                        )?.value || "",
-
-                    phone:
-                        document.getElementById(
-                            "phone"
-                        )?.value || "",
-
-                    city:
-                        document.getElementById(
-                            "city"
-                        )?.value || "",
-
-                    service:
-                        document.getElementById(
-                            "service"
-                        )?.value || "",
-
-                    budget:
-                        document.getElementById(
-                            "budget"
-                        )?.value || "",
-
-                    message:
-                        document.getElementById(
-                            "message"
-                        )?.value || ""
-
-                };
-
-
-                const submitButton =
-                    form.querySelector(
-                        ".form-submit"
-                    );
-
-
-                const originalText =
-                    submitButton?.innerHTML;
-
+            } finally {
 
                 if (submitButton) {
 
                     submitButton.disabled =
-                        true;
+                        false;
 
-                    submitButton.innerHTML =
-                        `
-                            Sending...
-                            <i class="fa-solid fa-spinner fa-spin"></i>
-                        `;
-
-                }
-
-
-                try {
-
-                    const response =
-                        await fetch(
-                            `${API_URL}/api/leads`,
-                            {
-                                method: "POST",
-
-                                headers: {
-                                    "Content-Type":
-                                        "application/json",
-
-                                    "Accept":
-                                        "application/json"
-                                },
-
-                                body:
-                                    JSON.stringify(
-                                        formData
-                                    )
-                            }
-                        );
-
-
-                    const result =
-                        await response.json();
-
-
-                    if (!response.ok) {
-
-                        throw new Error(
-                            result.message ||
-                            "Unable to submit request."
-                        );
-
-                    }
-
-
-                    showFormMessage(
-                        "Thank you! Your project request has been received.",
-                        "#60a5fa"
-                    );
-
-
-                    form.reset();
-
-
-                    if (submitButton) {
-
-                        submitButton.innerHTML =
-                            `
-                                Request Sent
-                                <i class="fa-solid fa-check"></i>
-                            `;
-
-
-                        setTimeout(() => {
-
-                            submitButton.innerHTML =
-                                originalText ||
-                                "Send Project Request";
-
-                            submitButton.disabled =
-                                false;
-
-                        }, 3000);
-
-                    }
-
-
-                    console.log(
-                        "Lead successfully sent:",
-                        result
-                    );
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Lead submission error:",
-                        error
-                    );
-
-
-                    showFormMessage(
-                        "Unable to send request. Please try again.",
-                        "#f87171"
-                    );
-
-
-                    if (submitButton) {
-
-                        submitButton.disabled =
-                            false;
-
-                        submitButton.innerHTML =
-                            originalText ||
-                            "Send Project Request";
-
-                    }
-
-                }
-
-            }
-        );
-
-
-        function showFormMessage(
-            text,
-            color
-        ) {
-
-            if (!message) return;
-
-            message.textContent = text;
-
-            message.style.color = color;
-
-        }
-
-    }
-
-
-    /* =========================================================
-       TEAM IMAGE
-       ========================================================= */
-
-    function getTeamPhotoUrl(photo) {
-
-        if (!photo) {
-            return "";
-        }
-
-
-        let imageUrl =
-            String(photo).trim();
-
-
-        const replacements = [
-
-            [
-                "http://localhost:5000",
-                API_URL
-            ],
-
-            [
-                "http://127.0.0.1:5000",
-                API_URL
-            ],
-
-            [
-                "http://growtechaxon-backend.onrender.com",
-                API_URL
-            ]
-
-        ];
-
-
-        replacements.forEach(
-            ([oldUrl, newUrl]) => {
-
-                if (
-                    imageUrl.startsWith(oldUrl)
-                ) {
-
-                    imageUrl =
-                        imageUrl.replace(
-                            oldUrl,
-                            newUrl
-                        );
-
-                }
-
-            }
-        );
-
-
-        if (
-            imageUrl.startsWith("/uploads/")
-        ) {
-
-            imageUrl =
-                `${API_URL}${imageUrl}`;
-
-        }
-
-
-        if (
-            imageUrl.startsWith("uploads/team/")
-        ) {
-
-            imageUrl =
-                `${API_URL}/${imageUrl}`;
-
-        }
-
-
-        return imageUrl;
-
-    }
-
-
-    /* =========================================================
-       DEFAULT TEAM IMAGE
-       ========================================================= */
-
-    function getDefaultTeamImage() {
-
-        const svg = `
-
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="600"
-                height="600"
-                viewBox="0 0 600 600"
-            >
-
-                <rect
-                    width="600"
-                    height="600"
-                    fill="#08152b"
-                />
-
-                <circle
-                    cx="300"
-                    cy="210"
-                    r="90"
-                    fill="#2563eb"
-                />
-
-                <circle
-                    cx="300"
-                    cy="210"
-                    r="50"
-                    fill="#dbeafe"
-                />
-
-                <path
-                    d="
-                        M145 500
-                        C160 370 220 310 300 310
-                        C380 310 440 370 455 500Z
-                    "
-                    fill="#2563eb"
-                />
-
-                <text
-                    x="300"
-                    y="555"
-                    text-anchor="middle"
-                    fill="#ffffff"
-                    font-family="Arial, sans-serif"
-                    font-size="24"
-                    font-weight="600"
-                >
-                    GrowtechAxon
-                </text>
-
-            </svg>
-
-        `;
-
-
-        return (
-            "data:image/svg+xml;charset=UTF-8," +
-            encodeURIComponent(svg)
-        );
-
-    }
-
-
-    /* =========================================================
-       CREATE TEAM CARD
-       ========================================================= */
-
-    function createTeamCard(member) {
-
-        const article =
-            document.createElement("article");
-
-        article.className =
-            "team-card reveal-item";
-
-
-        const photoWrapper =
-            document.createElement("div");
-
-        photoWrapper.className =
-            "team-photo";
-
-
-        const image =
-            document.createElement("img");
-
-        image.loading = "lazy";
-
-        image.alt =
-            member.name ||
-            "Team Member";
-
-
-        const imageUrl =
-            getTeamPhotoUrl(
-                member.photo
-            );
-
-
-        image.src =
-            imageUrl ||
-            getDefaultTeamImage();
-
-
-        image.addEventListener(
-            "error",
-            () => {
-
-                if (
-                    image.dataset.fallbackApplied ===
-                    "true"
-                ) {
-
-                    return;
-
-                }
-
-
-                image.dataset.fallbackApplied =
-                    "true";
-
-
-                image.src =
-                    getDefaultTeamImage();
-
-            }
-        );
-
-
-        photoWrapper.appendChild(
-            image
-        );
-
-
-        const info =
-            document.createElement("div");
-
-        info.className =
-            "team-info";
-
-
-        const name =
-            document.createElement("h3");
-
-        name.textContent =
-            member.name || "";
-
-
-        const designation =
-            document.createElement("span");
-
-        designation.className =
-            "team-designation";
-
-        designation.textContent =
-            member.designation || "";
-
-
-        const description =
-            document.createElement("p");
-
-        description.textContent =
-            member.description || "";
-
-
-        const socials =
-            document.createElement("div");
-
-        socials.className =
-            "team-socials";
-
-
-        addTeamSocial(
-            socials,
-            member.linkedin,
-            "LinkedIn",
-            "fa-linkedin-in"
-        );
-
-
-        addTeamSocial(
-            socials,
-            member.instagram,
-            "Instagram",
-            "fa-instagram"
-        );
-
-
-        addTeamSocial(
-            socials,
-            member.github,
-            "GitHub",
-            "fa-github"
-        );
-
-
-        info.appendChild(name);
-
-        info.appendChild(designation);
-
-        info.appendChild(description);
-
-
-        if (socials.children.length) {
-
-            info.appendChild(socials);
-
-        }
-
-
-        article.appendChild(
-            photoWrapper
-        );
-
-        article.appendChild(
-            info
-        );
-
-
-        return article;
-
-    }
-
-
-    function addTeamSocial(
-        parent,
-        url,
-        label,
-        icon
-    ) {
-
-        if (!url) return;
-
-
-        const link =
-            document.createElement("a");
-
-
-        link.href = url;
-
-        link.target = "_blank";
-
-        link.rel =
-            "noopener noreferrer";
-
-
-        link.setAttribute(
-            "aria-label",
-            label
-        );
-
-
-        link.innerHTML =
-            `<i class="fa-brands ${icon}"></i>`;
-
-
-        parent.appendChild(link);
-
-    }
-
-
-    /* =========================================================
-       LOAD TEAM
-       ========================================================= */
-
-    async function loadTeamMembers() {
-
-        const teamGrid =
-            document.getElementById(
-                "teamGrid"
-            );
-
-
-        if (!teamGrid) return;
-
-
-        try {
-
-            const response =
-                await fetch(
-                    `${API_URL}/api/team`,
-                    {
-                        method: "GET",
-
-                        headers: {
-                            "Accept":
-                                "application/json"
-                        },
-
-                        cache: "no-cache"
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    `Team API failed: ${response.status}`
-                );
-
-            }
-
-
-            const result =
-                await response.json();
-
-
-            const members =
-                Array.isArray(result)
-                    ? result
-                    : result.team ||
-                      result.data ||
-                      [];
-
-
-            const activeMembers =
-                members
-                    .filter(
-                        member =>
-                            member &&
-                            member.active !== false
-                    )
-                    .sort(
-                        (a, b) =>
-                            (
-                                Number(
-                                    a.displayOrder
-                                ) || 0
-                            ) -
-                            (
-                                Number(
-                                    b.displayOrder
-                                ) || 0
-                            )
-                    );
-
-
-            if (!activeMembers.length) {
-
-                teamGrid.innerHTML = `
-
-                    <div class="team-empty">
-
-                        Our team members will
-                        appear here soon.
-
-                    </div>
-
-                `;
-
-                return;
-
-            }
-
-
-            teamGrid.innerHTML = "";
-
-
-            activeMembers.forEach(
-                member => {
-
-                    teamGrid.appendChild(
-                        createTeamCard(member)
-                    );
-
-                }
-            );
-
-
-            initializeReveal();
-
-
-            console.log(
-                `Team members loaded: ${activeMembers.length}`
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "Team loading error:",
-                error
-            );
-
-
-            teamGrid.innerHTML = `
-
-                <div class="team-empty">
-
-                    Unable to load team members.
-
-                </div>
-
-            `;
-
-        }
-
-    }
-
-
-    /* =========================================================
-       PAGE LINK CLICK HANDLER
-       ========================================================= */
-
-    document.addEventListener(
-        "click",
-        event => {
-
-            const link =
-                event.target.closest(
-                    "a[href^='#']"
-                );
-
-
-            if (!link) return;
-
-
-            const href =
-                link.getAttribute("href");
-
-
-            if (
-                !href ||
-                href === "#"
-            ) {
-
-                return;
-
-            }
-
-
-            const route =
-                href.substring(1);
-
-
-            if (
-                Object.prototype.hasOwnProperty.call(
-                    pageData,
-                    route
-                )
-            ) {
-
-                event.preventDefault();
-
-
-                if (
-                    window.location.hash !==
-                    `#${route}`
-                ) {
-
-                    window.location.hash =
-                        route;
-
-                } else {
-
-                    renderPage(route);
+                    submitButton.textContent =
+                        "Send Message";
 
                 }
 
@@ -3426,53 +2426,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     );
 
-
-    /* =========================================================
-       BACK TO TOP
-       ========================================================= */
-
-    backToTop?.addEventListener(
-        "click",
-        () => {
-
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-        }
-    );
+}
 
 
-    /* =========================================================
-       ESCAPE KEY
-       ========================================================= */
+/* =========================================================
+   FOOTER
+========================================================= */
 
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key === "Escape"
-            ) {
-
-                closeMobileMenu();
-
-            }
-
-        }
-    );
-
-
-    /* =========================================================
-       CURRENT YEAR
-       ========================================================= */
+function initializeFooter() {
 
     const year =
         document.getElementById(
-            "currentYear"
+            "current-year"
         );
-
 
     if (year) {
 
@@ -3481,86 +2447,92 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+}
 
-    /* =========================================================
-       CURSOR GLOW
-       ========================================================= */
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHTML(value) {
 
     if (
-        window.innerWidth > 900
+        value === null ||
+        value === undefined
     ) {
 
-        const cursorGlow =
-            document.createElement("div");
-
-
-        cursorGlow.style.position =
-            "fixed";
-
-        cursorGlow.style.width =
-            "180px";
-
-        cursorGlow.style.height =
-            "180px";
-
-        cursorGlow.style.borderRadius =
-            "50%";
-
-        cursorGlow.style.pointerEvents =
-            "none";
-
-        cursorGlow.style.zIndex =
-            "0";
-
-        cursorGlow.style.background =
-            "radial-gradient(circle, rgba(37,99,235,0.08), transparent 70%)";
-
-        cursorGlow.style.transform =
-            "translate(-50%, -50%)";
-
-        cursorGlow.style.display =
-            "block";
-
-
-        document.body.appendChild(
-            cursorGlow
-        );
-
-
-        document.addEventListener(
-            "mousemove",
-            event => {
-
-                cursorGlow.style.left =
-                    `${event.clientX}px`;
-
-                cursorGlow.style.top =
-                    `${event.clientY}px`;
-
-            }
-        );
+        return "";
 
     }
 
 
-    /* =========================================================
-       INITIAL ROUTE
-       ========================================================= */
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
-    routeChange();
+}
 
 
-    /* =========================================================
-       READY
-       ========================================================= */
+/* =========================================================
+   INITIALIZE FOOTER YEAR AFTER DYNAMIC CONTENT
+========================================================= */
 
-    console.log(
-        "GrowtechAxon SPA initialized successfully."
-    );
+window.addEventListener(
+    "hashchange",
+    () => {
 
-    console.log(
-        "Backend API:",
-        API_URL
-    );
+        setTimeout(
+            initializeFooter,
+            0
+        );
 
-});
+    }
+);
+
+
+/* =========================================================
+   GLOBAL ERROR HANDLING
+========================================================= */
+
+window.addEventListener(
+    "error",
+    event => {
+
+        console.error(
+            "GrowtechAxon JavaScript error:",
+            event.error || event.message
+        );
+
+    }
+);
+
+
+window.addEventListener(
+    "unhandledrejection",
+    event => {
+
+        console.error(
+            "GrowtechAxon promise error:",
+            event.reason
+        );
+
+    }
+);
