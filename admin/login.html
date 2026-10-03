@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GrowtechAxon | Admin Login</title>
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <div class="login-page">
+
+        <div class="login-card">
+
+            <div class="brand">
+                <div class="brand-logo">GX</div>
+
+                <div>
+                    <h1>Growtech<span>Axon</span></h1>
+                    <p>ADMIN PANEL</p>
+                </div>
+            </div>
+
+            <div class="login-title">
+                <h2>Welcome Back</h2>
+                <p>Sign in to access your admin dashboard</p>
+            </div>
+
+            <form id="loginForm">
+
+                <div class="input-group">
+                    <label for="username">Username</label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter admin username"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter admin password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <div id="loginMessage"></div>
+
+                <button type="submit" class="login-btn">
+                    <span>Sign In</span>
+                    <span>→</span>
+                </button>
+
+            </form>
+
+            <div class="login-footer">
+                <span>🔐</span>
+                Secure Admin Access
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="admin.js"></script>
+
+</body>
+</html>
