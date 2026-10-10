@@ -47,3 +47,23 @@ The root `server.js` is the front entry point. It serves the frontend and starts
 - The Founder is rendered as a larger centered card; remaining active members appear below in a responsive grid.
 - Public team profiles expose only the LinkedIn profile link. Instagram and GitHub fields are not part of the current team UI/API contract.
 - Profile photos can be uploaded through the admin panel when Cloudinary is configured.
+
+
+## Free Website Offer + admin controls (added)
+
+- The homepage shows an offer modal on a visitor's first visit in a browser session when the offer is enabled.
+- Closing the modal leaves a floating **Claim Your Offer** button visible while the offer is enabled.
+- `/free-website.html` contains the application form and Terms & Conditions. Form submissions are saved as leads in MongoDB.
+- Admin dashboard `/admin/` now includes **Offer Settings** to turn the offer ON/OFF and edit title, description, duration, eligible client limit, and terms. Settings are stored in MongoDB.
+- The main server proxies `/api/*` requests to the API process so the frontend and API can run from one Render Web Service.
+
+## Render single-Web-Service deployment
+
+1. Back up the current GitHub repository before replacing files.
+2. Merge this release into the repository root so `server.js`, `package.json`, `frontend/`, and `backend/` are at the root level.
+3. Set Render **Build Command** to `npm install --prefix backend` and **Start Command** to `npm start`.
+4. Set environment variables in Render (never commit `.env`): `MONGODB_URI`, `JWT_SECRET` (32+ random characters), `ADMIN_USERNAME`, `ADMIN_PASSWORD` or `ADMIN_PASSWORD_HASH`, and optional Cloudinary variables for team photo uploads.
+5. If using a different public domain, update `FRONTEND_ORIGIN` to its exact origin(s). The default production allowlist is growtechaxon.in and www.growtechaxon.in.
+6. Deploy and verify `/api/health`, `/`, `/free-website.html`, and `/admin/`.
+
+Important: this ZIP excludes `.env`, Git history and `node_modules`. Preserve your existing production environment variables. The offer settings are saved in MongoDB. The offer is enabled by default on first initialization; open Admin → Offer Settings to switch it off if needed.

@@ -104,11 +104,6 @@ function getTeamPhotoUrl(photo) {
     const photoString =
         String(photo).trim();
 
-    /* Backend-relative upload URL */
-    if (photoString.startsWith('/')) {
-        return `${API_URL}${photoString}`;
-    }
-
 
     /* Old localhost URL */
     if (
@@ -2217,46 +2212,6 @@ function initializeTeamForm() {
    WITH FILE UPLOAD
 ========================================================= */
 
-async function prepareTeamPhotoData(file) {
-    if (!(file instanceof File)) throw new Error("Please select a valid image file.");
-
-    const maxDimension = 1800;
-    const maxPayloadBytes = 6 * 1024 * 1024;
-
-    const sourceUrl = URL.createObjectURL(file);
-    try {
-        const image = await new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = () => resolve(img);
-            img.onerror = () => reject(new Error("The selected image could not be read. Please choose another JPG, PNG or WEBP image."));
-            img.src = sourceUrl;
-        });
-
-        const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth || image.width, image.naturalHeight || image.height));
-        const width = Math.max(1, Math.round((image.naturalWidth || image.width) * scale));
-        const height = Math.max(1, Math.round((image.naturalHeight || image.height) * scale));
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d", { alpha: false });
-        if (!ctx) throw new Error("Your browser could not prepare the selected image.");
-        ctx.drawImage(image, 0, 0, width, height);
-
-        let quality = 0.88;
-        let dataUrl = canvas.toDataURL("image/jpeg", quality);
-        while (dataUrl.length > maxPayloadBytes * 1.37 && quality > 0.55) {
-            quality -= 0.08;
-            dataUrl = canvas.toDataURL("image/jpeg", quality);
-        }
-        if (!dataUrl || dataUrl.length > maxPayloadBytes * 1.37) {
-            throw new Error("The image is too large after optimization. Please choose a smaller image.");
-        }
-        return dataUrl;
-    } finally {
-        URL.revokeObjectURL(sourceUrl);
-    }
-}
-
 async function saveTeamMember(e) {
 
     e.preventDefault();
@@ -2430,7 +2385,9 @@ async function saveTeamMember(e) {
 
 
     const method =
-        "POST";
+        isEdit
+            ? "PUT"
+            : "POST";
 
 
     const saveButton =
@@ -2455,37 +2412,67 @@ async function saveTeamMember(e) {
 
 
     /* -----------------------------------------------------
-       JSON PAYLOAD + OPTIONAL PHOTO DATA
-       Using base64 here avoids browser/proxy multipart handling
-       problems while keeping the existing file picker UX.
+       FORM DATA
     ----------------------------------------------------- */
 
-    let photoData = "";
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "name",
+        name
+    );
+
+
+    formData.append(
+        "designation",
+        designation
+    );
+
+
+    formData.append(
+        "description",
+        description
+    );
+
+
+    formData.append(
+        "linkedin",
+        linkedin
+    );
+
+
+    formData.append(
+        "isFounder",
+        String(isFounder)
+    );
+
+
+    formData.append(
+        "displayOrder",
+        String(displayOrder)
+    );
+
+
+    formData.append(
+        "active",
+        String(active)
+    );
+
+
+    /* -----------------------------------------------------
+       ADD PHOTO ONLY IF SELECTED
+    ----------------------------------------------------- */
 
     if (photoFile) {
-        photoData = await prepareTeamPhotoData(photoFile);
+
+        formData.append(
+            "photo",
+            photoFile
+        );
     }
 
-    const payload = {
-        name,
-        designation,
-        description,
-        linkedin,
-        isFounder: String(isFounder),
-        displayOrder: String(displayOrder),
-        active: String(active),
-        photoSelected: photoFile ? "true" : "false"
-    };
-
-    if (photoData) payload.photoData = photoData;
-
-    console.info("[GrowtechAxon Team Upload]", {
-        hasPhoto: Boolean(photoFile),
-        fileName: photoFile?.name || "",
-        fileType: photoFile?.type || "",
-        fileSize: photoFile?.size || 0,
-        transport: "json-photoData-v11"
-    });
 
     try {
 
@@ -2496,11 +2483,12 @@ async function saveTeamMember(e) {
                     method,
 
                     headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json"
+                        "Authorization":
+                            `Bearer ${token}`
                     },
 
-                    body: JSON.stringify(payload)
+                    body:
+                        formData
                 }
             );
 

@@ -1,768 +1,545 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta http-equiv="Cache-Control" content="no-store">
-    <meta name="robots" content="noindex,nofollow">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>GrowtechAxon | Admin Dashboard</title>
 
-    <link rel="stylesheet" href="admin.css">
-</head>
+    <link rel="stylesheet" href="admin.css" />
+  </head>
 
-<body>
-
+  <body>
     <div class="dashboard">
-
-        <!-- =====================================================
+      <!-- =====================================================
              SIDEBAR
         ====================================================== -->
 
-        <aside class="sidebar">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-logo">GX</div>
 
-            <div class="sidebar-brand">
+          <div class="brand-text">
+            <h2>Growtech<span>Axon</span></h2>
+            <small>ADMIN PANEL</small>
+          </div>
+        </div>
 
-                <div class="brand-logo">
-                    GX
-                </div>
+        <nav class="sidebar-nav">
+          <a href="#" class="nav-item active">
+            <span class="nav-icon">▣</span>
+            <span class="nav-text">Dashboard</span>
+          </a>
 
-                <div class="brand-text">
-                    <h2>Growtech<span>Axon</span></h2>
-                    <small>ADMIN PANEL</small>
-                </div>
+          <a href="#leads" class="nav-item">
+            <span class="nav-icon">👥</span>
+            <span class="nav-text">Customer Leads</span>
+          </a>
 
+          <a href="#offerManagement" class="nav-item"
+            ><span class="nav-icon">🎁</span
+            ><span class="nav-text">Offer Settings</span></a
+          >\n
+          <a href="#teamManagement" class="nav-item">
+            <span class="nav-icon">✦</span>
+            <span class="nav-text">Our Team</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-status">
+            <span class="status-dot"></span>
+
+            <div>
+              <strong>System Online</strong>
+              <small>All services active</small>
             </div>
+          </div>
 
+          <button id="logoutBtn" class="logout-btn">
+            <span>↪</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
 
-            <nav class="sidebar-nav">
-
-                <a href="#" class="nav-item active">
-                    <span class="nav-icon">▣</span>
-                    <span class="nav-text">Dashboard</span>
-                </a>
-
-                <a href="#leads" class="nav-item">
-                    <span class="nav-icon">👥</span>
-                    <span class="nav-text">Customer Leads</span>
-                </a>
-
-                <a href="#teamManagement" class="nav-item">
-                    <span class="nav-icon">✦</span>
-                    <span class="nav-text">Our Team</span>
-                </a>
-
-            </nav>
-
-
-            <div class="sidebar-bottom">
-
-                <div class="sidebar-status">
-                    <span class="status-dot"></span>
-
-                    <div>
-                        <strong>System Online</strong>
-                        <small>All services active</small>
-                    </div>
-                </div>
-
-
-                <button id="logoutBtn" class="logout-btn">
-                    <span>↪</span>
-                    <span>Logout</span>
-                </button>
-
-            </div>
-
-        </aside>
-
-
-
-        <!-- =====================================================
+      <!-- =====================================================
              MAIN CONTENT
         ====================================================== -->
 
-        <main class="main-content">
-
-
-            <!-- =================================================
+      <main class="main-content">
+        <!-- =================================================
                  TOPBAR
             ================================================== -->
 
-            <header class="topbar">
+        <header class="topbar">
+          <div class="page-heading">
+            <div class="eyebrow">GROWTECHAXON • ADMIN</div>
 
-                <div class="page-heading">
+            <h1>Dashboard</h1>
 
-                    <div class="eyebrow">
-                        GROWTECHAXON • ADMIN
-                    </div>
+            <p>Manage your customer enquiries and team from one place.</p>
+          </div>
 
-                    <h1>Dashboard</h1>
+          <div class="topbar-right">
+            <div class="admin-badge">
+              <span class="status-dot"></span>
 
-                    <p>
-                        Manage your customer enquiries and team from one place.
-                    </p>
+              <div>
+                <strong>Admin</strong>
+                <small>Online</small>
+              </div>
+            </div>
+          </div>
+        </header>
 
-                </div>
-
-
-                <div class="topbar-right">
-
-                    <div class="admin-badge">
-
-                        <span class="status-dot"></span>
-
-                        <div>
-                            <strong>Admin</strong>
-                            <small>Online</small>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </header>
-
-
-
-            <!-- =================================================
+        <!-- =================================================
                  STATS
             ================================================== -->
 
-            <section class="stats-grid">
+        <section class="stats-grid">
+          <!-- TOTAL LEADS -->
 
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <div class="stat-icon">👥</div>
 
-                <!-- TOTAL LEADS -->
+              <span class="stat-label"> LEADS </span>
+            </div>
 
-                <div class="stat-card">
+            <div class="stat-info">
+              <p>Total Leads</p>
 
-                    <div class="stat-card-top">
+              <h2 id="totalLeads">0</h2>
 
-                        <div class="stat-icon">
-                            👥
-                        </div>
+              <span class="stat-description"> All customer enquiries </span>
+            </div>
+          </div>
 
-                        <span class="stat-label">
-                            LEADS
-                        </span>
+          <!-- NEW LEADS -->
 
-                    </div>
+          <div class="stat-card stat-green">
+            <div class="stat-card-top">
+              <div class="stat-icon">✦</div>
 
-                    <div class="stat-info">
+              <span class="stat-label"> NEW </span>
+            </div>
 
-                        <p>Total Leads</p>
+            <div class="stat-info">
+              <p>New Leads</p>
 
-                        <h2 id="totalLeads">
-                            0
-                        </h2>
+              <h2 id="newLeads">0</h2>
 
-                        <span class="stat-description">
-                            All customer enquiries
-                        </span>
+              <span class="stat-description"> Awaiting response </span>
+            </div>
+          </div>
 
-                    </div>
+          <!-- TODAY -->
 
-                </div>
+          <div class="stat-card stat-gold">
+            <div class="stat-card-top">
+              <div class="stat-icon">◷</div>
 
+              <span class="stat-label"> TODAY </span>
+            </div>
 
+            <div class="stat-info">
+              <p>Today's Leads</p>
 
-                <!-- NEW LEADS -->
+              <h2 id="todayLeads">0</h2>
 
-                <div class="stat-card stat-green">
+              <span class="stat-description"> Received today </span>
+            </div>
+          </div>
 
-                    <div class="stat-card-top">
+          <!-- PROJECTS -->
 
-                        <div class="stat-icon">
-                            ✦
-                        </div>
+          <div class="stat-card stat-purple">
+            <div class="stat-card-top">
+              <div class="stat-icon">◆</div>
 
-                        <span class="stat-label">
-                            NEW
-                        </span>
+              <span class="stat-label"> PROJECTS </span>
+            </div>
 
-                    </div>
+            <div class="stat-info">
+              <p>Projects</p>
 
-                    <div class="stat-info">
+              <h2 id="projectLeads">0</h2>
 
-                        <p>New Leads</p>
+              <span class="stat-description"> Converted enquiries </span>
+            </div>
+          </div>
+        </section>
 
-                        <h2 id="newLeads">
-                            0
-                        </h2>
-
-                        <span class="stat-description">
-                            Awaiting response
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- TODAY -->
-
-                <div class="stat-card stat-gold">
-
-                    <div class="stat-card-top">
-
-                        <div class="stat-icon">
-                            ◷
-                        </div>
-
-                        <span class="stat-label">
-                            TODAY
-                        </span>
-
-                    </div>
-
-                    <div class="stat-info">
-
-                        <p>Today's Leads</p>
-
-                        <h2 id="todayLeads">
-                            0
-                        </h2>
-
-                        <span class="stat-description">
-                            Received today
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- PROJECTS -->
-
-                <div class="stat-card stat-purple">
-
-                    <div class="stat-card-top">
-
-                        <div class="stat-icon">
-                            ◆
-                        </div>
-
-                        <span class="stat-label">
-                            PROJECTS
-                        </span>
-
-                    </div>
-
-                    <div class="stat-info">
-
-                        <p>Projects</p>
-
-                        <h2 id="projectLeads">
-                            0
-                        </h2>
-
-                        <span class="stat-description">
-                            Converted enquiries
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-
-            <!-- =================================================
+        <!-- =================================================
                  CUSTOMER LEADS
             ================================================== -->
 
-            <section class="content-section leads-section" id="leads">
+        <section class="content-section leads-section" id="leads">
+          <!-- SECTION HEADER -->
 
+          <div class="section-header">
+            <div class="section-title">
+              <span class="section-kicker"> CUSTOMER MANAGEMENT </span>
 
-                <!-- SECTION HEADER -->
+              <h2>Customer Leads</h2>
 
-                <div class="section-header">
+              <p>Website se received customer enquiries</p>
+            </div>
 
-                    <div class="section-title">
+            <button id="refreshBtn" class="refresh-btn">
+              <span>↻</span>
+              Refresh
+            </button>
+          </div>
 
-                        <span class="section-kicker">
-                            CUSTOMER MANAGEMENT
-                        </span>
+          <!-- FILTER BAR -->
 
-                        <h2>
-                            Customer Leads
-                        </h2>
+          <div class="filter-bar">
+            <div class="search-box">
+              <span class="search-icon"> ⌕ </span>
 
-                        <p>
-                            Website se received customer enquiries
-                        </p>
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Search customer, email, phone..."
+              />
+            </div>
 
-                    </div>
+            <div class="filter-select">
+              <select id="statusFilter">
+                <option value="all">All Status</option>
 
+                <option value="New">New</option>
 
-                    <button id="refreshBtn" class="refresh-btn">
-                        <span>↻</span>
-                        Refresh
-                    </button>
+                <option value="Contacted">Contacted</option>
 
-                </div>
+                <option value="Converted">Converted</option>
 
+                <option value="Closed">Closed</option>
+              </select>
+            </div>
+          </div>
 
+          <!-- TABLE -->
 
-                <!-- FILTER BAR -->
+          <div class="table-wrapper">
+            <table class="leads-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
 
-                <div class="filter-bar">
+                  <th>Customer</th>
 
-                    <div class="search-box">
+                  <th>Business</th>
 
-                        <span class="search-icon">
-                            ⌕
-                        </span>
+                  <th>Email</th>
 
-                        <input
-                            type="text"
-                            id="searchInput"
-                            placeholder="Search customer, email, phone..."
-                        >
+                  <th>Phone</th>
 
-                    </div>
+                  <th>Service</th>
 
+                  <th>Budget</th>
 
-                    <div class="filter-select">
+                  <th>Status</th>
 
-                        <select id="statusFilter">
+                  <th>Date</th>
 
-                            <option value="all">
-                                All Status
-                            </option>
+                  <th>Action</th>
+                </tr>
+              </thead>
 
-                            <option value="New">
-                                New
-                            </option>
+              <tbody id="leadsTable">
+                <tr>
+                  <td colspan="10" class="loading">
+                    <div class="loading-spinner"></div>
 
-                            <option value="Contacted">
-                                Contacted
-                            </option>
+                    <span> Loading leads... </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-                            <option value="Converted">
-                                Converted
-                            </option>
-
-                            <option value="Closed">
-                                Closed
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- TABLE -->
-
-                <div class="table-wrapper">
-
-                    <table class="leads-table">
-
-                        <thead>
-
-                            <tr>
-
-                                <th>ID</th>
-
-                                <th>Customer</th>
-
-                                <th>Business</th>
-
-                                <th>Email</th>
-
-                                <th>Phone</th>
-
-                                <th>Service</th>
-
-                                <th>Budget</th>
-
-                                <th>Status</th>
-
-                                <th>Date</th>
-
-                                <th>Action</th>
-
-                            </tr>
-
-                        </thead>
-
-
-                        <tbody id="leadsTable">
-
-                            <tr>
-
-                                <td colspan="10" class="loading">
-
-                                    <div class="loading-spinner"></div>
-
-                                    <span>
-                                        Loading leads...
-                                    </span>
-
-                                </td>
-
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </section>
-
-
-
-            <!-- =================================================
+        <!-- =================================================
                  OUR TEAM MANAGEMENT
             ================================================== -->
 
-            <section
-                class="content-section team-admin-section"
-                id="teamManagement"
-            >
+        <section class="content-section team-admin-section" id="teamManagement">
+          <div class="section-header">
+            <div class="section-title">
+              <span class="section-kicker"> COMPANY MANAGEMENT </span>
 
+              <h2>Our Team</h2>
 
-                <div class="section-header">
+              <p>Manage GrowtechAxon team members</p>
+            </div>
 
-                    <div class="section-title">
+            <button id="addTeamBtn" class="refresh-btn add-team-btn">
+              <span>+</span>
 
-                        <span class="section-kicker">
-                            COMPANY MANAGEMENT
-                        </span>
+              Add Team Member
+            </button>
+          </div>
 
-                        <h2>
-                            Our Team
-                        </h2>
+          <!-- TEAM TABLE -->
 
-                        <p>
-                            Manage GrowtechAxon team members
-                        </p>
+          <div class="table-wrapper">
+            <table class="team-table">
+              <thead>
+                <tr>
+                  <th>Photo</th>
 
-                    </div>
+                  <th>Name</th>
 
+                  <th>Designation</th>
 
-                    <button id="addTeamBtn" class="refresh-btn add-team-btn">
+                  <th>Order</th>
 
-                        <span>+</span>
+                  <th>Status</th>
 
-                        Add Team Member
+                  <th>Action</th>
+                </tr>
+              </thead>
 
-                    </button>
+              <tbody id="teamTable">
+                <tr>
+                  <td colspan="6" class="loading">
+                    <div class="loading-spinner"></div>
 
-                </div>
-
-
-
-                <!-- TEAM TABLE -->
-
-                <div class="table-wrapper">
-
-                    <table class="team-table">
-
-                        <thead>
-
-                            <tr>
-
-                                <th>Photo</th>
-
-                                <th>Name</th>
-
-                                <th>Designation</th>
-
-                                <th>Order</th>
-
-                                <th>Status</th>
-
-                                <th>Action</th>
-
-                            </tr>
-
-                        </thead>
-
-
-                        <tbody id="teamTable">
-
-                            <tr>
-
-                                <td colspan="6" class="loading">
-
-                                    <div class="loading-spinner"></div>
-
-                                    <span>
-                                        Loading team members...
-                                    </span>
-
-                                </td>
-
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </section>
-
-        </main>
-
+                    <span> Loading team members... </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
     </div>
-
-
 
     <!-- =========================================================
          ADD / EDIT TEAM MEMBER MODAL
     ========================================================== -->
 
     <div id="teamModal" class="team-modal">
-
-        <div class="team-modal-content">
-
-
-            <!-- MODAL HEADER -->
-
-            <div class="team-modal-header">
-
-                <div>
-
-                    <span class="team-modal-tag">
-                        GROWTECHAXON
-                    </span>
-
-                    <h2 id="teamModalTitle">
-                        Add Team Member
-                    </h2>
-
-                    <p>
-                        Add or update profile details. The Founder profile is displayed prominently above the rest of the team.
-                    </p>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    id="closeTeamModal"
-                    class="team-close-btn"
-                >
-                    ×
-                </button>
-
-            </div>
-
-
-
-            <!-- TEAM FORM -->
-
-            <form id="teamForm">
-
-                <input
-                    type="hidden"
-                    id="teamId"
-                >
-
-
-
-                <!-- NAME + DESIGNATION -->
-
-                <div class="team-form-grid">
-
-                    <div class="team-input-group">
-
-                        <label for="teamName">
-                            Full Name *
-                        </label>
-
-                        <input
-                            type="text"
-                            id="teamName"
-                            placeholder="Enter full name"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="team-input-group">
-
-                        <label for="teamDesignation">
-                            Designation *
-                        </label>
-
-                        <input
-                            type="text"
-                            id="teamDesignation"
-                            placeholder="e.g. Founder & CEO"
-                            required
-                        >
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- PHOTO -->
-
-                <div class="team-input-group">
-
-                    <label for="teamPhoto">
-                        Profile Photo
-                    </label>
-
-                    <input
-    type="file"
-    id="teamPhoto"
-    name="photo"
-    accept="image/jpeg,image/png,image/webp"
->
-
-                    <small>Choose a JPG, PNG or WEBP file. The selected photo is uploaded automatically and published on the website.</small>
-
-                </div>
-
-
-
-                <!-- DESCRIPTION -->
-
-                <div class="team-input-group">
-
-                    <label for="teamDescription">
-                        Description
-                    </label>
-
-                    <textarea
-                        id="teamDescription"
-                        rows="4"
-                        placeholder="Write a short professional description..."
-                    ></textarea>
-
-                </div>
-
-
-
-                <!-- LINKEDIN + DISPLAY ORDER -->
-
-                <div class="team-form-grid">
-
-                    <div class="team-input-group">
-
-                        <label for="teamLinkedin">
-                            LinkedIn
-                        </label>
-
-                        <input
-                            type="url"
-                            id="teamLinkedin"
-                            placeholder="https://www.linkedin.com/in/..."
-                        >
-
-                        <small>Only LinkedIn is shown publicly on the team card.</small>
-
-                    </div>
-
-
-                    <div class="team-input-group">
-
-                        <label for="teamOrder">
-                            Display Order
-                        </label>
-
-                        <input
-                            type="number"
-                            id="teamOrder"
-                            value="0"
-                            min="0"
-                        >
-
-                    </div>
-
-                </div>
-
-                <div class="team-status-row">
-                    <label class="team-toggle team-founder-toggle">
-                        <input type="checkbox" id="teamFounder">
-                        <span class="team-toggle-slider"></span>
-                        <span>Show as Founder / Primary Profile</span>
-                    </label>
-                </div>
-
-
-
-                <!-- ACTIVE STATUS -->
-
-                <div class="team-status-row">
-
-                    <label class="team-toggle">
-
-                        <input
-                            type="checkbox"
-                            id="teamActive"
-                            checked
-                        >
-
-                        <span class="team-toggle-slider"></span>
-
-                        <span>
-                            Active Member
-                        </span>
-
-                    </label>
-
-                </div>
-
-
-
-                <!-- MESSAGE -->
-
-                <div id="teamMessage"></div>
-
-
-
-                <!-- ACTIONS -->
-
-                <div class="team-form-actions">
-
-                    <button
-                        type="button"
-                        id="cancelTeamBtn"
-                        class="team-cancel-btn"
-                    >
-                        Cancel
-                    </button>
-
-
-                    <button
-                        type="submit"
-                        class="team-save-btn"
-                    >
-
-                        <span id="teamSaveText">
-                            Save Team Member
-                        </span>
-
-                    </button>
-
-                </div>
-
-            </form>
-
+      <div class="team-modal-content">
+        <!-- MODAL HEADER -->
+
+        <div class="team-modal-header">
+          <div>
+            <span class="team-modal-tag"> GROWTECHAXON </span>
+
+            <h2 id="teamModalTitle">Add Team Member</h2>
+
+            <p>
+              Add or update profile details. The Founder profile is displayed
+              prominently above the rest of the team.
+            </p>
+          </div>
+
+          <button type="button" id="closeTeamModal" class="team-close-btn">
+            ×
+          </button>
         </div>
 
+        <!-- TEAM FORM -->
+
+        <form id="teamForm">
+          <input type="hidden" id="teamId" />
+
+          <!-- NAME + DESIGNATION -->
+
+          <div class="team-form-grid">
+            <div class="team-input-group">
+              <label for="teamName"> Full Name * </label>
+
+              <input
+                type="text"
+                id="teamName"
+                placeholder="Enter full name"
+                required
+              />
+            </div>
+
+            <div class="team-input-group">
+              <label for="teamDesignation"> Designation * </label>
+
+              <input
+                type="text"
+                id="teamDesignation"
+                placeholder="e.g. Founder & CEO"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- PHOTO -->
+
+          <div class="team-input-group">
+            <label for="teamPhoto"> Profile Photo </label>
+
+            <input
+              type="file"
+              id="teamPhoto"
+              name="photo"
+              accept="image/jpeg,image/png,image/webp"
+            />
+
+            <small
+              >Choose a JPG, PNG or WEBP file. The selected photo is uploaded
+              automatically and published on the website.</small
+            >
+          </div>
+
+          <!-- DESCRIPTION -->
+
+          <div class="team-input-group">
+            <label for="teamDescription"> Description </label>
+
+            <textarea
+              id="teamDescription"
+              rows="4"
+              placeholder="Write a short professional description..."
+            ></textarea>
+          </div>
+
+          <!-- LINKEDIN + DISPLAY ORDER -->
+
+          <div class="team-form-grid">
+            <div class="team-input-group">
+              <label for="teamLinkedin"> LinkedIn </label>
+
+              <input
+                type="url"
+                id="teamLinkedin"
+                placeholder="https://www.linkedin.com/in/..."
+              />
+
+              <small>Only LinkedIn is shown publicly on the team card.</small>
+            </div>
+
+            <div class="team-input-group">
+              <label for="teamOrder"> Display Order </label>
+
+              <input type="number" id="teamOrder" value="0" min="0" />
+            </div>
+          </div>
+
+          <div class="team-status-row">
+            <label class="team-toggle team-founder-toggle">
+              <input type="checkbox" id="teamFounder" />
+              <span class="team-toggle-slider"></span>
+              <span>Show as Founder / Primary Profile</span>
+            </label>
+          </div>
+
+          <!-- ACTIVE STATUS -->
+
+          <div class="team-status-row">
+            <label class="team-toggle">
+              <input type="checkbox" id="teamActive" checked />
+
+              <span class="team-toggle-slider"></span>
+
+              <span> Active Member </span>
+            </label>
+          </div>
+
+          <!-- MESSAGE -->
+
+          <div id="teamMessage"></div>
+
+          <!-- ACTIONS -->
+
+          <div class="team-form-actions">
+            <button type="button" id="cancelTeamBtn" class="team-cancel-btn">
+              Cancel
+            </button>
+
+            <button type="submit" class="team-save-btn">
+              <span id="teamSaveText"> Save Team Member </span>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
+    <section
+      id="offerManagement"
+      class="content-section"
+      style="
+        margin: 24px 0;
+        padding: 24px;
+        background: #fff;
+        border-radius: 16px;
+      "
+    >
+      <h2>Free Website Offer Settings</h2>
+      <p>Control the public offer popup and “Claim Your Offer” button.</p>
+      <form
+        id="gxOfferSettingsForm"
+        style="display: grid; gap: 12px; max-width: 760px"
+      >
+        <label style="display: flex; gap: 10px; align-items: center"
+          ><input type="checkbox" id="gxOfferEnabled" /> Offer is ON (uncheck to
+          hide popup and claim button)</label
+        >
+        <label
+          >Offer title<input
+            id="gxOfferTitle"
+            maxlength="120"
+            required
+            style="display: block; width: 100%; padding: 10px"
+        /></label>
+        <label
+          >Offer description<textarea
+            id="gxOfferDescription"
+            maxlength="500"
+            rows="3"
+            style="display: block; width: 100%; padding: 10px"
+          ></textarea>
+        </label>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap">
+          <label
+            >Duration (days)<input
+              id="gxOfferDurationDays"
+              type="number"
+              min="1"
+              max="365"
+              value="30"
+              required
+              style="display: block; padding: 10px" /></label
+          ><label
+            >Maximum clients<input
+              id="gxOfferMaxClients"
+              type="number"
+              min="1"
+              max="10000"
+              value="10"
+              required
+              style="display: block; padding: 10px"
+          /></label>
+        </div>
+        <label
+          >Terms &amp; Conditions<textarea
+            id="gxOfferTerms"
+            rows="5"
+            maxlength="5000"
+            required
+            style="display: block; width: 100%; padding: 10px"
+          ></textarea>
+        </label>
+        <button type="submit" style="padding: 12px 18px; cursor: pointer">
+          Save Offer Settings
+        </button>
+        <p id="gxOfferSettingsMessage" role="status"></p>
+      </form>
+    </section>
+    <script src="admin.js"></script>
 
-
-    <script src="admin.js?v=20261003-v11"></script>
-
-</body>
-
+    <script src="offer-admin.js"></script>
+  </body>
 </html>

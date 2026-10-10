@@ -5,6 +5,7 @@ const { spawn } = require('child_process');
 const zlib = require('zlib');
 
 const ROOT = __dirname;
+const IS_RENDER = Boolean(process.env.RENDER || process.env.RENDER_SERVICE_ID);
 const FRONTEND = path.join(ROOT, 'frontend');
 const BACKEND_ENV = path.join(ROOT, 'backend', '.env');
 const FRONT_PORT = Number(process.env.FRONTEND_PORT || 5173);
@@ -35,6 +36,14 @@ function resolveFile(urlPath){
   return null;
 }
 const frontendServer = http.createServer((req,res)=>{
+  // Same-origin API proxy lets the existing website and backend share one Render Web Service/domain.
+  if ((req.url || '').startsWith('/api/')) {
+    const proxyReq = http.request({hostname:'127.0.0.1',port:API_PORT,path:req.url,method:req.method,headers:{...req.headers,host:`127.0.0.1:${API_PORT}`}}, proxyRes => {
+      res.writeHead(proxyRes.statusCode || 502, proxyRes.headers); proxyRes.pipe(res);
+    });
+    proxyReq.on('error',()=>{if(!res.headersSent){res.writeHead(502,{'Content-Type':'application/json'});}res.end(JSON.stringify({success:false,message:'API service temporarily unavailable.'}));});
+    req.pipe(proxyReq); return;
+  }
   if ((req.url || '').split('?')[0] === '/favicon.ico') {
     const icon = path.join(FRONTEND, 'assets', 'images', 'logo.jpeg');
     if (fs.existsSync(icon)) {
@@ -57,7 +66,7 @@ const frontendServer = http.createServer((req,res)=>{
   res.writeHead(200,headers); res.end(data);
 });
 
-const child = spawn(process.execPath,[path.join(ROOT,'backend','api-server.js')],{cwd:path.join(ROOT,'backend'),env:{...process.env,PORT:String(API_PORT),FRONTEND_ORIGIN:process.env.FRONTEND_ORIGIN||`http://localhost:${FRONT_PORT}`,DOTENV_CONFIG_PATH:BACKEND_ENV},stdio:'inherit'});
+const child = spawn(process.execPath,[path.join(ROOT,'backend','api-server.js')],{cwd:path.join(ROOT,'backend'),env:{...process.env,PORT:String(API_PORT),FRONTEND_ORIGIN:process.env.FRONTEND_ORIGIN|| (IS_RENDER ? 'https://growtechaxon.in,https://www.growtechaxon.in' : `http://localhost:${FRONT_PORT}`),DOTENV_CONFIG_PATH:BACKEND_ENV},stdio:'inherit'});
 child.on('error',e=>console.error('[API] failed to start:',e.message));
 child.on('exit',(code,signal)=>{ if(!shuttingDown) console.error(`[API] stopped (${code ?? signal})`); });
 

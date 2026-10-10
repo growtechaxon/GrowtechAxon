@@ -31,16 +31,9 @@ const teamSchema = new mongoose.Schema(
             trim: true
         },
 
-        instagram: {
-            type: String,
-            default: "",
-            trim: true
-        },
-
-        github: {
-            type: String,
-            default: "",
-            trim: true
+        isFounder: {
+            type: Boolean,
+            default: false
         },
 
         displayOrder: {
