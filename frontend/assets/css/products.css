@@ -1,0 +1,11 @@
+/* Isolated portfolio/product card styles. */
+.gx-product-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:28px}
+.gx-product-card{overflow:hidden;padding:0;min-width:0}
+.gx-product-image{position:relative;display:block;overflow:hidden;aspect-ratio:16/9;background:#edf4fb}
+.gx-product-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
+.gx-product-image:hover img{transform:scale(1.035)}
+.gx-product-tag{position:absolute;top:12px;left:12px;padding:6px 11px;border-radius:999px;background:#087fd1;color:#fff;font-size:12px;font-weight:800}
+.gx-product-card .body{padding:18px}
+.gx-product-card .body p{line-height:1.65}
+@media(max-width:1050px){.gx-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.gx-product-grid{grid-template-columns:1fr;gap:18px}.gx-product-card .body{padding:18px}}

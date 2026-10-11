@@ -1,0 +1,20 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+coverage/
+
+# Local customer data
+backend/data/
+
+
+# Never commit backend secrets or local runtime files
+backend/.env
+
+node_modules/
+.env
+.env.*
+!.env.example
+uploads/
