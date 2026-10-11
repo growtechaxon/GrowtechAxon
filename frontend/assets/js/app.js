@@ -1,4 +1,4 @@
-
+﻿
 (() => {
   'use strict';
 
@@ -7,7 +7,7 @@
   // ==========================================
   // Keep public pages and Admin on the same API/database by default.
   // An explicit deployment override remains supported when needed.
-  const API = String(window.GROWTECHAXON_API_URL || window.location.origin)
+  const API = String(window.GROWTECHAXON_API_URL || ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://localhost:5000' : 'https://growtechaxon-backend.onrender.com'))
     .replace(/\/+$/, '');
 
   const FALLBACK_IMAGE = '/assets/images/logo.jpeg';
@@ -167,7 +167,7 @@
             rel="noopener noreferrer"
             aria-label="View ${name} on LinkedIn"
           >
-            LinkedIn ↗
+            LinkedIn â†—
           </a>
         `
       : '';
@@ -315,9 +315,9 @@
   // ==========================================
   const selectedPlanId = new URLSearchParams(window.location.search).get('plan');
   const selectedPlan = ({
-    starter: { name: 'Starter Website', price: 0, service: 'Website Development', budget: '₹0' },
-    business: { name: 'Business Website', price: 4999, service: 'Business Website Development', budget: '₹4,999' },
-    software: { name: 'Software / App', price: 9999, service: 'Software / App Development', budget: '₹9,999' }
+    starter: { name: 'Starter Website', price: 0, service: 'Website Development', budget: 'â‚¹0' },
+    business: { name: 'Business Website', price: 4999, service: 'Business Website Development', budget: 'â‚¹4,999' },
+    software: { name: 'Software / App', price: 9999, service: 'Software / App Development', budget: 'â‚¹9,999' }
   })[selectedPlanId];
 
   document.querySelectorAll('[data-lead-form]').forEach((form) => {
@@ -343,7 +343,7 @@
       const budgetInput = form.querySelector('[name="budget"]');
       if (budgetInput) budgetInput.value = selectedPlan.budget;
       const heading = form.closest('.container')?.querySelector('h1');
-      if (heading) heading.textContent = `Request ${selectedPlan.name} — ₹${selectedPlan.price.toLocaleString('en-IN')}`;
+      if (heading) heading.textContent = `Request ${selectedPlan.name} â€” â‚¹${selectedPlan.price.toLocaleString('en-IN')}`;
     }
 
     form.addEventListener('submit', async (event) => {
@@ -408,3 +408,4 @@
   console.info('[GrowtechAxon] App initialized successfully.');
 
 })();
+

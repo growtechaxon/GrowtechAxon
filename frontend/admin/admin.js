@@ -1,4 +1,4 @@
-
+﻿
 /* =========================================================
    GROWTECH AXON - ADMIN PANEL
    Login + Leads + Team Management
@@ -6,7 +6,7 @@
 
 /* ==================== API CONFIG ==================== */
 
-const API_URL = String(window.GROWTECHAXON_API_URL || window.location.origin).replace(/\/+$/, '');
+const API_URL = String(window.GROWTECHAXON_API_URL || ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://localhost:5000' : 'https://growtechaxon-backend.onrender.com')).replace(/\/+$/, '');
 
 
 /* ==================== COMMON HELPERS ==================== */
@@ -246,7 +246,7 @@ function displayLeads(leads) {
                 <td>${escapeHTML(lead.email || "-")}</td>
                 <td>${escapeHTML(lead.phone || "-")}</td>
                 <td>${escapeHTML(lead.planName || lead.service || "-")}</td>
-                <td>${escapeHTML(typeof lead.planPrice === "number" ? `₹${lead.planPrice.toLocaleString("en-IN")}` : (lead.budget || "-"))}</td>
+                <td>${escapeHTML(typeof lead.planPrice === "number" ? `â‚¹${lead.planPrice.toLocaleString("en-IN")}` : (lead.budget || "-"))}</td>
                 <td>
                     <select class="lead-status"
                         data-id="${escapeHTML(id)}"
@@ -424,7 +424,7 @@ Phone: ${lead.phone || "-"}
 City: ${lead.city || "-"}
 Service: ${lead.service || "-"}
 Selected plan: ${lead.planName || "Not specified"}
-Plan price: ${typeof lead.planPrice === "number" ? `₹${lead.planPrice.toLocaleString("en-IN")}` : "Not specified"}
+Plan price: ${typeof lead.planPrice === "number" ? `â‚¹${lead.planPrice.toLocaleString("en-IN")}` : "Not specified"}
 Budget: ${lead.budget || "-"}
 Message: ${lead.message || "-"}
 Status: ${lead.status || "New"}
@@ -1112,3 +1112,4 @@ function showTeamMessage(message, type = "") {
     teamMessage.textContent = message;
     teamMessage.className = `team-message ${type}`;
 }
+
