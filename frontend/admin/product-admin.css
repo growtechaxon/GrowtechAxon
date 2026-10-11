@@ -1,0 +1,14 @@
+/* Isolated Add Product form styles */
+#productManagement{padding:24px;margin:24px 0;background:#fff;border-radius:16px;border:1px solid #e2e8f0}
+#productManagement .section-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.product-admin-form{padding:18px;margin:18px 0;background:#f7fbff;border:1px solid #d9eaf6;border-radius:12px}
+.product-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.product-form-grid label{display:block;font-weight:700;font-size:13px;color:#183047}
+.product-form-grid input:not([type=checkbox]),.product-form-grid textarea{display:block;width:100%;box-sizing:border-box;margin-top:6px;padding:11px;border:1px solid #cad9e5;border-radius:8px;font:inherit;background:#fff}
+.product-form-grid .product-description-label{grid-column:1/-1}
+.product-form-grid .product-active-label{display:flex;align-items:center;gap:8px}
+.product-form-actions{display:flex;gap:10px;margin-top:16px}
+#productTable a{color:#087fd1}
+#productTable button{padding:7px 10px;margin:2px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;cursor:pointer}
+#productMessage{font-weight:700}
+@media(max-width:700px){.product-form-grid{grid-template-columns:1fr}#productManagement .section-heading{align-items:flex-start;flex-direction:column}}

@@ -1,0 +1,14 @@
+{
+  "name":"growtechaxon",
+  "version":"2.0.0",
+  "private":true,
+  "description":"GrowtechAxon public website and API workspace",
+  "main":"server.js",
+  "scripts":{
+    "dev":"node server.js",
+    "start":"node server.js",
+    "api":"node backend/api-server.js",
+    "check":"node tests/smoke.js"
+  },
+  "engines":{"node":">=18"}
+}

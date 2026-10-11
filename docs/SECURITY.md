@@ -1,0 +1,12 @@
+# GrowtechAxon security baseline
+- Backend is API-only; it does not serve the public frontend.
+- CORS is restricted to `FRONTEND_ORIGIN`.
+- JSON/form request bodies are size limited.
+- API, lead and admin-login rate limits are enabled.
+- Security headers are applied at the API layer.
+- Admin tokens are signed JWTs with issuer/audience and a short lifetime.
+- Prefer `ADMIN_PASSWORD_HASH` (bcrypt) in production.
+- Team uploads are restricted to JPG/PNG/WEBP and 5 MB.
+- IDs, email, phone, URLs, statuses and text fields are validated server-side.
+- Secrets belong in `.env`, never in source control or distributable ZIPs.
+- Production should additionally use HTTPS, HSTS, a reverse proxy/WAF, backups and monitoring.
