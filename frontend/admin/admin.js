@@ -1,4 +1,4 @@
-﻿
+
 /* =========================================================
    GROWTECH AXON - ADMIN PANEL
    Login + Leads + Team Management
@@ -730,8 +730,8 @@ function initializeTeamPhotoPreview() {
             return;
         }
 
-        if (!file.type.startsWith("image/")) {
-            showTeamMessage("Please select a valid image file.", "error");
+        if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+            showTeamMessage("Choose a JPG, JPEG, PNG or WEBP image.", "error");
             input.value = "";
             clearTeamPhotoPreview();
             return;
@@ -870,8 +870,8 @@ async function saveTeamMember(event) {
         formData.append("active", String(active));
         formData.append("isFounder", String(isFounder));
 
-        if (instagram) formData.append("instagram", instagram);
-        if (github) formData.append("github", github);
+        formData.append("instagram", instagram);
+        formData.append("github", github);
 
         if (photoFile) {
             formData.append("photo", photoFile, photoFile.name);

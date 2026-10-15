@@ -167,7 +167,7 @@
             rel="noopener noreferrer"
             aria-label="View ${name} on LinkedIn"
           >
-            LinkedIn â†—
+            LinkedIn
           </a>
         `
       : '';

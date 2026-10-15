@@ -478,107 +478,7 @@
               client metrics.
             </p>
           </div>
-          <div class="grid-4 gx-product-grid" id="gxProductGrid">
-            <article class="card project-card">
-              <img
-                src="/assets/images/portfolio.webp"
-                alt="GrowtechAxon portfolio project"
-                loading="lazy"
-              />
-              <div class="body">
-                <h3>Online Exam System</h3>
-                <p>Web application for examination workflows.</p>
-                <a class="btn btn-secondary" href="/pages/projects.html"
-                  >View Projects</a
-                >
-              </div>
-            </article>
-            <article class="card project-card">
-              <img
-                src="/assets/images/test.webp"
-                alt="GrowtechAxon testing interface"
-                loading="lazy"
-              />
-              <div class="body">
-                <h3>Portfolio Website</h3>
-                <p>Responsive digital portfolio experience.</p>
-                <a class="btn btn-secondary" href="/pages/projects.html"
-                  >View Projects</a
-                >
-              </div>
-            </article>
-            <article class="card project-card gx-product-card">
-              <a
-                class="gx-product-image"
-                href="https://growtech-axon.netlify.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                ><img
-                  src="/assets/images/portfolio.webp"
-                  alt="Growtech Axon website preview"
-                  loading="lazy"
-                  width="900"
-                  height="600"
-                /><span class="gx-product-tag">Live Website</span></a
-              >
-              <div class="body">
-                <span class="eyebrow">Digital Solutions</span>
-                <h3>Growtech Axon</h3>
-                <p>Website for technology services and digital solutions.</p>
-                <a
-                  class="btn btn-primary"
-                  href="https://growtech-axon.netlify.app/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >Visit Website ↗</a
-                >
-              </div>
-            </article>
-            <article class="card project-card gx-product-card">
-              <a
-                class="gx-product-image"
-                href="https://super-dry-cleaners.netlify.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                ><img
-                  src="/assets/images/side.webp"
-                  alt="Super Dry Cleaners website preview"
-                  loading="lazy"
-                  width="900"
-                  height="600"
-                /><span class="gx-product-tag">Live Website</span></a
-              >
-              <div class="body">
-                <span class="eyebrow">Business Website</span>
-                <h3>Super Dry Cleaners</h3>
-                <p>Business website for dry-cleaning services.</p>
-                <a
-                  class="btn btn-primary"
-                  href="https://super-dry-cleaners.netlify.app/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >Visit Website ↗</a
-                >
-              </div>
-            </article>
-            <article class="card">
-              <div class="icon">CS</div>
-              <h3>Case Studies</h3>
-              <p>
-                Explain the problem, approach, technology and outcome without
-                unsupported claims.
-              </p>
-              <a class="btn btn-secondary" href="/pages/case-studies.html"
-                >Read Case Studies</a
-              >
-            </article>
-            <article class="card">
-              <div class="icon">FAQ</div>
-              <h3>Questions?</h3>
-              <p>Find answers about projects, pricing, training and support.</p>
-              <a class="btn btn-secondary" href="/pages/faq.html">Open FAQ</a>
-            </article>
-          </div>
+          <div class="grid-4 gx-product-grid" id="gxProductGrid"><div class="notice">Loading projects from Admin Panel…</div></div>
         </div>
       </section>
       <section class="section">
@@ -633,9 +533,27 @@
           <div class="notice">Loading team profiles…</div>
         </div>
         <div class="actions team-section-action">
-          <a class="btn btn-secondary" href="/pages/team.html"
-            >View Full Team</a
-          >
+          <a class="btn btn-secondary" href="/pages/team.html">View Full Team</a>
+          <a class="btn btn-primary" href="#join-our-team">Join Our Team</a>
+        </div>
+        <div class="card join-team-card" id="join-our-team">
+          <div class="section-head">
+            <span class="eyebrow">Careers & Collaboration</span>
+            <h2>Join Our Team</h2>
+            <p>Interested in working with GrowtechAxon? Share your details and our team will review your application.</p>
+          </div>
+          <form id="joinTeamForm" class="join-team-form">
+            <div class="join-form-grid">
+              <label>Full name<input name="name" autocomplete="name" required maxlength="80" placeholder="Your full name"></label>
+              <label>Email address<input name="email" type="email" autocomplete="email" required maxlength="120" placeholder="you@example.com"></label>
+              <label>Phone number<input name="phone" type="tel" autocomplete="tel" required maxlength="20" pattern="[+0-9() .-]{7,20}" placeholder="Your phone number"></label>
+              <label>City<input name="city" autocomplete="address-level2" maxlength="80" placeholder="Your city"></label>
+            </div>
+            <label>Tell us about your skills and role of interest<textarea name="message" required rows="4" maxlength="3000" placeholder="Your skills, experience, interests, or role you are applying for"></textarea></label>
+            <input type="hidden" name="service" value="Joining Team">
+            <button class="btn btn-primary" type="submit">Submit Application</button>
+            <p id="joinTeamStatus" class="join-team-status" role="status" aria-live="polite"></p>
+          </form>
         </div>
       </div>
     </section>
@@ -660,7 +578,8 @@
           <a href="/services/web-development.html">Web Development</a
           ><a href="/services/software-development.html">Software Development</a
           ><a href="/services/mobile-app-development.html">Mobile Apps</a
-          ><a href="/services/digital-marketing.html">Digital Marketing</a>
+          ><a href="/services/digital-marketing.html">Digital Marketing</a
+          ><a href="/#join-our-team">Joining Team</a>
         </div>
         <div>
           <h3>Explore</h3>
@@ -729,5 +648,6 @@
     <script src="/assets/js/offer.js" defer></script>
     <script src="/assets/js/app.js" defer></script>
     <script src="/assets/js/products.js" defer></script>
+    <script src="/assets/js/join-team.js" defer></script>
   </body>
 </html>

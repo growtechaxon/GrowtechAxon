@@ -339,9 +339,10 @@
               <h2>Products &amp; Projects</h2>
               <p>Add and manage live websites shown on the public website.</p>
             </div>
-            <button type="button" class="refresh-btn" id="addProductBtn">
-              + Add Product
-            </button>
+            <div class="product-heading-actions">
+              <button type="button" class="refresh-btn" id="refreshProductsBtn">Refresh Projects</button>
+              <button type="button" class="refresh-btn" id="addProductBtn">+ Add Product</button>
+            </div>
           </div>
           <form id="productForm" class="product-admin-form" hidden>
             <input type="hidden" id="productId" />
@@ -367,12 +368,17 @@
                   value="Website"
                   placeholder="Website / Software"
               /></label>
-              <label
-                >Preview Image URL<input
+              <label class="product-image-label"
+                >Select Project Image
+                <input
                   id="productImage"
-                  type="url"
-                  placeholder="https://.../preview.webp"
-              /></label>
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  aria-describedby="productImageHelp"
+                />
+                <small id="productImageHelp">JPG, JPEG, PNG or WEBP · maximum 5 MB. Leave empty while editing to keep the current image.</small>
+                <img id="productImagePreview" class="product-image-preview" alt="Project image preview" hidden />
+              </label>
               <label
                 >Display Order<input
                   id="productOrder"
@@ -406,6 +412,7 @@
             <table class="team-table">
               <thead>
                 <tr>
+                  <th>Image</th>
                   <th>Product</th>
                   <th>Website</th>
                   <th>Category</th>
@@ -415,7 +422,7 @@
               </thead>
               <tbody id="productTable">
                 <tr>
-                  <td colspan="5">Products are loading…</td>
+                  <td colspan="6">Products are loading…</td>
                 </tr>
               </tbody>
             </table>
@@ -660,9 +667,8 @@
         <p id="gxOfferSettingsMessage" role="status"></p>
       </form>
     </section>
-    <script src="admin.js"></script>
-    <script src="product-admin.js"></script>
-
-    <script src="offer-admin.js"></script>
+    <script src="admin.js?v=20261016-project-admin"></script>
+    <script src="product-admin.js?v=20261016-project-admin"></script>
+    <script src="offer-admin.js?v=20261016-project-admin"></script>
   </body>
 </html>

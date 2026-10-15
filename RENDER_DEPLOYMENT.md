@@ -20,14 +20,14 @@ Set these in Render Dashboard → service → Environment. Do not commit `.env` 
 - `ADMIN_USERNAME`
 - `ADMIN_PASSWORD_HASH` or `ADMIN_PASSWORD` (prefer the hash)
 - `FRONTEND_ORIGIN`: `https://growtechaxon.in,https://www.growtechaxon.in`
-- `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` if using Cloudinary image uploads
+- `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` — required for team and project image uploads in production. Render local disk is not used as an upload fallback.
 
 Keep the existing MongoDB URI/database unchanged to preserve current data. This deployment configuration does not intentionally delete or migrate collections.
 
 ## Verify after deployment
 
 1. Open `https://growtechaxon-backend.onrender.com/api/health` — expect JSON with `"status":"ok"`.
-2. Open `https://growtechaxon-backend.onrender.com/api/offer-settings` — expect JSON with an `offer` object. This route needs a working MongoDB connection.
+2. Open `https://growtechaxon-backend.onrender.com/api/offer-settings` — expect JSON with an `offer` object. This route needs a working MongoDB connection. The health response reports whether MongoDB is connected.
 3. Open `https://growtechaxon-backend.onrender.com/` — the public website should load.
 4. Test admin login and save the offer setting from the dashboard.
 
